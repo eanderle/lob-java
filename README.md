@@ -1,14 +1,14 @@
-# Lob Java Bindings
+# lob-java
+[![Coverage Status](https://img.shields.io/coveralls/lob/lob-java.svg)](https://coveralls.io/r/lob/lob-java)
 
-You can sign up for a Lob account at https://www.lob.com.
 
-Requirements
-============
+Node.js wrapper for the [Lob.com](http://Lob.com) API.
+
+## Requirements
 
 Java 1.5 and later.
 
-Installation
-============
+## Installation
 
 ### Maven users
 
@@ -32,8 +32,13 @@ You'll need to manually install the following JARs:
 * [Apache HttpCore](http://hc.apache.org/httpcomponents-core-ga/) from <http://mirrors.sonic.net/apache//httpcomponents/httpcore/binary/httpcomponents-core-4.3.1-bin.zip>.
 * [Apache HttpClient Mime](http://hc.apache.org/httpcomponents-client-ga/) from <http://repo1.maven.org/maven2/org/apache/httpcomponents/httpmime/4.3.2/httpmime-4.3.2.jar>.
 
-Usage
-=====
+## Getting Started
+
+In order to use the client, you must have an API key. To obtain your key, you need to first create an account at [Lob.com](https://www.lob.com/)
+
+You can access your API access credentials from the [Accounts Page](https://www.Lob.com/account)
+
+## Usage
 
 LobExample.java
 
@@ -51,27 +56,27 @@ LobExample.java
 			Lob.apiKey = "test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc:";
 			String id = "job_0e3eff58cb59c935";
 			try {
-	 
+
 				Job j1 = Job.retrieve(id, Lob.apiKey);
-				System.out.println(j1);           
-		   
+				System.out.println(j1);
+
 				Map<String, java.lang.Object> ObjectMap = new HashMap<String, java.lang.Object>();
 				ObjectMap.put("name", "Michigan fan letter");
 				ObjectMap.put("to", "adr_43769b47aed248c2");
 				ObjectMap.put("from", "adr_7f9ece71fbca3796");
 				ObjectMap.put("object1", "obj_7ca5f80b42b6dfca");
 				ObjectMap.put("object2", "obj_12128d3aad2aa98f");
-				ObjectMap.put("object3", "obj_4241a46e01b4f892");       
-						
+				ObjectMap.put("object3", "obj_4241a46e01b4f892");
+
 				Job j2 = Job.create(ObjectMap, Lob.apiKey);
 				System.out.println(j2);
-				
+
 				Map<String, java.lang.Object> listParams = new HashMap<String, java.lang.Object>();
 				listParams.put("count", 2);
 				listParams.put("offset", 3);
 				JobCollection ac = Job.all(listParams, Lob.apiKey);
 				System.out.println(ac);
-				
+
 			} catch (LobException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
@@ -83,5 +88,18 @@ LobExample.java
 		}
 	}
 
+## Examples
 
 See Example folder for more examples.
+
+## Running the test-suite
+
+To run the tests:
+
+    mvn test
+
+## Credits
+
+Copyright &copy; 2013 Lob.com
+
+Released under the MIT License, which can be found in the repository in `LICENSE.txt`.
