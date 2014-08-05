@@ -1,4 +1,4 @@
-#################
+f#################
 ## Eclipse
 #################
 
@@ -28,6 +28,7 @@ local.properties
 # PDT-specific
 .buildpath
 
+target
 
 #################
 ## Visual Studio
