@@ -32,8 +32,6 @@ import com.lob.exception.AuthenticationException;
 import com.lob.exception.InvalidRequestException;
 import com.lob.model.EventData;
 import com.lob.model.LobObject;
-import com.lob.model.LobRawJsonObject;
-import com.lob.model.LobRawJsonObjectDeserializer;
 
 public abstract class APIResource extends LobObject {
 
