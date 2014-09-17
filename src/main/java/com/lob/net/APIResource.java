@@ -31,7 +31,6 @@ import com.lob.exception.APIException;
 import com.lob.exception.AuthenticationException;
 import com.lob.exception.InvalidRequestException;
 import com.lob.model.EventData;
-import com.lob.model.EventDataDeserializer;
 import com.lob.model.LobObject;
 import com.lob.model.LobRawJsonObject;
 import com.lob.model.LobRawJsonObjectDeserializer;
@@ -40,8 +39,6 @@ public abstract class APIResource extends LobObject {
 
 	public static final Gson gson = new GsonBuilder()
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-			.registerTypeAdapter(EventData.class, new EventDataDeserializer())
-			.registerTypeAdapter(LobRawJsonObject.class, new LobRawJsonObjectDeserializer())
 			.create();
 
 	private static String className(Class<?> clazz) {

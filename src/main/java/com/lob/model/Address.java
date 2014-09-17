@@ -20,7 +20,7 @@ public class Address extends APIResource {
 	String address_zip;
 	String address_country;
 
-	
+
 	public String getName() {
 		return name;
 	}
@@ -104,32 +104,24 @@ public class Address extends APIResource {
 				Address.class, apiKey);
 	}
 
-	public static Address update(String id, Map<String, java.lang.Object> params, String apiKey)
-			throws AuthenticationException, InvalidRequestException,
-			APIConnectionException, APIException {
-			return request(RequestMethod.POST,
-					instanceURL(Address.class, id), params, Address.class,
-					apiKey);
-	}
-
 	public static Address create(Map<String, java.lang.Object> params, String apiKey)
 			throws AuthenticationException, InvalidRequestException,
 			APIConnectionException, APIException {
 			return request(RequestMethod.POST, classURL(Address.class), params,
 					Address.class, apiKey);
-	}	
-	
+	}
+
 	public static DeletedStatus delete(String id, String apiKey)
 	throws AuthenticationException, InvalidRequestException,
 			APIConnectionException, APIException {
 			return request(RequestMethod.DELETE,
 				instanceURL(Address.class, id), null,
 				DeletedStatus.class, apiKey);
-	}	
-	
+	}
+
 	public static AddressCollection all(Map<String, java.lang.Object> params,
 			String apiKey) throws AuthenticationException,
-			InvalidRequestException, APIConnectionException, 
+			InvalidRequestException, APIConnectionException,
 			APIException {
 		return request(RequestMethod.GET, classURL(Address.class), params,
 				AddressCollection.class, apiKey);
@@ -137,9 +129,9 @@ public class Address extends APIResource {
 
 	public static Verify verify(Map<String, java.lang.Object> params,
 			String apiKey) throws AuthenticationException,
-			InvalidRequestException, APIConnectionException, 
+			InvalidRequestException, APIConnectionException,
 			APIException {
 		return request(RequestMethod.POST, singleClassURL(Verify.class), params,
 				Verify.class, apiKey);
-	}	
+	}
 }
