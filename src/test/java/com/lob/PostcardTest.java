@@ -35,8 +35,8 @@ public class PostcardTest {
       defaultPostcardParams.put("name", "Test Postcard");
       defaultPostcardParams.put("to", defaultAddress.getId());
       defaultPostcardParams.put("from", defaultAddress.getId());
-      defaultPostcardParams.put("front", "https://www.lob.com/test.pdf");
-      defaultPostcardParams.put("back", "https://www.lob.com/test.pdf");
+      defaultPostcardParams.put("front", "https://assets.lob.com/test.pdf");
+      defaultPostcardParams.put("back", "https://assets.lob.com/test.pdf");
     }
 
     @Test

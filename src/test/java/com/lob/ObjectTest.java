@@ -21,7 +21,7 @@ public class ObjectTest {
       Lob.apiKey = "test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc";
 
       defaultObjectParams.put("name", "Test Object");
-      defaultObjectParams.put("file", "https://www.lob.com/test.pdf");
+      defaultObjectParams.put("file", "https://assets.lob.com/test.pdf");
       defaultObjectParams.put("setting_id", "201");
     }
 
