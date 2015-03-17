@@ -2,12 +2,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.lob</groupId>
-  <artifactId>lob-java</artifactId>
-  <packaging>jar</packaging>
-  <version>1.3</version>
-  <name>lob-java</name>
+  <artifactId>lob-all</artifactId>
+  <packaging>pom</packaging>
+  <version>2.0.0-SNAPSHOT</version>
+  <name>lob-all</name>
   <description>Java Wrapper for Lob API</description>
   <url>https://github.com/lob/lob-java</url>
+
+  <modules>
+    <module>lob-protocol</module>
+  </modules>
 
   <developers>
     <developer>
