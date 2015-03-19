@@ -2,7 +2,6 @@ package com.lob;
 
 import com.lob.exception.LobException;
 import com.lob.exception.APIException;
-import com.lob.Lob;
 import com.lob.model.Bank_account;
 import com.lob.model.BankAccountCollection;
 import com.lob.model.DeletedStatus;

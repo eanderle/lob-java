@@ -2,7 +2,6 @@ package com.lob;
 
 import com.lob.exception.LobException;
 import com.lob.exception.APIException;
-import com.lob.Lob;
 import com.lob.model.DeletedStatus;
 import com.lob.model.Object;
 import com.lob.model.ObjectCollection;

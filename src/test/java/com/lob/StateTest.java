@@ -1,13 +1,8 @@
 package com.lob;
 
 import com.lob.exception.LobException;
-import com.lob.exception.APIException;
-import com.lob.Lob;
 import com.lob.model.State;
 import com.lob.model.StateCollection;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

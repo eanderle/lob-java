@@ -1,8 +1,6 @@
 package com.lob;
 
 import com.lob.exception.LobException;
-import com.lob.exception.APIException;
-import com.lob.Lob;
 import com.lob.model.Country;
 import com.lob.model.CountryCollection;
 

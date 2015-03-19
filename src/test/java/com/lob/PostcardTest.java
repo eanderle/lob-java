@@ -2,7 +2,6 @@ package com.lob;
 
 import com.lob.exception.LobException;
 import com.lob.exception.APIException;
-import com.lob.Lob;
 import com.lob.model.Address;
 import com.lob.model.Postcard;
 import com.lob.model.PostcardCollection;
