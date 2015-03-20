@@ -7,7 +7,7 @@ import com.lob.exception.AuthenticationException;
 import com.lob.exception.InvalidRequestException;
 import com.lob.net.APIResource;
 import com.lob.protocol.response.*;
-import com.lob.protocol.response.LobObject;
+import com.lob.protocol.request.LobObjectRequest;
 
 public class Job extends APIResource {
     String id;
@@ -15,7 +15,7 @@ public class Job extends APIResource {
     Double price;
     Address to;
     Address from;
-    LobObject[] objects;
+    LobObjectRequest[] objects;
     Integer quantity;
     String status;
     Tracking tracking;
@@ -48,7 +48,7 @@ public class Job extends APIResource {
     }
 
 
-    public LobObject[] getObjects() {
+    public LobObjectRequest[] getObjects() {
         return objects;
     }
 

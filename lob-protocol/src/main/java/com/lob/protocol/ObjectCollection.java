@@ -1,13 +1,15 @@
 package com.lob.protocol;
 
+import com.lob.protocol.request.LobObjectRequest;
+
 import java.lang.*;
 import java.util.List;
 
 public class ObjectCollection extends LobObject {
-    List<com.lob.protocol.response.LobObject> data;
+    List<LobObjectRequest> data;
     String object;
 
-    public List<com.lob.protocol.response.LobObject> getData() {
+    public List<LobObjectRequest> getData() {
         return data;
     }
     public String getObject() {

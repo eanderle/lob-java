@@ -1,4 +1,4 @@
-package com.lob.protocol.response;
+package com.lob.protocol.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,8 +6,7 @@ import com.lob.id.AddressId;
 import com.neovisionaries.i18n.CountryCode;
 import org.joda.time.DateTime;
 
-public class Address {
-    @JsonProperty("id") private final AddressId id;
+public class AddressRequest {
     @JsonProperty("name") private final String name;
     @JsonProperty("email") private final String email;
     @JsonProperty("phone") private final String phone;
@@ -17,14 +16,9 @@ public class Address {
     @JsonProperty("address_state") private final String state;
     @JsonProperty("address_zip") private final String zip;
     @JsonProperty("address_country") private final CountryCode country;
-    @JsonProperty("object") private final String object;
-    @JsonProperty("date_created") private final DateTime dateCreated;
-    @JsonProperty("date_modified") private final DateTime dateModified;
-    @JsonProperty("deleted") private final boolean deleted;
 
     @JsonCreator
-    public Address(
-            final AddressId id,
+    public AddressRequest(
             final String name,
             final String email,
             final String phone,
@@ -33,12 +27,7 @@ public class Address {
             final String city,
             final String state,
             final String zip,
-            final CountryCode country,
-            final String object,
-            final DateTime dateCreated,
-            final DateTime dateModified,
-            final boolean deleted) {
-        this.id = id;
+            final CountryCode country) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -48,14 +37,6 @@ public class Address {
         this.state = state;
         this.zip = zip;
         this.country = country;
-        this.object = object;
-        this.dateCreated = dateCreated;
-        this.dateModified = dateModified;
-        this.deleted = deleted;
-    }
-
-    public AddressId getId() {
-        return id;
     }
 
     public String getName() {
@@ -93,20 +74,5 @@ public class Address {
     public CountryCode getCountry() {
         return country;
     }
-
-    public String getObject() {
-        return object;
-    }
-
-    public DateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public DateTime getDateModified() {
-        return dateModified;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
     }
 }
