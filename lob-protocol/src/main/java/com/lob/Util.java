@@ -1,16 +1,46 @@
 package com.lob;
 
+import java.util.Collection;
+
 public final class Util {
     // prevent instantiation
     private Util() {}
 
-    public static <T> T checkNotNull(final T ref) {
+    public static <T> T checkNotNull(final T ref, final String message) {
         if (ref == null) {
-            throw new NullPointerException();
+            throw new NullPointerException(message);
         }
 
         return ref;
     }
+
+    public static <T> T checkNotNull(final T ref) {
+        return checkNotNull(ref, "");
+    }
+
+    public static String checkPresent(final String ref, final String message) {
+        if (checkNotNull(ref, message).isEmpty()) {
+            throw new IllegalArgumentException(message);
+        }
+        return ref;
+    }
+
+    public static <T> Collection<T> checkPresent(final Collection<T> ref, final String message) {
+        if (checkNotNull(ref, message).isEmpty()) {
+            throw new IllegalArgumentException(message);
+        }
+        return ref;
+    }
+
+    public static <T1, T2> OrCollection<T1, T2> checkPresent(final OrCollection<T1, T2> ref, final String message) {
+        checkNotNull(ref, message);
+        if ((ref.isTypeA() && ref.getTypeA().isEmpty()) || (ref.isTypeB() && ref.getTypeB().isEmpty())) {
+            throw new IllegalArgumentException(message);
+        }
+        return ref;
+    }
+
+    final private static String hexRegex = "[a-fA-F0-9]+";
 
     public static String checkValidHex(final String s) {
         // handle the null and empty check right away
@@ -18,10 +48,7 @@ public final class Util {
             throw new IllegalArgumentException("string cannot be empty!");
         }
 
-        try {
-            Long.parseLong(s, 16);
-        }
-        catch (final NumberFormatException e) {
+        if (!s.matches(hexRegex)) {
             throw new IllegalArgumentException("string " + s + " is not valid hex!");
         }
 

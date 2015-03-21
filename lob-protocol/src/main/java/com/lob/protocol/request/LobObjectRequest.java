@@ -1,12 +1,16 @@
 package com.lob.protocol.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.protocol.Setting;
+import com.lob.ParamMapBuilder;
+import com.lob.id.SettingId;
 
-public class LobObjectRequest {
+import java.util.List;
+import java.util.Map;
+
+public class LobObjectRequest implements ParamMappable {
     @JsonProperty("name") private final String name;
     @JsonProperty("file") private final String file;
-    @JsonProperty("setting") private final SettingRequest setting;
+    @JsonProperty("setting") private final SettingId setting;
     @JsonProperty("quantity") private final int quantity;
     @JsonProperty("double_sided") private final boolean doubleSided;
     @JsonProperty("full_bleed") private final boolean fullBleed;
@@ -15,7 +19,7 @@ public class LobObjectRequest {
     public LobObjectRequest(
             final String name,
             final String file,
-            final SettingRequest setting,
+            final SettingId setting,
             final int quantity,
             final boolean doubleSided,
             final boolean fullBleed,
@@ -29,6 +33,19 @@ public class LobObjectRequest {
         this.template = template;
     }
 
+    @Override
+    public Map<String, List<String>> toParamMap() {
+        return ParamMapBuilder.create()
+            .put("name", name)
+            .put("file", file) // TODO
+            .put("setting", setting)
+            .put("quantity", quantity)
+            .put("double_sided", doubleSided)
+            .put("full_bleed", fullBleed)
+            .put("template", template)
+            .build();
+    }
+
     public String getName() {
         return name;
     }
@@ -37,7 +54,7 @@ public class LobObjectRequest {
         return file;
     }
 
-    public SettingRequest getSetting() {
+    public SettingId getSetting() {
         return setting;
     }
 

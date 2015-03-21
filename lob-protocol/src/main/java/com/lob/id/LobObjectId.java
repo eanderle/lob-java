@@ -5,7 +5,7 @@ public class LobObjectId extends LobId {
         super(prefix, identifier);
     }
 
-    public LobObjectId parse(final String s) {
+    public static LobObjectId parse(final String s) {
         return new LobObjectId(Prefix.OBJECT, s);
     }
 }

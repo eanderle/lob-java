@@ -11,6 +11,7 @@
 
   <modules>
     <module>lob-protocol</module>
+    <module>lob-client</module>
   </modules>
 
   <developers>
