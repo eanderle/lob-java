@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.lob</groupId>
+  <artifactId>lob-client</artifactId>
+  <packaging>jar</packaging>
+  <version>2.0.0-SNAPSHOT</version>
+  <name>lob-client</name>
+  <description>Client for the Lob API</description>
+  <url>https://github.com/lob/lob-java</url>
+
+  <parent>
+    <groupId>com.lob</groupId>
+    <artifactId>lob-all</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+  </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.lob</groupId>
+      <artifactId>lob-protocol</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>18.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ning</groupId>
+      <artifactId>async-http-client</artifactId>
+      <version>1.9.15</version>
+    </dependency>
+  </dependencies>
+</project>
