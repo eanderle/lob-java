@@ -1,6 +1,8 @@
 package com.lob.client;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
@@ -15,7 +17,8 @@ import com.ning.http.client.Realm;
 import com.ning.http.client.Realm.AuthScheme;
 import com.ning.http.client.Response;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,7 +26,10 @@ import java.util.concurrent.Executors;
 import static com.google.common.base.Preconditions.*;
 
 public class AsyncLobClient implements LobClient {
-    private final static ObjectMapper MAPPER = new ObjectMapper();
+    private final static ObjectMapper MAPPER = new ObjectMapper()
+        .registerModule(new JodaModule())
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
     private final AsyncHttpClient httpClient;
     private final String baseUrl;
     private final String apiVersion;
@@ -44,6 +50,7 @@ public class AsyncLobClient implements LobClient {
     public static LobClient createDefault(final String apiKey) {
         final Realm realm = new Realm.RealmBuilder()
             .setPrincipal(checkNotNull(apiKey))
+            .setUsePreemptiveAuth(true)
             .setScheme(AuthScheme.BASIC)
             .build();
 
@@ -66,8 +73,8 @@ public class AsyncLobClient implements LobClient {
         return this.httpClient.prepareGet(this.baseUrl);
     }
 
-    private BoundRequestBuilder post(final String resourceUrl, final Map<String, List<String>> paramMap) {
-        return this.httpClient.preparePost(this.baseUrl + resourceUrl).setFormParams(paramMap);
+    private BoundRequestBuilder post(final String resourceUrl, final Map<String, Collection<String>> paramMap) {
+        return this.httpClient.preparePost(this.baseUrl + resourceUrl).setParameters(paramMap);
     }
 
     private static <T> ListenableFuture<T> execute(
@@ -75,7 +82,12 @@ public class AsyncLobClient implements LobClient {
         final BoundRequestBuilder request,
         final ExecutorService callbackExecutorService) {
         final SettableFuture<T> guavaFut = SettableFuture.create();
-        request.execute(new GuavaFutureConverter<T>(clazz, guavaFut, callbackExecutorService));
+        try {
+            request.execute(new GuavaFutureConverter<T>(clazz, guavaFut, callbackExecutorService));
+        }
+        catch (final IOException e) {
+            guavaFut.setException(e);
+        }
         return guavaFut;
     }
 

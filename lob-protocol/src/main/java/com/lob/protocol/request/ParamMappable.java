@@ -1,8 +1,8 @@
 package com.lob.protocol.request;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 public interface ParamMappable {
-    public Map<String, List<String>> toParamMap();
+    public Map<String, Collection<String>> toParamMap();
 }

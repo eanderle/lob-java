@@ -1,14 +1,14 @@
 package com.lob.id;
 
-public class ServiceId implements IntegerId {
-    final int id;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
+public class ServiceId extends IntegerId {
     public ServiceId(final int id) {
-        this.id = id;
+        super(id);
     }
 
-    @Override
-    public int getId() {
-        return id;
+    @JsonCreator
+    public static ServiceId parse(final String s) {
+        return new ServiceId(Integer.valueOf(s));
     }
 }

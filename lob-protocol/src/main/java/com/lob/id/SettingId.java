@@ -1,8 +1,8 @@
 package com.lob.id;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
-public class SettingId implements IntegerId {
+public class SettingId extends IntegerId {
     public static SettingId BLACK_AND_WHITE_DOCUMENT = create(100);
     public static SettingId COLOR_DOCUMENT = create(101);
     public static SettingId COLOR_CARD_4X6 = create(201);
@@ -21,18 +21,16 @@ public class SettingId implements IntegerId {
     public static SettingId STANDARD_DOOR_HANGERS_100_CT_4_25X11 = create(800);
     public static SettingId GLOSSY_COLOR_FLYER_100_CT = create(803);
 
-    private final int id;
-
     public SettingId(final int id) {
-        this.id = id;
+        super(id);
+    }
+
+    @JsonCreator
+    public static SettingId parse(final String s) {
+        return new SettingId(Integer.valueOf(s));
     }
 
     public static SettingId create(final int settingId) {
         return new SettingId(settingId);
-    }
-
-    @Override
-    public int getId() {
-        return this.id;
     }
 }

@@ -16,7 +16,7 @@ public class AddressResponse {
     @JsonProperty("address_city") private final String city;
     @JsonProperty("address_state") private final String state;
     @JsonProperty("address_zip") private final String zip;
-    @JsonProperty("address_country") private final CountryCode country;
+    @JsonProperty("address_country") private final String country;
     @JsonProperty("object") private final String object;
     @JsonProperty("date_created") private final DateTime dateCreated;
     @JsonProperty("date_modified") private final DateTime dateModified;
@@ -24,20 +24,20 @@ public class AddressResponse {
 
     @JsonCreator
     public AddressResponse(
-        final AddressId id,
-        final String name,
-        final String email,
-        final String phone,
-        final String line1,
-        final String line2,
-        final String city,
-        final String state,
-        final String zip,
-        final CountryCode country,
-        final String object,
-        final DateTime dateCreated,
-        final DateTime dateModified,
-        final boolean deleted) {
+            @JsonProperty("id") final AddressId id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("email") final String email,
+            @JsonProperty("phone") final String phone,
+            @JsonProperty("address_line1") final String line1,
+            @JsonProperty("address_line2") final String line2,
+            @JsonProperty("address_city") final String city,
+            @JsonProperty("address_state") final String state,
+            @JsonProperty("address_zip") final String zip,
+            @JsonProperty("address_country") final String country,
+            @JsonProperty("object") final String object,
+            @JsonProperty("date_created") final DateTime dateCreated,
+            @JsonProperty("date_modified") final DateTime dateModified,
+            @JsonProperty("deleted") final boolean deleted) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -90,7 +90,7 @@ public class AddressResponse {
         return zip;
     }
 
-    public CountryCode getCountry() {
+    public String getCountry() {
         return country;
     }
 
@@ -108,5 +108,25 @@ public class AddressResponse {
 
     public boolean isDeleted() {
         return deleted;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressResponse{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", phone='" + phone + '\'' +
+            ", line1='" + line1 + '\'' +
+            ", line2='" + line2 + '\'' +
+            ", city='" + city + '\'' +
+            ", state='" + state + '\'' +
+            ", zip='" + zip + '\'' +
+            ", country='" + country + '\'' +
+            ", object='" + object + '\'' +
+            ", dateCreated=" + dateCreated +
+            ", dateModified=" + dateModified +
+            ", deleted=" + deleted +
+            '}';
     }
 }

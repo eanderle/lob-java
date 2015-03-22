@@ -1,37 +1,40 @@
 package com.lob.protocol.response;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.JobId;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
 
 public class JobResponse {
-    final JobId id;
-    final String name;
-    final String price;
-    final AddressResponse to;
-    final AddressResponse from;
-    final String status;
-    final String tracking;
-    final ServiceResponse service;
-    final Collection<LobObjectResponse> objects;
-    final DateTime dateCreated;
-    final DateTime dateModified;
-    final String object;
+    @JsonProperty("id") private final JobId id;
+    @JsonProperty("name") private final String name;
+    @JsonProperty("price") private final String price;
+    @JsonProperty("to") private final AddressResponse to;
+    @JsonProperty("from") private final AddressResponse from;
+    @JsonProperty("status") private final String status;
+    @JsonProperty("tracking") private final TrackingResponse tracking;
+    @JsonProperty("service") private final ServiceResponse service;
+    @JsonProperty("objects") private final Collection<LobObjectResponse> objects;
+    @JsonProperty("date_created") private final DateTime dateCreated;
+    @JsonProperty("date_modified") private final DateTime dateModified;
+    @JsonProperty("object") private final String object;
 
+    @JsonCreator
     public JobResponse(
-            final JobId id,
-            final String name,
-            final String price,
-            final AddressResponse to,
-            final AddressResponse from,
-            final String status,
-            final String tracking,
-            final ServiceResponse service,
-            final Collection<LobObjectResponse> objects,
-            final DateTime dateCreated,
-            final DateTime dateModified,
-            final String object) {
+            @JsonProperty("id") final JobId id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("price") final String price,
+            @JsonProperty("to") final AddressResponse to,
+            @JsonProperty("from") final AddressResponse from,
+            @JsonProperty("status") final String status,
+            @JsonProperty("tracking") final TrackingResponse tracking,
+            @JsonProperty("service") final ServiceResponse service,
+            @JsonProperty("objects") final Collection<LobObjectResponse> objects,
+            @JsonProperty("date_created") final DateTime dateCreated,
+            @JsonProperty("date_modified") final DateTime dateModified,
+            @JsonProperty("object") final String object) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -70,7 +73,7 @@ public class JobResponse {
         return status;
     }
 
-    public String getTracking() {
+    public TrackingResponse getTracking() {
         return tracking;
     }
 

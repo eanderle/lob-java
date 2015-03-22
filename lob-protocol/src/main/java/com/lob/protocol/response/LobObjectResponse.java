@@ -1,32 +1,34 @@
 package com.lob.protocol.response;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.LobObjectId;
 import org.joda.time.DateTime;
 
 public class LobObjectResponse {
-    private final LobObjectId id;
+    @JsonProperty("id") private final LobObjectId id;
     @JsonProperty("name") private final String name;
     @JsonProperty("quantity") private final int quantity;
     @JsonProperty("full_bleed") private final boolean fullBleed;
     @JsonProperty("double_sided") private final boolean doubleSided;
     @JsonProperty("template") private final boolean template;
-    private final DateTime dateCreated;
-    private final DateTime dateModified;
+    @JsonProperty("date_created") private final DateTime dateCreated;
+    @JsonProperty("date_modified") private final DateTime dateModified;
     @JsonProperty("setting") private final SettingResponse setting;
-    private final String object;
+    @JsonProperty("object") private final String object;
 
+    @JsonCreator
     public LobObjectResponse(
-            final LobObjectId id,
-            final String name,
-            final int quantity,
-            final boolean fullBleed,
-            final boolean doubleSided,
-            final boolean template,
-            final DateTime dateCreated,
-            final DateTime dateModified,
-            final SettingResponse setting,
-            final String object) {
+            @JsonProperty("id") final LobObjectId id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("quantity") final int quantity,
+            @JsonProperty("full_bleed") final boolean fullBleed,
+            @JsonProperty("double_sided") final boolean doubleSided,
+            @JsonProperty("template") final boolean template,
+            @JsonProperty("date_created") final DateTime dateCreated,
+            @JsonProperty("date_modified") final DateTime dateModified,
+            @JsonProperty("setting") final SettingResponse setting,
+            @JsonProperty("object") final String object) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -77,5 +79,21 @@ public class LobObjectResponse {
 
     public String getObject() {
         return object;
+    }
+
+    @Override
+    public String toString() {
+        return "LobObjectResponse{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", quantity=" + quantity +
+            ", fullBleed=" + fullBleed +
+            ", doubleSided=" + doubleSided +
+            ", template=" + template +
+            ", dateCreated=" + dateCreated +
+            ", dateModified=" + dateModified +
+            ", setting=" + setting +
+            ", object='" + object + '\'' +
+            '}';
     }
 }

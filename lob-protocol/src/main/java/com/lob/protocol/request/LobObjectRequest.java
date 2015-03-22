@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.ParamMapBuilder;
 import com.lob.id.SettingId;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 public class LobObjectRequest implements ParamMappable {
@@ -38,7 +38,7 @@ public class LobObjectRequest implements ParamMappable {
     }
 
     @Override
-    public Map<String, List<String>> toParamMap() {
+    public Map<String, Collection<String>> toParamMap() {
         return ParamMapBuilder.create()
             .put("name", name)
             .put("file", file) // TODO

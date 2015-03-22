@@ -1,5 +1,7 @@
 package com.lob.id;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +47,7 @@ public abstract class LobId {
         // If we make it here, everything is good!
     }
 
+    @JsonValue
     public String value() {
         return this.id;
     }

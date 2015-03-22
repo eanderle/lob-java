@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.ParamMapBuilder;
 import com.neovisionaries.i18n.CountryCode;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
@@ -52,7 +52,7 @@ public class AddressRequest implements ParamMappable {
     }
 
     @Override
-    public Map<String, List<String>> toParamMap() {
+    public Map<String, Collection<String>> toParamMap() {
         return ParamMapBuilder.create()
             .put("name", name)
             .put("email", email)

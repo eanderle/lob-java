@@ -11,10 +11,10 @@ public class DataItem {
 
     @JsonCreator
     public DataItem(
-            final int id,
-            final String name,
-            final String description,
-            final String object) {
+            @JsonProperty("id") final int id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("description") final String description,
+            @JsonProperty("object") final String object) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -35,5 +35,15 @@ public class DataItem {
 
     public String getObject() {
         return object;
+    }
+
+    @Override
+    public String toString() {
+        return "DataItem{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", object='" + object + '\'' +
+            '}';
     }
 }

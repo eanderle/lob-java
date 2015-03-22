@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ParamMapBuilder {
-    private final Map<String, List<String>> map = new HashMap<String, List<String>>();
+    private final Map<String, Collection<String>> map = new HashMap<String, Collection<String>>();
 
     public static ParamMapBuilder create() {
         return new ParamMapBuilder();
@@ -89,19 +89,19 @@ public class ParamMapBuilder {
             return this;
         }
 
-        for (final Map.Entry<String, List<String>> entry : object.toParamMap().entrySet()) {
+        for (final Map.Entry<String, Collection<String>> entry : object.toParamMap().entrySet()) {
             // XXX not sure how it's going to work if we get more than one level deep
             putAll(k + "[" + entry.getKey() + "]", entry.getValue());
         }
         return this;
     }
 
-    public ParamMapBuilder putAll(final String k, final List<String> v) {
+    public ParamMapBuilder putAll(final String k, final Collection<String> v) {
         if (v == null || v.isEmpty()) {
             return this;
         }
 
-        List<String> vList = this.map.get(k);
+        Collection<String> vList = this.map.get(k);
         if (vList == null) {
             vList = new ArrayList<String>();
             this.map.put(k, vList);
@@ -111,7 +111,7 @@ public class ParamMapBuilder {
         return this;
     }
 
-    public Map<String, List<String>> build() {
+    public Map<String, Collection<String>> build() {
         return this.map;
     }
 }

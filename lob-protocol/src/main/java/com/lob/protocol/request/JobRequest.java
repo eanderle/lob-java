@@ -42,7 +42,7 @@ public class JobRequest implements ParamMappable {
     }
 
     @Override
-    public Map<String, List<String>> toParamMap() {
+    public Map<String, Collection<String>> toParamMap() {
         return ParamMapBuilder.create()
             .put("name", name)
             .put("to", to)
