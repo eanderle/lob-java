@@ -33,6 +33,10 @@ public class LobObjectRequest implements ParamMappable {
         this.template = template;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public Map<String, List<String>> toParamMap() {
         return ParamMapBuilder.create()
@@ -72,5 +76,68 @@ public class LobObjectRequest implements ParamMappable {
 
     public boolean isTemplate() {
         return template;
+    }
+
+    public static class Builder {
+        private String name;
+        private String file;
+        private SettingId setting;
+        private int quantity;
+        private boolean doubleSided;
+        private boolean fullBleed;
+        private boolean template;
+
+        private Builder() {
+        }
+
+        public Builder name(final String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder file(final String file) {
+            this.file = file;
+            return this;
+        }
+
+        public Builder setting(final SettingId setting) {
+            this.setting = setting;
+            return this;
+        }
+
+        public Builder quantity(final int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Builder doubleSided(final boolean doubleSided) {
+            this.doubleSided = doubleSided;
+            return this;
+        }
+
+        public Builder fullBleed(final boolean fullBleed) {
+            this.fullBleed = fullBleed;
+            return this;
+        }
+
+        public Builder template(final boolean template) {
+            this.template = template;
+            return this;
+        }
+
+        public Builder butWith() {
+            return new Builder()
+                .name(name)
+                .file(file)
+                .setting(setting)
+                .quantity(quantity)
+                .doubleSided(doubleSided)
+                .fullBleed(fullBleed)
+                .template(template);
+        }
+
+        public LobObjectRequest build() {
+            return new LobObjectRequest(name, file, setting, quantity, doubleSided, fullBleed, template);
+        }
     }
 }

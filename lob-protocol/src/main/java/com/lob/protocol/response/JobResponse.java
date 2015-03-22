@@ -93,4 +93,22 @@ public class JobResponse {
     public String getObject() {
         return object;
     }
+
+    @Override
+    public String toString() {
+        return "JobResponse{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", price='" + price + '\'' +
+            ", to=" + to +
+            ", from=" + from +
+            ", status='" + status + '\'' +
+            ", tracking='" + tracking + '\'' +
+            ", service=" + service +
+            ", objects=" + objects +
+            ", dateCreated=" + dateCreated +
+            ", dateModified=" + dateModified +
+            ", object='" + object + '\'' +
+            '}';
+    }
 }

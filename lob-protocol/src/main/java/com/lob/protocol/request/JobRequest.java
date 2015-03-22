@@ -1,12 +1,15 @@
 package com.lob.protocol.request;
 
-import com.lob.ParamMapBuilder;
 import com.lob.Or;
 import com.lob.OrCollection;
+import com.lob.ParamMapBuilder;
 import com.lob.id.AddressId;
 import com.lob.id.LobObjectId;
 import com.lob.id.ServiceId;
+import com.sun.jndi.cosnaming.IiopUrl.Address;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +86,11 @@ public class JobRequest implements ParamMappable {
             return this;
         }
 
+        public Builder to(final String to) {
+            this.to = Or.typeA(AddressId.parse(to));
+            return this;
+        }
+
         public Builder to(final AddressId to) {
             this.to = Or.typeA(to);
             return this;
@@ -90,6 +98,11 @@ public class JobRequest implements ParamMappable {
 
         public Builder to(final AddressRequest to) {
             this.to = Or.typeB(to);
+            return this;
+        }
+
+        public Builder from(final String from) {
+            this.from = Or.typeA(AddressId.parse(from));
             return this;
         }
 
@@ -103,8 +116,32 @@ public class JobRequest implements ParamMappable {
             return this;
         }
 
-        public Builder objectIds(final Collection<LobObjectId> objects) {
-            this.objects = OrCollection.typeA(objects);
+        public Builder objectId(final String singleObjectId) {
+            this.objects = OrCollection.typeA(Arrays.asList(LobObjectId.parse(singleObjectId)));
+            return this;
+        }
+
+        public Builder objectId(final LobObjectId singleObjectId) {
+            this.objects = OrCollection.typeA(Arrays.asList(singleObjectId));
+            return this;
+        }
+
+        public Builder object(final LobObjectRequest singleObject) {
+            this.objects = OrCollection.typeB(Arrays.asList(singleObject));
+            return this;
+        }
+
+        public Builder objectStringIds(final Collection<String> objectIds) {
+            final List<LobObjectId> idList = new ArrayList<LobObjectId>(objectIds.size());
+            for (final String stringId : objectIds) {
+                idList.add(LobObjectId.parse(stringId));
+            }
+            this.objects = OrCollection.typeA(idList);
+            return this;
+        }
+
+        public Builder objectIds(final Collection<LobObjectId> objectIds) {
+            this.objects = OrCollection.typeA(objectIds);
             return this;
         }
 
