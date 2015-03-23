@@ -5,4 +5,5 @@ public class Router {
     private Router() {}
 
     public static String JOBS = "jobs";
+    public static String POSTCARDS = "postcards";
 }

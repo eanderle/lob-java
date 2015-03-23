@@ -7,7 +7,10 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
 import com.lob.protocol.request.JobRequest;
+import com.lob.protocol.request.ParamMappable;
+import com.lob.protocol.request.PostcardRequest;
 import com.lob.protocol.response.JobResponse;
+import com.lob.protocol.response.PostcardResponse;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
@@ -66,15 +69,20 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<JobResponse> createJob(final JobRequest jobRequest) {
-        return execute(JobResponse.class, post(Router.JOBS, jobRequest.toParamMap()), this.callbackExecutorService);
+        return execute(JobResponse.class, post(Router.JOBS, jobRequest), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest) {
+        return execute(PostcardResponse.class, post(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
     }
 
     private BoundRequestBuilder get() {
         return this.httpClient.prepareGet(this.baseUrl);
     }
 
-    private BoundRequestBuilder post(final String resourceUrl, final Map<String, Collection<String>> paramMap) {
-        return this.httpClient.preparePost(this.baseUrl + resourceUrl).setParameters(paramMap);
+    private BoundRequestBuilder post(final String resourceUrl, final ParamMappable request) {
+        return this.httpClient.preparePost(this.baseUrl + resourceUrl).setParameters(request.toParamMap());
     }
 
     private static <T> ListenableFuture<T> execute(

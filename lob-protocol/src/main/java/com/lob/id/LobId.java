@@ -70,7 +70,8 @@ public abstract class LobId {
     protected static enum Prefix {
         ADDRESS("adr", "address"),
         JOB("job", "job"),
-        OBJECT("obj", "object");
+        OBJECT("obj", "object"),
+        POSTCARD("psc", "postcard");
 
         private final static Map<String, Prefix> stringPrefixMap = new HashMap<String, Prefix>();
         static {

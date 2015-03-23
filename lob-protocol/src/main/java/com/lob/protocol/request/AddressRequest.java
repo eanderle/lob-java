@@ -106,6 +106,21 @@ public class AddressRequest implements ParamMappable {
         return country;
     }
 
+    @Override
+    public String toString() {
+        return "AddressRequest{" +
+            "name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", phone='" + phone + '\'' +
+            ", line1='" + line1 + '\'' +
+            ", line2='" + line2 + '\'' +
+            ", city='" + city + '\'' +
+            ", state='" + state + '\'' +
+            ", zip='" + zip + '\'' +
+            ", country=" + country +
+            '}';
+    }
+
     public static class Builder {
         private String name;
         private String email;

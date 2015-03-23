@@ -72,6 +72,17 @@ public class JobRequest implements ParamMappable {
         return service;
     }
 
+    @Override
+    public String toString() {
+        return "JobRequest{" +
+            "name='" + name + '\'' +
+            ", to=" + to +
+            ", from=" + from +
+            ", objects=" + objects +
+            ", service=" + service +
+            '}';
+    }
+
     public static class Builder {
         private String name;
         private Or<AddressId, AddressRequest> to;

@@ -78,6 +78,19 @@ public class LobObjectRequest implements ParamMappable {
         return template;
     }
 
+    @Override
+    public String toString() {
+        return "LobObjectRequest{" +
+            "name='" + name + '\'' +
+            ", file='" + file + '\'' +
+            ", setting=" + setting +
+            ", quantity=" + quantity +
+            ", doubleSided=" + doubleSided +
+            ", fullBleed=" + fullBleed +
+            ", template=" + template +
+            '}';
+    }
+
     public static class Builder {
         private String name;
         private String file;
