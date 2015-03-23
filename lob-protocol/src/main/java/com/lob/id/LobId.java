@@ -69,6 +69,8 @@ public abstract class LobId {
 
     protected static enum Prefix {
         ADDRESS("adr", "address"),
+        BANK("bank", "bank"),
+        CHECK("chk", "check"),
         JOB("job", "job"),
         OBJECT("obj", "object"),
         POSTCARD("psc", "postcard");

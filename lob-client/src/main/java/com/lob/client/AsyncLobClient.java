@@ -6,9 +6,11 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
+import com.lob.protocol.request.BankAccountRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.ParamMappable;
 import com.lob.protocol.request.PostcardRequest;
+import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.JobResponse;
 import com.lob.protocol.response.PostcardResponse;
 import com.ning.http.client.AsyncCompletionHandler;
@@ -75,6 +77,11 @@ public class AsyncLobClient implements LobClient {
     @Override
     public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest) {
         return execute(PostcardResponse.class, post(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<BankAccountResponse> createBankAccount(final BankAccountRequest bankAccountRequest) {
+        return execute(BankAccountResponse.class, post(Router.BANK_ACCOUNTS, bankAccountRequest), this.callbackExecutorService);
     }
 
     private BoundRequestBuilder get() {

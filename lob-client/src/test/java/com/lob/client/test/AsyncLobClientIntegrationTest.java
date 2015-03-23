@@ -5,8 +5,10 @@ import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
 import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.AddressRequest.Builder;
+import com.lob.protocol.request.BankAccountRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.PostcardRequest;
+import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.JobResponse;
 import com.lob.protocol.response.PostcardResponse;
 import com.neovisionaries.i18n.CountryCode;
@@ -25,18 +27,19 @@ public class AsyncLobClientIntegrationTest {
         final ListenableFuture<JobResponse> jobResponse = client.createJob(jobRequest);
         System.out.println(jobResponse.get());
 
-        final Builder toAddrBuilder = AddressRequest.builder()
+        final Builder addrA = AddressRequest.builder()
             .name("eric")
             .line1("123 main st")
             .city("san francisco")
             .state("ca")
             .zip("94107")
             .country(CountryCode.US);
+        final Builder addrB = addrA.butWith().name("peter").line1("850 Berry");
 
         final PostcardRequest postcardRequest = PostcardRequest.builder()
             .name("demo postcard")
-            .to(toAddrBuilder.build())
-            .from(toAddrBuilder.butWith().name("peter").line1("850 Berry").build())
+            .to(addrA.build())
+            .from(addrB.build())
             .fullBleed(true)
             .front("https://lob.com/postcardfront.pdf")
             .back("https://lob.com/postcardback.pdf")
@@ -44,5 +47,17 @@ public class AsyncLobClientIntegrationTest {
 
         final ListenableFuture<PostcardResponse> postcardResponse = client.createPostcard(postcardRequest);
         System.out.println(postcardResponse.get());
+
+        final BankAccountRequest bankAccountRequest = BankAccountRequest.builder()
+            .name("my bank account")
+            .bankAddress(addrA.build())
+            .accountAddress(addrB.build())
+            .routingNumber("322271627")
+            .accountNumber("123456789")
+            .signatory("John Doe")
+            .build();
+
+        final ListenableFuture<BankAccountResponse> bankAccountResponse = client.createBankAccount(bankAccountRequest);
+        System.out.println(bankAccountResponse.get());
     }
 }
