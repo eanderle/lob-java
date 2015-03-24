@@ -7,6 +7,8 @@ import org.joda.time.DateTime;
 
 import java.util.Collection;
 
+import static com.lob.Util.defensiveCopy;
+
 public class JobResponse {
     @JsonProperty("id") private final JobId id;
     @JsonProperty("name") private final String name;
@@ -82,7 +84,7 @@ public class JobResponse {
     }
 
     public Collection<LobObjectResponse> getObjects() {
-        return objects;
+        return defensiveCopy(objects);
     }
 
     public DateTime getDateCreated() {

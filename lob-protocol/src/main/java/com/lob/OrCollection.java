@@ -2,6 +2,8 @@ package com.lob;
 
 import java.util.Collection;
 
+import static com.lob.Util.defensiveCopy;
+
 public class OrCollection<T1, T2> {
     private final Or<Collection<T1>, Collection<T2>> orCollection;
 
@@ -26,10 +28,10 @@ public class OrCollection<T1, T2> {
     }
 
     public Collection<T1> getTypeA() {
-        return orCollection.getTypeA();
+        return defensiveCopy(orCollection.getTypeA());
     }
 
     public Collection<T2> getTypeB() {
-        return orCollection.getTypeB();
+        return defensiveCopy(orCollection.getTypeB());
     }
 }

@@ -4,15 +4,19 @@ import com.lob.id.IntegerId;
 import com.lob.id.LobId;
 import com.lob.protocol.request.ParamMappable;
 import com.neovisionaries.i18n.CountryCode;
+import org.joda.money.Money;
+import org.joda.money.format.MoneyFormatter;
+import org.joda.money.format.MoneyFormatterBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ParamMapBuilder {
+    private final static MoneyFormatter MONEY_FORMAT = new MoneyFormatterBuilder().appendAmount().toFormatter();
+
     private final Map<String, Collection<String>> map = new HashMap<String, Collection<String>>();
 
     public static ParamMapBuilder create() {
@@ -28,12 +32,24 @@ public class ParamMapBuilder {
         return this;
     }
 
-    public ParamMapBuilder put(final String k, final int v) {
+    public ParamMapBuilder put(final String k, final Integer v) {
+        if (v == null) {
+            return this;
+        }
+
         return put(k, Integer.toString(v));
     }
 
     public ParamMapBuilder put(final String k, final boolean v) {
         return put(k, (v ? "1" : "0"));
+    }
+
+    public ParamMapBuilder put(final String k, final LobId v) {
+        if (v == null) {
+            return this;
+        }
+
+        return put(k, v.value());
     }
 
     public ParamMapBuilder put(final String k, final Or<? extends LobId, ? extends ParamMappable> v) {
@@ -68,6 +84,14 @@ public class ParamMapBuilder {
             }
         }
         return this;
+    }
+
+    public ParamMapBuilder put(final String k, final Money v) {
+        if (v == null) {
+            return this;
+        }
+
+        return put(k, MONEY_FORMAT.print(v));
     }
 
     public ParamMapBuilder put(final String k, final CountryCode code) {

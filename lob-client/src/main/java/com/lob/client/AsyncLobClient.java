@@ -2,15 +2,19 @@ package com.lob.client;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
+import com.lob.MoneyDeserializer;
 import com.lob.protocol.request.BankAccountRequest;
+import com.lob.protocol.request.CheckRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.ParamMappable;
 import com.lob.protocol.request.PostcardRequest;
 import com.lob.protocol.response.BankAccountResponse;
+import com.lob.protocol.response.CheckResponse;
 import com.lob.protocol.response.JobResponse;
 import com.lob.protocol.response.PostcardResponse;
 import com.ning.http.client.AsyncCompletionHandler;
@@ -21,10 +25,10 @@ import com.ning.http.client.AsyncHttpClientConfig.Builder;
 import com.ning.http.client.Realm;
 import com.ning.http.client.Realm.AuthScheme;
 import com.ning.http.client.Response;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -33,6 +37,7 @@ import static com.google.common.base.Preconditions.*;
 public class AsyncLobClient implements LobClient {
     private final static ObjectMapper MAPPER = new ObjectMapper()
         .registerModule(new JodaModule())
+        .registerModule(new SimpleModule().addDeserializer(Money.class, new MoneyDeserializer(CurrencyUnit.USD)))
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     private final AsyncHttpClient httpClient;
@@ -77,6 +82,11 @@ public class AsyncLobClient implements LobClient {
     @Override
     public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest) {
         return execute(PostcardResponse.class, post(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<CheckResponse> createCheck(final CheckRequest checkRequest) {
+        return execute(CheckResponse.class, post(Router.CHECKS, checkRequest), this.callbackExecutorService);
     }
 
     @Override

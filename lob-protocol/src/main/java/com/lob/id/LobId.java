@@ -73,7 +73,8 @@ public abstract class LobId {
         CHECK("chk", "check"),
         JOB("job", "job"),
         OBJECT("obj", "object"),
-        POSTCARD("psc", "postcard");
+        POSTCARD("psc", "postcard"),
+        TRACKING("trk", "tracking");
 
         private final static Map<String, Prefix> stringPrefixMap = new HashMap<String, Prefix>();
         static {

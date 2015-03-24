@@ -6,5 +6,6 @@ public class Router {
 
     public static String BANK_ACCOUNTS = "bank_accounts";
     public static String JOBS = "jobs";
+    public static String CHECKS = "checks";
     public static String POSTCARDS = "postcards";
 }

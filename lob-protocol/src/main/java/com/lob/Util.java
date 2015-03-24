@@ -1,6 +1,11 @@
 package com.lob;
 
+import com.lob.protocol.response.ThumbnailResponse;
+
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public final class Util {
     // prevent instantiation
@@ -53,5 +58,17 @@ public final class Util {
         }
 
         return s;
+    }
+
+    public static <T> List<T> defensiveCopy(final Collection<T> original) {
+        if (original == null || original.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final List<T> copy = new ArrayList<T>(original.size());
+        for (final T t : original) {
+            copy.add(t);
+        }
+        return copy;
     }
 }

@@ -6,12 +6,15 @@ import com.lob.client.LobClient;
 import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.AddressRequest.Builder;
 import com.lob.protocol.request.BankAccountRequest;
+import com.lob.protocol.request.CheckRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.PostcardRequest;
 import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.JobResponse;
 import com.lob.protocol.response.PostcardResponse;
 import com.neovisionaries.i18n.CountryCode;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 
 public class AsyncLobClientIntegrationTest {
     public static void main(final String[] args) throws Exception {
@@ -57,7 +60,18 @@ public class AsyncLobClientIntegrationTest {
             .signatory("John Doe")
             .build();
 
-        final ListenableFuture<BankAccountResponse> bankAccountResponse = client.createBankAccount(bankAccountRequest);
-        System.out.println(bankAccountResponse.get());
+        final BankAccountResponse bankAccountResponse = client.createBankAccount(bankAccountRequest).get();
+        System.out.println(bankAccountResponse);
+
+        final CheckRequest checkRequest = CheckRequest.builder()
+            .name("test check")
+            .to(addrA.build())
+            .amount(Money.of(CurrencyUnit.USD, 20.00))
+            .bankAccount(bankAccountResponse.getId())
+            .memo("rent")
+            .build();
+
+        System.out.println(client.createCheck(checkRequest).get());
+
     }
 }
