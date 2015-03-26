@@ -6,7 +6,6 @@ import com.lob.ParamMapBuilder;
 import com.lob.id.AddressId;
 import com.lob.id.LobObjectId;
 import com.lob.id.ServiceId;
-import com.sun.jndi.cosnaming.IiopUrl.Address;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +46,7 @@ public class JobRequest implements ParamMappable {
             .put("name", name)
             .put("to", to)
             .put("from", from)
-            .put("object", objects)
+            .putAll("object", objects)
             .put("service", service)
             .build();
     }

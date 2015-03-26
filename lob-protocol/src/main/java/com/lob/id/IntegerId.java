@@ -1,9 +1,9 @@
 package com.lob.id;
 
-public abstract class IntegerId {
+public abstract class IntegerId implements StringValued {
     final int id;
 
-    public IntegerId(final int id) {
+    protected IntegerId(final int id) {
         this.id = id;
     }
 
@@ -12,7 +12,12 @@ public abstract class IntegerId {
     }
 
     @Override
-    public String toString() {
+    public String value() {
         return Integer.toString(this.id);
+    }
+
+    @Override
+    public String toString() {
+        return value();
     }
 }

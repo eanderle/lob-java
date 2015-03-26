@@ -19,8 +19,8 @@ public class PostcardRequest implements ParamMappable {
     private final String message;
     private final String front;
     private final String back;
-    private final boolean template;
-    private final boolean fullBleed;
+    private final Boolean template;
+    private final Boolean fullBleed;
     private final SettingId setting;
 
     public PostcardRequest(
@@ -30,8 +30,8 @@ public class PostcardRequest implements ParamMappable {
             final String message,
             final String front,
             final String back,
-            final boolean template,
-            final boolean fullBleed,
+            final Boolean template,
+            final Boolean fullBleed,
             final SettingId setting) {
 
         this.name = name;
@@ -85,11 +85,11 @@ public class PostcardRequest implements ParamMappable {
         return back;
     }
 
-    public boolean isTemplate() {
+    public Boolean isTemplate() {
         return template;
     }
 
-    public boolean isFullBleed() {
+    public Boolean isFullBleed() {
         return fullBleed;
     }
 
@@ -123,8 +123,8 @@ public class PostcardRequest implements ParamMappable {
         private String message;
         private String front;
         private String back;
-        private boolean template;
-        private boolean fullBleed;
+        private Boolean template;
+        private Boolean fullBleed;
         private SettingId setting;
 
         private Builder() {
@@ -180,12 +180,12 @@ public class PostcardRequest implements ParamMappable {
             return this;
         }
 
-        public Builder template(final boolean template) {
+        public Builder template(final Boolean template) {
             this.template = template;
             return this;
         }
 
-        public Builder fullBleed(final boolean fullBleed) {
+        public Builder fullBleed(final Boolean fullBleed) {
             this.fullBleed = fullBleed;
             return this;
         }

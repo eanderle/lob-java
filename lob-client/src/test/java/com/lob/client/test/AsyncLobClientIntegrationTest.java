@@ -3,18 +3,23 @@ package com.lob.client.test;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
+import com.lob.id.ZipCodeRouteId;
 import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.AddressRequest.Builder;
+import com.lob.protocol.request.AreaMailRequest;
 import com.lob.protocol.request.BankAccountRequest;
 import com.lob.protocol.request.CheckRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.PostcardRequest;
+import com.lob.protocol.request.TargetType;
 import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.JobResponse;
 import com.lob.protocol.response.PostcardResponse;
 import com.neovisionaries.i18n.CountryCode;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
+
+import java.util.Arrays;
 
 public class AsyncLobClientIntegrationTest {
     public static void main(final String[] args) throws Exception {
@@ -73,5 +78,16 @@ public class AsyncLobClientIntegrationTest {
 
         System.out.println(client.createCheck(checkRequest).get());
 
+        final AreaMailRequest areaMailRequest = AreaMailRequest.builder()
+            .name("sample sam")
+            .front("https://lob.com/areafront.pdf")
+            .back("https://lob.com/areaback.pdf")
+            .routesForIds(Arrays.asList(ZipCodeRouteId.parse("94158-C001"), ZipCodeRouteId.parse("94107-C031")))
+            .targetType(TargetType.ALL)
+            .fullBleed(true)
+            .build();
+
+        System.out.println(areaMailRequest.toParamMap());
+        System.out.println(client.createAreaMail(areaMailRequest).get());
     }
 }

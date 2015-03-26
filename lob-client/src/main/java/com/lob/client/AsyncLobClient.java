@@ -8,11 +8,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
 import com.lob.MoneyDeserializer;
+import com.lob.protocol.request.AreaMailRequest;
 import com.lob.protocol.request.BankAccountRequest;
 import com.lob.protocol.request.CheckRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.ParamMappable;
 import com.lob.protocol.request.PostcardRequest;
+import com.lob.protocol.response.AreaMailResponse;
 import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.CheckResponse;
 import com.lob.protocol.response.JobResponse;
@@ -92,6 +94,11 @@ public class AsyncLobClient implements LobClient {
     @Override
     public ListenableFuture<BankAccountResponse> createBankAccount(final BankAccountRequest bankAccountRequest) {
         return execute(BankAccountResponse.class, post(Router.BANK_ACCOUNTS, bankAccountRequest), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AreaMailResponse> createAreaMail(final AreaMailRequest areaMailRequest) {
+        return execute(AreaMailResponse.class, post(Router.AREA_MAIL, areaMailRequest), this.callbackExecutorService);
     }
 
     private BoundRequestBuilder get() {

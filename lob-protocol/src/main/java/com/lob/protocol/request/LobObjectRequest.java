@@ -11,19 +11,19 @@ public class LobObjectRequest implements ParamMappable {
     @JsonProperty("name") private final String name;
     @JsonProperty("file") private final String file;
     @JsonProperty("setting") private final SettingId setting;
-    @JsonProperty("quantity") private final int quantity;
-    @JsonProperty("double_sided") private final boolean doubleSided;
-    @JsonProperty("full_bleed") private final boolean fullBleed;
-    @JsonProperty("template") private final boolean template;
+    @JsonProperty("quantity") private final Integer quantity;
+    @JsonProperty("double_sided") private final Boolean doubleSided;
+    @JsonProperty("full_bleed") private final Boolean fullBleed;
+    @JsonProperty("template") private final Boolean template;
 
     public LobObjectRequest(
             final String name,
             final String file,
             final SettingId setting,
-            final int quantity,
-            final boolean doubleSided,
-            final boolean fullBleed,
-            final boolean template) {
+            final Integer quantity,
+            final Boolean doubleSided,
+            final Boolean fullBleed,
+            final Boolean template) {
         this.name = name;
         this.file = file;
         this.setting = setting;
@@ -62,19 +62,19 @@ public class LobObjectRequest implements ParamMappable {
         return setting;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public boolean isDoubleSided() {
+    public Boolean isDoubleSided() {
         return doubleSided;
     }
 
-    public boolean isFullBleed() {
+    public Boolean isFullBleed() {
         return fullBleed;
     }
 
-    public boolean isTemplate() {
+    public Boolean isTemplate() {
         return template;
     }
 
@@ -95,10 +95,10 @@ public class LobObjectRequest implements ParamMappable {
         private String name;
         private String file;
         private SettingId setting;
-        private int quantity;
-        private boolean doubleSided;
-        private boolean fullBleed;
-        private boolean template;
+        private Integer quantity;
+        private Boolean doubleSided;
+        private Boolean fullBleed;
+        private Boolean template;
 
         private Builder() {
         }
@@ -118,22 +118,22 @@ public class LobObjectRequest implements ParamMappable {
             return this;
         }
 
-        public Builder quantity(final int quantity) {
+        public Builder quantity(final Integer quantity) {
             this.quantity = quantity;
             return this;
         }
 
-        public Builder doubleSided(final boolean doubleSided) {
+        public Builder doubleSided(final Boolean doubleSided) {
             this.doubleSided = doubleSided;
             return this;
         }
 
-        public Builder fullBleed(final boolean fullBleed) {
+        public Builder fullBleed(final Boolean fullBleed) {
             this.fullBleed = fullBleed;
             return this;
         }
 
-        public Builder template(final boolean template) {
+        public Builder template(final Boolean template) {
             this.template = template;
             return this;
         }

@@ -21,7 +21,7 @@ public class SettingId extends IntegerId {
     public static SettingId STANDARD_DOOR_HANGERS_100_CT_4_25X11 = create(800);
     public static SettingId GLOSSY_COLOR_FLYER_100_CT = create(803);
 
-    public SettingId(final int id) {
+    private SettingId(final int id) {
         super(id);
     }
 

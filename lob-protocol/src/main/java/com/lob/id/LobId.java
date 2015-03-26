@@ -8,7 +8,7 @@ import java.util.Map;
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkValidHex;
 
-public abstract class LobId {
+public abstract class LobId implements StringValued {
     private final static String SEP = "_";
     private final static int ID_LENGTH = 20;
 
@@ -47,7 +47,7 @@ public abstract class LobId {
         // If we make it here, everything is good!
     }
 
-    @JsonValue
+    @Override
     public String value() {
         return this.id;
     }
@@ -69,6 +69,7 @@ public abstract class LobId {
 
     protected static enum Prefix {
         ADDRESS("adr", "address"),
+        AREA("area", "area"),
         BANK("bank", "bank"),
         CHECK("chk", "check"),
         JOB("job", "job"),

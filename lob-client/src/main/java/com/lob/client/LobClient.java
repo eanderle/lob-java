@@ -1,10 +1,12 @@
 package com.lob.client;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.lob.protocol.request.AreaMailRequest;
 import com.lob.protocol.request.BankAccountRequest;
 import com.lob.protocol.request.CheckRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.PostcardRequest;
+import com.lob.protocol.response.AreaMailResponse;
 import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.CheckResponse;
 import com.lob.protocol.response.JobResponse;
@@ -18,4 +20,6 @@ public interface LobClient {
     public ListenableFuture<CheckResponse> createCheck(final CheckRequest checkRequest);
 
     public ListenableFuture<BankAccountResponse> createBankAccount(final BankAccountRequest bankAccountRequest);
+
+    public ListenableFuture<AreaMailResponse> createAreaMail(final AreaMailRequest areaMailRequest);
 }
