@@ -14,6 +14,7 @@ import com.lob.protocol.request.PostcardRequest;
 import com.lob.protocol.request.TargetType;
 import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.JobResponse;
+import com.lob.protocol.response.JobResponseList;
 import com.lob.protocol.response.PostcardResponse;
 import com.neovisionaries.i18n.CountryCode;
 import org.joda.money.CurrencyUnit;
@@ -89,5 +90,12 @@ public class AsyncLobClientIntegrationTest {
 
         System.out.println(areaMailRequest.toParamMap());
         System.out.println(client.createAreaMail(areaMailRequest).get());
+
+        System.out.println("Result of getting job: " + client.getJob(jobResponse.get().getId()).get());
+        final JobResponseList jobResponses = client.getAllJobs().get();
+        System.out.println("Result of getting all jobs: " + jobResponses);
+
+        System.out.println("Result of getting jobs, count 1: " + client.getJobs(1).get());
+        System.out.println("Result of getting jobs, count 1, offset 1: " + client.getJobs(1, 1).get());
     }
 }

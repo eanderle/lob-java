@@ -8,6 +8,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
 import com.lob.MoneyDeserializer;
+import com.lob.id.JobId;
 import com.lob.protocol.request.AreaMailRequest;
 import com.lob.protocol.request.BankAccountRequest;
 import com.lob.protocol.request.CheckRequest;
@@ -18,12 +19,14 @@ import com.lob.protocol.response.AreaMailResponse;
 import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.CheckResponse;
 import com.lob.protocol.response.JobResponse;
+import com.lob.protocol.response.JobResponseList;
 import com.lob.protocol.response.PostcardResponse;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.ning.http.client.AsyncHttpClientConfig;
 import com.ning.http.client.AsyncHttpClientConfig.Builder;
+import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.Realm;
 import com.ning.http.client.Realm.AuthScheme;
 import com.ning.http.client.Response;
@@ -82,6 +85,33 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
+    public ListenableFuture<JobResponse> getJob(final JobId id) {
+        return execute(JobResponse.class, get(Router.JOBS + "/" + id.value()), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<JobResponseList> getAllJobs() {
+        return execute(JobResponseList.class, get(Router.JOBS), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<JobResponseList> getJobs(final int count) {
+        return execute(JobResponseList.class, get(Router.JOBS, new FluentStringsMap().add("count", Integer.toString(count))), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<JobResponseList> getJobs(final int count, final int offset) {
+        return execute(
+            JobResponseList.class,
+            get(Router.JOBS,
+                new FluentStringsMap()
+                    .add("count", Integer.toString(count))
+                    .add("offset", Integer.toString(offset))
+            ),
+            this.callbackExecutorService);
+    }
+
+    @Override
     public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest) {
         return execute(PostcardResponse.class, post(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
     }
@@ -101,8 +131,12 @@ public class AsyncLobClient implements LobClient {
         return execute(AreaMailResponse.class, post(Router.AREA_MAIL, areaMailRequest), this.callbackExecutorService);
     }
 
-    private BoundRequestBuilder get() {
-        return this.httpClient.prepareGet(this.baseUrl);
+    private BoundRequestBuilder get(final String resourceUrl) {
+        return get(resourceUrl, new FluentStringsMap());
+    }
+
+    private BoundRequestBuilder get(final String resourceUrl, final FluentStringsMap params) {
+        return this.httpClient.prepareGet(this.baseUrl + resourceUrl).setQueryParameters(params);
     }
 
     private BoundRequestBuilder post(final String resourceUrl, final ParamMappable request) {
