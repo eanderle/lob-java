@@ -5,6 +5,7 @@ public class Router {
     private Router() {}
 
     public static String AREA_MAIL = "areas";
+    public static String ADDRESSES = "addresses";
     public static String BANK_ACCOUNTS = "bank_accounts";
     public static String JOBS = "jobs";
     public static String CHECKS = "checks";

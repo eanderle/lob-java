@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 
-public class JobResponseList extends ListResponse<JobResponse> {
-    public JobResponseList(
-            @JsonProperty("data") final Collection<JobResponse> data,
+public class AddressResponseList extends ListResponse<AddressResponse> {
+    public AddressResponseList(
+            @JsonProperty("data") final Collection<AddressResponse> data,
             @JsonProperty("object") final String object,
             @JsonProperty("next_url") final String nextUrl,
             @JsonProperty("previous_url") final String previousUrl,
@@ -16,6 +16,6 @@ public class JobResponseList extends ListResponse<JobResponse> {
 
     @Override
     public String toString() {
-        return "JobResponseList{" + super.toString() + "}";
+        return "AddressResponseList{" + super.toString() + "}";
     }
 }

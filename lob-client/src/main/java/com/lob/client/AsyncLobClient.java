@@ -8,13 +8,18 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
 import com.lob.MoneyDeserializer;
+import com.lob.id.AddressId;
 import com.lob.id.JobId;
+import com.lob.id.LobId;
+import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.AreaMailRequest;
 import com.lob.protocol.request.BankAccountRequest;
 import com.lob.protocol.request.CheckRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.ParamMappable;
 import com.lob.protocol.request.PostcardRequest;
+import com.lob.protocol.response.AddressResponse;
+import com.lob.protocol.response.AddressResponseList;
 import com.lob.protocol.response.AreaMailResponse;
 import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.CheckResponse;
@@ -86,7 +91,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<JobResponse> getJob(final JobId id) {
-        return execute(JobResponse.class, get(Router.JOBS + "/" + id.value()), this.callbackExecutorService);
+        return execute(JobResponse.class, get(Router.JOBS, id), this.callbackExecutorService);
     }
 
     @Override
@@ -96,19 +101,37 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<JobResponseList> getJobs(final int count) {
-        return execute(JobResponseList.class, get(Router.JOBS, new FluentStringsMap().add("count", Integer.toString(count))), this.callbackExecutorService);
+        return execute(JobResponseList.class, get(Router.JOBS, count), this.callbackExecutorService);
     }
 
     @Override
     public ListenableFuture<JobResponseList> getJobs(final int count, final int offset) {
-        return execute(
-            JobResponseList.class,
-            get(Router.JOBS,
-                new FluentStringsMap()
-                    .add("count", Integer.toString(count))
-                    .add("offset", Integer.toString(offset))
-            ),
-            this.callbackExecutorService);
+        return execute(JobResponseList.class, get(Router.JOBS, count, offset), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AddressResponse> createAddress(final AddressRequest addressRequest) {
+        return execute(AddressResponse.class, post(Router.ADDRESSES, addressRequest), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AddressResponse> getAddress(final AddressId id) {
+        return execute(AddressResponse.class, get(Router.ADDRESSES, id), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AddressResponseList> getAllAddresses() {
+        return execute(AddressResponseList.class, get(Router.ADDRESSES), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AddressResponseList> getAddresses(final int count) {
+        return execute(AddressResponseList.class, get(Router.ADDRESSES, count), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AddressResponseList> getAddresses(final int count, final int offset) {
+        return execute(AddressResponseList.class, get(Router.ADDRESSES, count, offset), this.callbackExecutorService);
     }
 
     @Override
@@ -133,6 +156,22 @@ public class AsyncLobClient implements LobClient {
 
     private BoundRequestBuilder get(final String resourceUrl) {
         return get(resourceUrl, new FluentStringsMap());
+    }
+
+    private BoundRequestBuilder get(final String resourceUrl, final LobId id) {
+        return get(resourceUrl + "/" + id.value(), new FluentStringsMap());
+    }
+
+    private BoundRequestBuilder get(final String resourceUrl, final int count) {
+        return get(resourceUrl, new FluentStringsMap().add("count", Integer.toString(count)));
+    }
+
+    private BoundRequestBuilder get(final String resourceUrl, final int count, final int offset) {
+        return get(
+            resourceUrl,
+            new FluentStringsMap()
+                .add("count", Integer.toString(count))
+                .add("offset", Integer.toString(offset)));
     }
 
     private BoundRequestBuilder get(final String resourceUrl, final FluentStringsMap params) {
