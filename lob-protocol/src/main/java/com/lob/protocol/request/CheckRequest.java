@@ -3,7 +3,7 @@ package com.lob.protocol.request;
 import com.lob.Or;
 import com.lob.ParamMapBuilder;
 import com.lob.id.AddressId;
-import com.lob.id.BankId;
+import com.lob.id.BankAccountId;
 import org.joda.money.Money;
 
 import java.util.Collection;
@@ -15,7 +15,7 @@ import static com.lob.Util.checkPresent;
 public class CheckRequest implements ParamMappable {
     private final String name;
     private final Integer checkNumber; // optional parameter, needs to be null if not set
-    private final BankId bankAccount;
+    private final BankAccountId bankAccount;
     private final Or<AddressId, AddressRequest> to;
     private final Money amount;
     private final String message;
@@ -25,7 +25,7 @@ public class CheckRequest implements ParamMappable {
     public CheckRequest(
             final String name,
             final Integer checkNumber,
-            final BankId bankAccount,
+            final BankAccountId bankAccount,
             final Or<AddressId, AddressRequest> to,
             final Money amount,
             final String message,
@@ -63,7 +63,7 @@ public class CheckRequest implements ParamMappable {
         return checkNumber;
     }
 
-    public BankId getBankAccount() {
+    public BankAccountId getBankAccount() {
         return bankAccount;
     }
 
@@ -108,7 +108,7 @@ public class CheckRequest implements ParamMappable {
     public static class Builder {
         private String name;
         private Integer checkNumber;
-        private BankId bankAccount;
+        private BankAccountId bankAccount;
         private Or<AddressId, AddressRequest> to;
         private Money amount;
         private String message;
@@ -128,7 +128,7 @@ public class CheckRequest implements ParamMappable {
             return this;
         }
 
-        public Builder bankAccount(final BankId bankAccount) {
+        public Builder bankAccount(final BankAccountId bankAccount) {
             this.bankAccount = bankAccount;
             return this;
         }

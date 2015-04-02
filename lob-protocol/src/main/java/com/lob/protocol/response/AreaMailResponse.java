@@ -2,7 +2,7 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.id.AreaId;
+import com.lob.id.AreaMailId;
 import com.lob.protocol.request.TargetType;
 import org.joda.money.Money;
 import org.joda.time.DateTime;
@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import java.util.Collection;
 
 public class AreaMailResponse {
-    @JsonProperty private final AreaId id;
+    @JsonProperty private final AreaMailId id;
     @JsonProperty private final String name;
     @JsonProperty private final String status;
     @JsonProperty private final Money price;
@@ -26,7 +26,7 @@ public class AreaMailResponse {
 
     @JsonCreator
     public AreaMailResponse(
-            @JsonProperty("id") final AreaId id,
+            @JsonProperty("id") final AreaMailId id,
             @JsonProperty("name") final String name,
             @JsonProperty("status") final String status,
             @JsonProperty("price") final Money price,
@@ -54,7 +54,7 @@ public class AreaMailResponse {
         this.object = object;
     }
 
-    public AreaId getId() {
+    public AreaMailId getId() {
         return id;
     }
 

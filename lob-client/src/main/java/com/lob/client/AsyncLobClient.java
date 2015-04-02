@@ -9,23 +9,22 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
 import com.lob.MoneyDeserializer;
 import com.lob.id.AddressId;
+import com.lob.id.AreaMailId;
+import com.lob.id.BankAccountId;
+import com.lob.id.CheckId;
 import com.lob.id.JobId;
 import com.lob.id.LobId;
+import com.lob.id.LobObjectId;
+import com.lob.id.PostcardId;
 import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.AreaMailRequest;
 import com.lob.protocol.request.BankAccountRequest;
 import com.lob.protocol.request.CheckRequest;
 import com.lob.protocol.request.JobRequest;
+import com.lob.protocol.request.LobObjectRequest;
 import com.lob.protocol.request.ParamMappable;
 import com.lob.protocol.request.PostcardRequest;
-import com.lob.protocol.response.AddressResponse;
-import com.lob.protocol.response.AddressResponseList;
-import com.lob.protocol.response.AreaMailResponse;
-import com.lob.protocol.response.BankAccountResponse;
-import com.lob.protocol.response.CheckResponse;
-import com.lob.protocol.response.JobResponse;
-import com.lob.protocol.response.JobResponseList;
-import com.lob.protocol.response.PostcardResponse;
+import com.lob.protocol.response.*;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
@@ -135,8 +134,63 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
+    public ListenableFuture<LobObjectResponse> createLobObject(final LobObjectRequest lobObjectRequest) {
+        return execute(LobObjectResponse.class, post(Router.OBJECTS, lobObjectRequest), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<LobObjectResponse> getLobObject(final LobObjectId id) {
+        return execute(LobObjectResponse.class, get(Router.OBJECTS, id), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<LobObjectResponseList> getAllLobObjects() {
+        return execute(LobObjectResponseList.class, get(Router.OBJECTS), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<LobObjectResponseList> getLobObjects(final int count) {
+        return execute(LobObjectResponseList.class, get(Router.OBJECTS, count), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<LobObjectResponseList> getLobObjects(final int count, final int offset) {
+        return execute(LobObjectResponseList.class, get(Router.OBJECTS, count, offset), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<SettingResponseList> getAllSettings() {
+        return execute(SettingResponseList.class, get(Router.SETTINGS), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<ServiceResponseList> getAllServices() {
+        return execute(ServiceResponseList.class, get(Router.SERVICES), this.callbackExecutorService);
+    }
+
+    @Override
     public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest) {
         return execute(PostcardResponse.class, post(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<PostcardResponse> getPostcard(final PostcardId id) {
+        return execute(PostcardResponse.class, get(Router.POSTCARDS, id), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<PostcardResponseList> getAllPostcards() {
+        return execute(PostcardResponseList.class, get(Router.POSTCARDS), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<PostcardResponseList> getPostcards(final int count) {
+        return execute(PostcardResponseList.class, get(Router.POSTCARDS, count), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<PostcardResponseList> getPostcards(final int count, final int offset) {
+        return execute(PostcardResponseList.class, get(Router.POSTCARDS, count, offset), this.callbackExecutorService);
     }
 
     @Override
@@ -145,13 +199,73 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
+    public ListenableFuture<CheckResponse> getCheck(final CheckId id) {
+        return execute(CheckResponse.class, get(Router.CHECKS, id), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<CheckResponseList> getAllChecks() {
+        return execute(CheckResponseList.class, get(Router.CHECKS), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<CheckResponseList> getChecks(final int count) {
+        return execute(CheckResponseList.class, get(Router.CHECKS, count), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<CheckResponseList> getChecks(final int count, final int offset) {
+        return execute(CheckResponseList.class, get(Router.CHECKS, count, offset), this.callbackExecutorService);
+    }
+
+    @Override
     public ListenableFuture<BankAccountResponse> createBankAccount(final BankAccountRequest bankAccountRequest) {
         return execute(BankAccountResponse.class, post(Router.BANK_ACCOUNTS, bankAccountRequest), this.callbackExecutorService);
     }
 
     @Override
+    public ListenableFuture<BankAccountResponse> getBankAccount(final BankAccountId id) {
+        return execute(BankAccountResponse.class, get(Router.BANK_ACCOUNTS, id), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<BankAccountResponseList> getAllBankAccounts() {
+        return execute(BankAccountResponseList.class, get(Router.BANK_ACCOUNTS), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<BankAccountResponseList> getBankAccounts(final int count) {
+        return execute(BankAccountResponseList.class, get(Router.BANK_ACCOUNTS, count), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<BankAccountResponseList> getBankAccounts(final int count, final int offset) {
+        return execute(BankAccountResponseList.class, get(Router.BANK_ACCOUNTS, count, offset), this.callbackExecutorService);
+    }
+
+    @Override
     public ListenableFuture<AreaMailResponse> createAreaMail(final AreaMailRequest areaMailRequest) {
         return execute(AreaMailResponse.class, post(Router.AREA_MAIL, areaMailRequest), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AreaMailResponse> getAreaMail(final AreaMailId id) {
+        return execute(AreaMailResponse.class, get(Router.AREA_MAIL, id), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AreaMailResponseList> getAllAreaMails() {
+        return execute(AreaMailResponseList.class, get(Router.AREA_MAIL), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AreaMailResponseList> getAreaMails(final int count) {
+        return execute(AreaMailResponseList.class, get(Router.AREA_MAIL, count), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<AreaMailResponseList> getAreaMails(final int count, final int offset) {
+        return execute(AreaMailResponseList.class, get(Router.AREA_MAIL, count, offset), this.callbackExecutorService);
     }
 
     private BoundRequestBuilder get(final String resourceUrl) {

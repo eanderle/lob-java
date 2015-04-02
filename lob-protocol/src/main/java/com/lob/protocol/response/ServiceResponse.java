@@ -3,36 +3,47 @@ package com.lob.protocol.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Collection;
-import java.util.List;
-
-import static com.lob.Util.defensiveCopy;
-
 public class ServiceResponse {
-    @JsonProperty("object") private final String object;
-	@JsonProperty("data") private final Collection<DataItem> data;
+    @JsonProperty("id") private final int id;
+	@JsonProperty("name") private final String name;
+	@JsonProperty("description") private final String description;
+	@JsonProperty("object") private final String object;
 
     @JsonCreator
     public ServiceResponse(
-            @JsonProperty("object") final String object,
-            @JsonProperty("data") final Collection<DataItem> data) {
+            @JsonProperty("id") final int id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("description") final String description,
+            @JsonProperty("object") final String object) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
         this.object = object;
-        this.data = data;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getObject() {
         return object;
     }
 
-    public Collection<DataItem> getData() {
-        return defensiveCopy(data);
-    }
-
     @Override
     public String toString() {
         return "ServiceResponse{" +
-            "object='" + object + '\'' +
-            ", data=" + data +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", object='" + object + '\'' +
             '}';
     }
 }

@@ -6,16 +6,16 @@ import com.lob.id.LobObjectId;
 import org.joda.time.DateTime;
 
 public class LobObjectResponse {
-    @JsonProperty("id") private final LobObjectId id;
-    @JsonProperty("name") private final String name;
-    @JsonProperty("quantity") private final int quantity;
-    @JsonProperty("full_bleed") private final boolean fullBleed;
-    @JsonProperty("double_sided") private final boolean doubleSided;
-    @JsonProperty("template") private final boolean template;
-    @JsonProperty("date_created") private final DateTime dateCreated;
-    @JsonProperty("date_modified") private final DateTime dateModified;
-    @JsonProperty("setting") private final SettingResponse setting;
-    @JsonProperty("object") private final String object;
+    @JsonProperty private final LobObjectId id;
+    @JsonProperty private final String name;
+    @JsonProperty private final int quantity;
+    @JsonProperty private final boolean fullBleed;
+    @JsonProperty private final boolean doubleSided;
+    @JsonProperty private final boolean template;
+    @JsonProperty private final DateTime dateCreated;
+    @JsonProperty private final DateTime dateModified;
+    @JsonProperty private final SettingResponse setting;
+    @JsonProperty private final String object;
 
     @JsonCreator
     public LobObjectResponse(

@@ -1,13 +1,8 @@
 package com.lob.protocol.request;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.Or;
 import com.lob.ParamMapBuilder;
 import com.lob.id.AddressId;
-import com.lob.id.BankId;
-import com.lob.protocol.response.AddressResponse;
-import org.joda.time.DateTime;
 
 import java.util.Collection;
 import java.util.Map;

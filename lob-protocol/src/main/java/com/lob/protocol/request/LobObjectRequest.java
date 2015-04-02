@@ -7,14 +7,16 @@ import com.lob.id.SettingId;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.lob.Util.checkNotNull;
+
 public class LobObjectRequest implements ParamMappable {
-    @JsonProperty("name") private final String name;
-    @JsonProperty("file") private final String file;
-    @JsonProperty("setting") private final SettingId setting;
-    @JsonProperty("quantity") private final Integer quantity;
-    @JsonProperty("double_sided") private final Boolean doubleSided;
-    @JsonProperty("full_bleed") private final Boolean fullBleed;
-    @JsonProperty("template") private final Boolean template;
+    private final String name;
+    private final String file;
+    private final SettingId setting;
+    private final Integer quantity;
+    private final Boolean doubleSided;
+    private final Boolean fullBleed;
+    private final Boolean template;
 
     public LobObjectRequest(
             final String name,
@@ -25,8 +27,8 @@ public class LobObjectRequest implements ParamMappable {
             final Boolean fullBleed,
             final Boolean template) {
         this.name = name;
-        this.file = file;
-        this.setting = setting;
+        this.file = checkNotNull(file, "file is required");
+        this.setting = checkNotNull(setting, "setting is required");
         this.quantity = quantity;
         this.doubleSided = doubleSided;
         this.fullBleed = fullBleed;

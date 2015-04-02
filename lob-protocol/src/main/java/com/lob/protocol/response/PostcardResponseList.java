@@ -1,0 +1,22 @@
+package com.lob.protocol.response;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.xml.ws.Response;
+import java.util.Collection;
+
+public class PostcardResponseList extends ListResponse<PostcardResponse> {
+    public PostcardResponseList(
+            @JsonProperty("data") final Collection<PostcardResponse> data,
+            @JsonProperty("object") final String object,
+            @JsonProperty("next_url") final String nextUrl,
+            @JsonProperty("previous_url") final String previousUrl,
+            @JsonProperty("count") final int count) {
+        super(data, object, nextUrl, previousUrl, count);
+    }
+
+    @Override
+    public String toString() {
+        return "PostcardResponseList{" + super.toString() + "}";
+    }
+}

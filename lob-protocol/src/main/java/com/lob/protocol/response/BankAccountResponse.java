@@ -2,11 +2,11 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.id.BankId;
+import com.lob.id.BankAccountId;
 import org.joda.time.DateTime;
 
 public class BankAccountResponse {
-    @JsonProperty private final BankId id;
+    @JsonProperty private final BankAccountId id;
     @JsonProperty private final AddressResponse bankAddress;
     @JsonProperty private final AddressResponse accountAddress;
     @JsonProperty private final String signatory;
@@ -16,7 +16,7 @@ public class BankAccountResponse {
 
     @JsonCreator
     public BankAccountResponse(
-            @JsonProperty("id") final BankId id,
+            @JsonProperty("id") final BankAccountId id,
             @JsonProperty("bank_address") final AddressResponse bankAddress,
             @JsonProperty("account_address") final AddressResponse accountAddress,
             @JsonProperty("signatory") final String signatory,
@@ -32,7 +32,7 @@ public class BankAccountResponse {
         this.object = object;
     }
 
-    public BankId getId() {
+    public BankAccountId getId() {
         return id;
     }
 
