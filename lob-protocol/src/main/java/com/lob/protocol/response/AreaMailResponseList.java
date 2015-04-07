@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 
-public class AreaMailResponseList extends ListResponse<AreaMailResponse> {
+public class AreaMailResponseList extends AbstractPagedResponseList<AreaMailResponse> {
     public AreaMailResponseList(
             @JsonProperty("data") final Collection<AreaMailResponse> data,
             @JsonProperty("object") final String object,

@@ -15,6 +15,7 @@ import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.LobObjectRequest;
 import com.lob.protocol.request.PostcardRequest;
 import com.lob.protocol.request.TargetType;
+import com.lob.protocol.request.ZipCodeRouteRequest;
 import com.lob.protocol.response.AddressResponse;
 import com.lob.protocol.response.AreaMailResponse;
 import com.lob.protocol.response.BankAccountResponse;
@@ -155,5 +156,11 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("get all area mails " + client.getAllAreaMails().get());
         System.out.println("get all area mails, count 1 " + client.getAreaMails(1).get());
         System.out.println("get all area mails, count 1, offset 1 " + client.getAreaMails(1, 1).get());
+
+        final ZipCodeRouteRequest zipCodeRouteRequest = ZipCodeRouteRequest.builder().addStringZips("48168", "94158").build();
+        System.out.println("get zip code routes " + client.getZipCodeRoutes(zipCodeRouteRequest).get());
+        System.out.println("countries " + client.getAllCountries().get());
+        System.out.println("states " + client.getAllStates().get());
+        System.out.println("packagings " + client.getAllPackagings().get());
     }
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 
-public abstract class ListResponse<T> {
+public abstract class AbstractPagedResponseList<T> {
     @JsonProperty private final Collection<T> data;
     @JsonProperty private final String object;
     @JsonProperty private final String nextUrl;
@@ -13,7 +13,7 @@ public abstract class ListResponse<T> {
     @JsonProperty private final int count;
 
     @JsonCreator
-    public ListResponse(
+    public AbstractPagedResponseList(
             @JsonProperty("data") final Collection<T> data,
             @JsonProperty("object") final String object,
             @JsonProperty("next_url") final String nextUrl,

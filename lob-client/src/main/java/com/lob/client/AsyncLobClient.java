@@ -24,6 +24,7 @@ import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.LobObjectRequest;
 import com.lob.protocol.request.ParamMappable;
 import com.lob.protocol.request.PostcardRequest;
+import com.lob.protocol.request.ZipCodeRouteRequest;
 import com.lob.protocol.response.*;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
@@ -268,8 +269,32 @@ public class AsyncLobClient implements LobClient {
         return execute(AreaMailResponseList.class, get(Router.AREA_MAIL, count, offset), this.callbackExecutorService);
     }
 
+    @Override
+    public ListenableFuture<ZipCodeRouteResponseList> getZipCodeRoutes(final ZipCodeRouteRequest request) {
+        return execute(ZipCodeRouteResponseList.class, get(Router.ROUTES, request), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<CountryResponseList> getAllCountries() {
+        return execute(CountryResponseList.class, get(Router.COUNTRIES), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<StateResponseList> getAllStates() {
+        return execute(StateResponseList.class, get(Router.STATES), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<PackagingResponseList> getAllPackagings() {
+        return execute(PackagingResponseList.class, get(Router.PACKAGINGS), this.callbackExecutorService);
+    }
+
     private BoundRequestBuilder get(final String resourceUrl) {
         return get(resourceUrl, new FluentStringsMap());
+    }
+
+    private BoundRequestBuilder get(final String resourceUrl, final ParamMappable request) {
+        return get(resourceUrl, new FluentStringsMap(request.toParamMap()));
     }
 
     private BoundRequestBuilder get(final String resourceUrl, final LobId id) {

@@ -2,10 +2,9 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.xml.ws.Response;
 import java.util.Collection;
 
-public class PostcardResponseList extends ListResponse<PostcardResponse> {
+public class PostcardResponseList extends AbstractPagedResponseList<PostcardResponse> {
     public PostcardResponseList(
             @JsonProperty("data") final Collection<PostcardResponse> data,
             @JsonProperty("object") final String object,

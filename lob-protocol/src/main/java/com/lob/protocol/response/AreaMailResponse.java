@@ -17,7 +17,7 @@ public class AreaMailResponse {
     @JsonProperty private final String url;
     @JsonProperty private final TargetType targetType;
     @JsonProperty private final int numAddresses;
-    @JsonProperty private final Collection<ZipCodeRouteCollection> zipCodeRouteCollections;
+    @JsonProperty private final Collection<ZipCodeRouteResponse> zipCodeRouteResponses;
     @JsonProperty private final Collection<ThumbnailResponse> thumbnails;
     @JsonProperty private final DateTime expectedDeliveryDate;
     @JsonProperty private final DateTime dateCreated;
@@ -33,7 +33,7 @@ public class AreaMailResponse {
             @JsonProperty("url") final String url,
             @JsonProperty("target_type") final TargetType targetType,
             @JsonProperty("addresses") final int numAddresses,
-            @JsonProperty("zip_codes") final Collection<ZipCodeRouteCollection> zipCodeRouteCollections,
+            @JsonProperty("zip_codes") final Collection<ZipCodeRouteResponse> zipCodeRouteResponses,
             @JsonProperty("thumbnails") final Collection<ThumbnailResponse> thumbnails,
             @JsonProperty("expected_delivery_date") final DateTime expectedDeliveryDate,
             @JsonProperty("date_created") final DateTime dateCreated,
@@ -46,7 +46,7 @@ public class AreaMailResponse {
         this.url = url;
         this.targetType = targetType;
         this.numAddresses = numAddresses;
-        this.zipCodeRouteCollections = zipCodeRouteCollections;
+        this.zipCodeRouteResponses = zipCodeRouteResponses;
         this.thumbnails = thumbnails;
         this.expectedDeliveryDate = expectedDeliveryDate;
         this.dateCreated = dateCreated;
@@ -82,8 +82,8 @@ public class AreaMailResponse {
         return numAddresses;
     }
 
-    public Collection<ZipCodeRouteCollection> getZipCodeRouteCollections() {
-        return zipCodeRouteCollections;
+    public Collection<ZipCodeRouteResponse> getZipCodeRouteResponses() {
+        return zipCodeRouteResponses;
     }
 
     public Collection<ThumbnailResponse> getThumbnails() {
@@ -116,7 +116,7 @@ public class AreaMailResponse {
             ", url='" + url + '\'' +
             ", targetType=" + targetType +
             ", numAddresses=" + numAddresses +
-            ", zipCodeRouteCollections=" + zipCodeRouteCollections +
+            ", zipCodeRouteCollections=" + zipCodeRouteResponses +
             ", thumbnails=" + thumbnails +
             ", expectedDeliveryDate=" + expectedDeliveryDate +
             ", dateCreated=" + dateCreated +

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 
-public class BankAccountResponseList extends ListResponse<BankAccountResponse> {
+public class BankAccountResponseList extends AbstractPagedResponseList<BankAccountResponse> {
     public BankAccountResponseList(
             @JsonProperty("data") final Collection<BankAccountResponse> data,
             @JsonProperty("object") final String object,
