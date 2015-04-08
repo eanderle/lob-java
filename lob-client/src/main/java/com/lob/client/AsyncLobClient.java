@@ -135,6 +135,11 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
+    public ListenableFuture<AddressDeleteResponse> deleteAddress(final AddressId id) {
+        return execute(AddressDeleteResponse.class, delete(Router.ADDRESSES, id), this.callbackExecutorService);
+    }
+
+    @Override
     public ListenableFuture<LobObjectResponse> createLobObject(final LobObjectRequest lobObjectRequest) {
         return execute(LobObjectResponse.class, post(Router.OBJECTS, lobObjectRequest), this.callbackExecutorService);
     }
@@ -152,6 +157,11 @@ public class AsyncLobClient implements LobClient {
     @Override
     public ListenableFuture<LobObjectResponseList> getLobObjects(final int count) {
         return execute(LobObjectResponseList.class, get(Router.OBJECTS, count), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<LobObjectDeleteResponse> deleteLobObject(final LobObjectId id) {
+        return execute(LobObjectDeleteResponse.class, delete(Router.OBJECTS, id), this.callbackExecutorService);
     }
 
     @Override
@@ -245,6 +255,11 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
+    public ListenableFuture<BankAccountDeleteResponse> deleteBankAccount(final BankAccountId id) {
+        return execute(BankAccountDeleteResponse.class, delete(Router.BANK_ACCOUNTS, id), this.callbackExecutorService);
+    }
+
+    @Override
     public ListenableFuture<AreaMailResponse> createAreaMail(final AreaMailRequest areaMailRequest) {
         return execute(AreaMailResponse.class, post(Router.AREA_MAIL, areaMailRequest), this.callbackExecutorService);
     }
@@ -287,6 +302,10 @@ public class AsyncLobClient implements LobClient {
     @Override
     public ListenableFuture<PackagingResponseList> getAllPackagings() {
         return execute(PackagingResponseList.class, get(Router.PACKAGINGS), this.callbackExecutorService);
+    }
+
+    private BoundRequestBuilder delete(final String resourceUrl, final LobId id) {
+        return this.httpClient.prepareDelete(this.baseUrl + resourceUrl + "/" + id.value());
     }
 
     private BoundRequestBuilder get(final String resourceUrl) {

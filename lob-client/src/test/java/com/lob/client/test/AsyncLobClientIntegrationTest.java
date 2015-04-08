@@ -118,6 +118,7 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("get all addresses " + client.getAllAddresses().get());
         System.out.println("get all addresses, count 1 " + client.getAddresses(1).get());
         System.out.println("get all addresses, count 1, offset 1 " + client.getAddresses(1, 1).get());
+        System.out.println("delete address " + client.deleteAddress(addressResponse.getId()).get());
 
         final LobObjectRequest objectRequest = LobObjectRequest.builder()
             .file("https://lob.com/goblue.pdf")
@@ -132,6 +133,7 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("get all objects " + client.getAllLobObjects().get());
         System.out.println("get all objects, count 1 " + client.getLobObjects(1).get());
         System.out.println("get all objects, count 1, offset 1 " + client.getLobObjects(1, 1).get());
+        System.out.println("delete object " + client.deleteLobObject(objectResponse.getId()).get());
 
         System.out.println("get all settings " + client.getAllSettings().get());
 
@@ -151,6 +153,7 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("get all banks " + client.getAllBankAccounts().get());
         System.out.println("get all banks, count 1 " + client.getBankAccounts(1).get());
         System.out.println("get all banks, count 1, offset 1 " + client.getBankAccounts(1, 1).get());
+        System.out.println("delete bank account" + client.deleteBankAccount(bankAccountResponse.getId()).get());
 
         System.out.println("get area mail " + client.getAreaMail(areaMailResponse.getId()).get());
         System.out.println("get all area mails " + client.getAllAreaMails().get());

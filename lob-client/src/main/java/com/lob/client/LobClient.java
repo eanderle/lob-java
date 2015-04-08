@@ -42,6 +42,8 @@ public interface LobClient {
 
     public ListenableFuture<AddressResponseList> getAddresses(final int count, final int offset);
 
+    public ListenableFuture<AddressDeleteResponse> deleteAddress(final AddressId id);
+
     // Object methods
     public ListenableFuture<LobObjectResponse> createLobObject(final LobObjectRequest lobObjectRequest);
 
@@ -52,6 +54,8 @@ public interface LobClient {
     public ListenableFuture<LobObjectResponseList> getLobObjects(final int count);
 
     public ListenableFuture<LobObjectResponseList> getLobObjects(final int count, final int offset);
+
+    public ListenableFuture<LobObjectDeleteResponse> deleteLobObject(final LobObjectId id);
 
     // Setting methods
     public ListenableFuture<SettingResponseList> getAllSettings();
@@ -91,6 +95,8 @@ public interface LobClient {
     public ListenableFuture<BankAccountResponseList> getBankAccounts(final int count);
 
     public ListenableFuture<BankAccountResponseList> getBankAccounts(final int count, final int offset);
+
+    public ListenableFuture<BankAccountDeleteResponse> deleteBankAccount(final BankAccountId id);
 
     // Area mail methods
     public ListenableFuture<AreaMailResponse> createAreaMail(final AreaMailRequest areaMailRequest);
