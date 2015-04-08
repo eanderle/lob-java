@@ -6,18 +6,11 @@ import com.lob.id.AddressId;
 import com.neovisionaries.i18n.CountryCode;
 import org.joda.time.DateTime;
 
-public class AddressResponse {
+public class AddressResponse extends AbstractAddressResponse {
     @JsonProperty("id") private final AddressId id;
     @JsonProperty("name") private final String name;
     @JsonProperty("email") private final String email;
     @JsonProperty("phone") private final String phone;
-    @JsonProperty("address_line1") private final String line1;
-    @JsonProperty("address_line2") private final String line2;
-    @JsonProperty("address_city") private final String city;
-    @JsonProperty("address_state") private final String state;
-    @JsonProperty("address_zip") private final String zip;
-    @JsonProperty("address_country") private final String country;
-    @JsonProperty("object") private final String object;
     @JsonProperty("date_created") private final DateTime dateCreated;
     @JsonProperty("date_modified") private final DateTime dateModified;
     @JsonProperty("deleted") private final boolean deleted;
@@ -38,17 +31,12 @@ public class AddressResponse {
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("deleted") final boolean deleted) {
+
+        super(line1, line2, city, state, zip, country, object);
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.line1 = line1;
-        this.line2 = line2;
-        this.city = city;
-        this.state = state;
-        this.zip = zip;
-        this.country = country;
-        this.object = object;
         this.dateCreated = dateCreated;
         this.dateModified = dateModified;
         this.deleted = deleted;
@@ -70,34 +58,6 @@ public class AddressResponse {
         return phone;
     }
 
-    public String getLine1() {
-        return line1;
-    }
-
-    public String getLine2() {
-        return line2;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public String getObject() {
-        return object;
-    }
-
     public DateTime getDateCreated() {
         return dateCreated;
     }
@@ -117,16 +77,9 @@ public class AddressResponse {
             ", name='" + name + '\'' +
             ", email='" + email + '\'' +
             ", phone='" + phone + '\'' +
-            ", line1='" + line1 + '\'' +
-            ", line2='" + line2 + '\'' +
-            ", city='" + city + '\'' +
-            ", state='" + state + '\'' +
-            ", zip='" + zip + '\'' +
-            ", country='" + country + '\'' +
-            ", object='" + object + '\'' +
             ", dateCreated=" + dateCreated +
             ", dateModified=" + dateModified +
             ", deleted=" + deleted +
-            '}';
+            super.toString();
     }
 }

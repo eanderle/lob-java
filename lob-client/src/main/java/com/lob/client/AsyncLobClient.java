@@ -16,15 +16,7 @@ import com.lob.id.JobId;
 import com.lob.id.LobId;
 import com.lob.id.LobObjectId;
 import com.lob.id.PostcardId;
-import com.lob.protocol.request.AddressRequest;
-import com.lob.protocol.request.AreaMailRequest;
-import com.lob.protocol.request.BankAccountRequest;
-import com.lob.protocol.request.CheckRequest;
-import com.lob.protocol.request.JobRequest;
-import com.lob.protocol.request.LobObjectRequest;
-import com.lob.protocol.request.ParamMappable;
-import com.lob.protocol.request.PostcardRequest;
-import com.lob.protocol.request.ZipCodeRouteRequest;
+import com.lob.protocol.request.*;
 import com.lob.protocol.response.*;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
@@ -287,6 +279,11 @@ public class AsyncLobClient implements LobClient {
     @Override
     public ListenableFuture<ZipCodeRouteResponseList> getZipCodeRoutes(final ZipCodeRouteRequest request) {
         return execute(ZipCodeRouteResponseList.class, get(Router.ROUTES, request), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<VerifyAddressResponse> verifyAddress(final VerifyAddressRequest request) {
+        return execute(VerifyAddressResponse.class, get(Router.VERIFY, request), this.callbackExecutorService);
     }
 
     @Override

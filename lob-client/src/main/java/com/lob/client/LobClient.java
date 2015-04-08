@@ -15,6 +15,7 @@ import com.lob.protocol.request.CheckRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.LobObjectRequest;
 import com.lob.protocol.request.PostcardRequest;
+import com.lob.protocol.request.VerifyAddressRequest;
 import com.lob.protocol.request.ZipCodeRouteRequest;
 import com.lob.protocol.response.*;
 
@@ -110,6 +111,9 @@ public interface LobClient {
     public ListenableFuture<AreaMailResponseList> getAreaMails(final int count, final int offset);
 
     public ListenableFuture<ZipCodeRouteResponseList> getZipCodeRoutes(final ZipCodeRouteRequest request);
+
+    // Address verification methods
+    public ListenableFuture<VerifyAddressResponse> verifyAddress(final VerifyAddressRequest request);
 
     // Resources
     public ListenableFuture<CountryResponseList> getAllCountries();

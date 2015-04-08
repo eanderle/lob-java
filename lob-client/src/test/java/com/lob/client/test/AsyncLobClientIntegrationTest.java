@@ -162,6 +162,7 @@ public class AsyncLobClientIntegrationTest {
 
         final ZipCodeRouteRequest zipCodeRouteRequest = ZipCodeRouteRequest.builder().addStringZips("48168", "94158").build();
         System.out.println("get zip code routes " + client.getZipCodeRoutes(zipCodeRouteRequest).get());
+
         System.out.println("countries " + client.getAllCountries().get());
         System.out.println("states " + client.getAllStates().get());
         System.out.println("packagings " + client.getAllPackagings().get());

@@ -17,4 +17,5 @@ public class Router {
     public static String SERVICES = "services";
     public static String SETTINGS = "settings";
     public static String STATES = "states";
+    public static String VERIFY = "verify";
 }
