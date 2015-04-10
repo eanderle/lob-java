@@ -283,7 +283,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<VerifyAddressResponse> verifyAddress(final VerifyAddressRequest request) {
-        return execute(VerifyAddressResponse.class, get(Router.VERIFY, request), this.callbackExecutorService);
+        return execute(VerifyAddressResponse.class, post(Router.VERIFY, request), this.callbackExecutorService);
     }
 
     @Override

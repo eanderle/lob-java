@@ -5,22 +5,46 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.AddressId;
 import org.joda.time.DateTime;
 
-public class VerifyAddressResponse extends AbstractAddressResponse {
-    @JsonCreator
-    public VerifyAddressResponse(
-            @JsonProperty("address_line1") final String line1,
-            @JsonProperty("address_line2") final String line2,
-            @JsonProperty("address_city") final String city,
-            @JsonProperty("address_state") final String state,
-            @JsonProperty("address_zip") final String zip,
-            @JsonProperty("address_country") final String country,
-            @JsonProperty("object") final String object) {
+public class VerifyAddressResponse {
+    @JsonProperty private final AbstractAddressResponse address;
 
-        super(line1, line2, city, state, zip, country, object);
+    @JsonCreator
+    public VerifyAddressResponse(@JsonProperty("address") final AbstractAddressResponse address) {
+        this.address = address;
+    }
+
+    public String getLine1() {
+        return address.getLine1();
+    }
+
+    public String getCountry() {
+        return address.getCountry();
+    }
+
+    public String getState() {
+        return address.getState();
+    }
+
+    public String getZip() {
+        return address.getZip();
+    }
+
+    public String getCity() {
+        return address.getCity();
+    }
+
+    public String getLine2() {
+        return address.getLine2();
+    }
+
+    public String getObject() {
+        return address.getObject();
     }
 
     @Override
     public String toString() {
-        return "VerifyAddressResponse{" + super.toString();
+        return "VerifyAddressResponse{" +
+            "address=" + address +
+            '}';
     }
 }

@@ -6,16 +6,8 @@ import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
 import com.lob.id.SettingId;
 import com.lob.id.ZipCodeRouteId;
-import com.lob.protocol.request.AddressRequest;
+import com.lob.protocol.request.*;
 import com.lob.protocol.request.AddressRequest.Builder;
-import com.lob.protocol.request.AreaMailRequest;
-import com.lob.protocol.request.BankAccountRequest;
-import com.lob.protocol.request.CheckRequest;
-import com.lob.protocol.request.JobRequest;
-import com.lob.protocol.request.LobObjectRequest;
-import com.lob.protocol.request.PostcardRequest;
-import com.lob.protocol.request.TargetType;
-import com.lob.protocol.request.ZipCodeRouteRequest;
 import com.lob.protocol.response.AddressResponse;
 import com.lob.protocol.response.AreaMailResponse;
 import com.lob.protocol.response.BankAccountResponse;
@@ -37,7 +29,6 @@ public class AsyncLobClientIntegrationTest {
         ((ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.INFO);
 
         final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
-
         final JobRequest jobRequest = JobRequest.builder()
             .name("Michigan fan letter")
             .to("adr_43769b47aed248c2")
@@ -162,6 +153,14 @@ public class AsyncLobClientIntegrationTest {
 
         final ZipCodeRouteRequest zipCodeRouteRequest = ZipCodeRouteRequest.builder().addStringZips("48168", "94158").build();
         System.out.println("get zip code routes " + client.getZipCodeRoutes(zipCodeRouteRequest).get());
+
+        final VerifyAddressRequest verifyRequest = VerifyAddressRequest.builder()
+            .line1("220 William T Morrissey Boulevard")
+            .city("boston")
+            .state("MA")
+            .zip("02125")
+            .build();
+        System.out.println("verify address " + client.verifyAddress(verifyRequest).get());
 
         System.out.println("countries " + client.getAllCountries().get());
         System.out.println("states " + client.getAllStates().get());
