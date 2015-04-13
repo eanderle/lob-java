@@ -1,26 +1,29 @@
 package com.lob.protocol.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.ParamMapBuilder;
 import com.lob.id.SettingId;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 
-public class LobObjectRequest implements ParamMappable {
+public class LobObjectRequest implements HasFileParams {
     private final String name;
-    private final String file;
+    private final FileParam file;
     private final SettingId setting;
     private final Integer quantity;
     private final Boolean doubleSided;
     private final Boolean fullBleed;
     private final Boolean template;
 
+    private final static String FILE_PARAM = "file";
+
     public LobObjectRequest(
             final String name,
-            final String file,
+            final FileParam file,
             final SettingId setting,
             final Integer quantity,
             final Boolean doubleSided,
@@ -43,7 +46,6 @@ public class LobObjectRequest implements ParamMappable {
     public Map<String, Collection<String>> toParamMap() {
         return ParamMapBuilder.create()
             .put("name", name)
-            .put("file", file) // TODO
             .put("setting", setting)
             .put("quantity", quantity)
             .put("double_sided", doubleSided)
@@ -56,8 +58,13 @@ public class LobObjectRequest implements ParamMappable {
         return name;
     }
 
-    public String getFile() {
+    public FileParam getFile() {
         return file;
+    }
+
+    @Override
+    public Collection<FileParam> getFileParams() {
+        return Arrays.asList(this.file);
     }
 
     public SettingId getSetting() {
@@ -95,7 +102,7 @@ public class LobObjectRequest implements ParamMappable {
 
     public static class Builder {
         private String name;
-        private String file;
+        private FileParam file;
         private SettingId setting;
         private Integer quantity;
         private Boolean doubleSided;
@@ -110,8 +117,18 @@ public class LobObjectRequest implements ParamMappable {
             return this;
         }
 
-        public Builder file(final String file) {
+        public Builder file(final FileParam file) {
             this.file = file;
+            return this;
+        }
+
+        public Builder file(final String file) {
+            this.file = FileParam.url(FILE_PARAM, file);
+            return this;
+        }
+
+        public Builder file(final File file) {
+            this.file = FileParam.file(FILE_PARAM, file);
             return this;
         }
 

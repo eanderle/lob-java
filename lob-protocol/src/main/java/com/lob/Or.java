@@ -45,4 +45,12 @@ public class Or<T1, T2> {
         }
         return this.refB;
     }
+
+    @Override
+    public String toString() {
+        return "Or{" +
+            "refA=" + refA +
+            ", refB=" + refB +
+            '}';
+    }
 }

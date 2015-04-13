@@ -1,6 +1,8 @@
 package com.lob.client.test;
 
 import ch.qos.logback.classic.Level;
+import com.google.common.io.Files;
+import com.google.common.io.Resources;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
@@ -22,13 +24,31 @@ import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.URL;
 import java.util.Arrays;
 
 public class AsyncLobClientIntegrationTest {
     public static void main(final String[] args) throws Exception {
-        ((ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.INFO);
+        ((ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.TRACE);
 
         final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
+
+        final LobObjectRequest.Builder objectRequest = LobObjectRequest.builder()
+            .file("https://lob.com/goblue.pdf")
+            .name("myObject")
+            .setting(SettingId.BLACK_AND_WHITE_DOCUMENT)
+            .template(true);
+
+        final File file = File.createTempFile("/tmp", ".tmp");
+        Resources.asByteSource(Resources.getResource("test.pdf")).copyTo(Files.asByteSink(file));
+        final LobObjectRequest fileRequest = objectRequest.butWith().file(file).build();
+        System.out.println(fileRequest);
+        System.out.println(client.createLobObject(fileRequest).get());
+        file.delete();
+
+
         final JobRequest jobRequest = JobRequest.builder()
             .name("Michigan fan letter")
             .to("adr_43769b47aed248c2")
@@ -111,14 +131,8 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("get all addresses, count 1, offset 1 " + client.getAddresses(1, 1).get());
         System.out.println("delete address " + client.deleteAddress(addressResponse.getId()).get());
 
-        final LobObjectRequest objectRequest = LobObjectRequest.builder()
-            .file("https://lob.com/goblue.pdf")
-            .name("myObject")
-            .setting(SettingId.BLACK_AND_WHITE_DOCUMENT)
-            .template(true)
-            .build();
-        System.out.println("object request: " + objectRequest.toParamMap());
-        final LobObjectResponse objectResponse = client.createLobObject(objectRequest).get();
+        System.out.println("object request: " + objectRequest.build().toParamMap());
+        final LobObjectResponse objectResponse = client.createLobObject(objectRequest.build()).get();
         System.out.println("create object " + objectResponse);
         System.out.println("get object " + client.getLobObject(objectResponse.getId()).get());
         System.out.println("get all objects " + client.getAllLobObjects().get());

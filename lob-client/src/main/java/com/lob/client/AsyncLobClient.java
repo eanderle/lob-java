@@ -23,6 +23,7 @@ import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.ning.http.client.AsyncHttpClientConfig;
 import com.ning.http.client.AsyncHttpClientConfig.Builder;
+import com.ning.http.client.FilePart;
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.Realm;
 import com.ning.http.client.Realm.AuthScheme;
@@ -133,7 +134,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<LobObjectResponse> createLobObject(final LobObjectRequest lobObjectRequest) {
-        return execute(LobObjectResponse.class, post(Router.OBJECTS, lobObjectRequest), this.callbackExecutorService);
+        return execute(LobObjectResponse.class, postWithFile(Router.OBJECTS, lobObjectRequest), this.callbackExecutorService);
     }
 
     @Override
@@ -335,6 +336,25 @@ public class AsyncLobClient implements LobClient {
 
     private BoundRequestBuilder post(final String resourceUrl, final ParamMappable request) {
         return this.httpClient.preparePost(this.baseUrl + resourceUrl).setParameters(request.toParamMap());
+    }
+
+    private BoundRequestBuilder postWithFile(final String resourceUrl, final HasFileParams request) {
+        final BoundRequestBuilder builder = this.httpClient
+            .preparePost(this.baseUrl + resourceUrl)
+            .setParameters(request.toParamMap());
+
+        for (final FileParam fileParam : request.getFileParams()) {
+            if (fileParam.isFile()) {
+                builder.addBodyPart(new FilePart(fileParam.getName(), fileParam.getFile(), null, null));
+            }
+            else if (fileParam.isUrl()) {
+                builder.addParameter(fileParam.getName(), fileParam.getUrl());
+            }
+            else {
+                throw new IllegalStateException("file param was not a file or string -- this should never happen! " + fileParam);
+            }
+        }
+        return builder;
     }
 
     private static <T> ListenableFuture<T> execute(
