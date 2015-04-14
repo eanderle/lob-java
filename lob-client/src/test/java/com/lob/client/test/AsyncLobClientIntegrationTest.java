@@ -26,14 +26,35 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 
 public class AsyncLobClientIntegrationTest {
     public static void main(final String[] args) throws Exception {
-        ((ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.TRACE);
+        ((ch.qos.logback.classic.Logger)LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME)).setLevel(Level.INFO);
 
         final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
+
+        final Builder addrA = AddressRequest.builder()
+            .name("eric")
+            .line1("123 main st")
+            .city("san francisco")
+            .state("ca")
+            .zip("94107")
+            .country(CountryCode.US);
+        final Builder addrB = addrA.butWith().name("peter").line1("850 Berry");
+
+        final PostcardRequest.Builder postcardRequestBuilder = PostcardRequest.builder()
+            .name("demo postcard")
+            .to(addrA.build())
+            .from(addrB.build())
+            .fullBleed(true)
+            .front("https://lob.com/postcardfront.pdf")
+            .back("https://lob.com/postcardback.pdf");
+
+        final PostcardRequest postcardFile = postcardRequestBuilder.butWith().front(fileFromResource("postcardfront.pdf")).build();
+        System.out.println("postcard with file front: " + client.createPostcard(postcardFile).get());
 
         final LobObjectRequest.Builder objectRequest = LobObjectRequest.builder()
             .file("https://lob.com/goblue.pdf")
@@ -41,12 +62,10 @@ public class AsyncLobClientIntegrationTest {
             .setting(SettingId.BLACK_AND_WHITE_DOCUMENT)
             .template(true);
 
-        final File file = File.createTempFile("/tmp", ".tmp");
-        Resources.asByteSource(Resources.getResource("test.pdf")).copyTo(Files.asByteSink(file));
-        final LobObjectRequest fileRequest = objectRequest.butWith().file(file).build();
+        final File file = fileFromResource("goblue.pdf");
+        final LobObjectRequest fileRequest = objectRequest.butWith().file(file).setting(SettingId.BLACK_AND_WHITE_DOCUMENT).build();
         System.out.println(fileRequest);
         System.out.println(client.createLobObject(fileRequest).get());
-        file.delete();
 
 
         final JobRequest jobRequest = JobRequest.builder()
@@ -59,24 +78,7 @@ public class AsyncLobClientIntegrationTest {
         final ListenableFuture<JobResponse> jobResponse = client.createJob(jobRequest);
         System.out.println(jobResponse.get());
 
-        final Builder addrA = AddressRequest.builder()
-            .name("eric")
-            .line1("123 main st")
-            .city("san francisco")
-            .state("ca")
-            .zip("94107")
-            .country(CountryCode.US);
-        final Builder addrB = addrA.butWith().name("peter").line1("850 Berry");
-
-        final PostcardRequest postcardRequest = PostcardRequest.builder()
-            .name("demo postcard")
-            .to(addrA.build())
-            .from(addrB.build())
-            .fullBleed(true)
-            .front("https://lob.com/postcardfront.pdf")
-            .back("https://lob.com/postcardback.pdf")
-            .build();
-
+        final PostcardRequest postcardRequest = postcardRequestBuilder.build();
         final PostcardResponse postcardResponse = client.createPostcard(postcardRequest).get();
         System.out.println(postcardResponse);
 
@@ -92,26 +94,32 @@ public class AsyncLobClientIntegrationTest {
         final BankAccountResponse bankAccountResponse = client.createBankAccount(bankAccountRequest).get();
         System.out.println(bankAccountResponse);
 
-        final CheckRequest checkRequest = CheckRequest.builder()
+        final CheckRequest.Builder checkRequestBuilder = CheckRequest.builder()
             .name("test check")
             .to(addrA.build())
             .amount(Money.of(CurrencyUnit.USD, 20.00))
             .bankAccount(bankAccountResponse.getId())
-            .memo("rent")
-            .build();
+            .memo("rent");
+
+        final CheckRequest fileLogoCheckRequest = checkRequestBuilder.butWith().logo(fileFromResource("lobCheckLogo.png")).build();
+        System.out.println("check response with file logo: " + client.createCheck(fileLogoCheckRequest).get());
+        final CheckRequest checkRequest = checkRequestBuilder.build();
 
         final CheckResponse checkResponse = client.createCheck(checkRequest).get();
         System.out.println(checkResponse);
 
-        final AreaMailRequest areaMailRequest = AreaMailRequest.builder()
+        final AreaMailRequest.Builder areaMailRequestBuilder = AreaMailRequest.builder()
             .name("sample sam")
             .front("https://lob.com/areafront.pdf")
             .back("https://lob.com/areaback.pdf")
             .routesForIds(Arrays.asList(ZipCodeRouteId.parse("94158-C001"), ZipCodeRouteId.parse("94107-C031")))
             .targetType(TargetType.ALL)
-            .fullBleed(true)
-            .build();
+            .fullBleed(true);
 
+        final AreaMailRequest fileAreaMailRequest = areaMailRequestBuilder.butWith().front(fileFromResource("areafront.pdf")).build();
+        System.out.println("area mail with file front: " + client.createAreaMail(fileAreaMailRequest).get());
+
+        final AreaMailRequest areaMailRequest = areaMailRequestBuilder.build();
         System.out.println(areaMailRequest.toParamMap());
         final AreaMailResponse areaMailResponse = client.createAreaMail(areaMailRequest).get();
         System.out.println(areaMailResponse);
@@ -179,5 +187,12 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("countries " + client.getAllCountries().get());
         System.out.println("states " + client.getAllStates().get());
         System.out.println("packagings " + client.getAllPackagings().get());
+    }
+
+    private static File fileFromResource(final String resource) throws IOException {
+        final File file = File.createTempFile("/tmp", ".tmp");
+        file.deleteOnExit();
+        Resources.asByteSource(Resources.getResource(resource)).copyTo(Files.asByteSink(file));
+        return file;
     }
 }

@@ -1,6 +1,7 @@
 package com.lob.protocol.request;
 
 import com.lob.ParamMapBuilder;
+import com.lob.Util;
 import com.lob.id.SettingId;
 
 import java.io.File;
@@ -42,16 +43,24 @@ public class LobObjectRequest implements HasFileParams {
         return new Builder();
     }
 
-    @Override
-    public Map<String, Collection<String>> toParamMap() {
+    private ParamMapBuilder toParamMapWithoutFiles() {
         return ParamMapBuilder.create()
             .put("name", name)
             .put("setting", setting)
             .put("quantity", quantity)
             .put("double_sided", doubleSided)
             .put("full_bleed", fullBleed)
-            .put("template", template)
-            .build();
+            .put("template", template);
+    }
+
+    @Override
+    public Map<String, Collection<String>> toParamMap() {
+        return toParamMapWithoutFiles().build();
+    }
+
+    @Override
+    public Map<String, Collection<String>> toParamMapWithFiles() {
+        return toParamMapWithoutFiles().put("file", file).build();
     }
 
     public String getName() {
@@ -63,8 +72,13 @@ public class LobObjectRequest implements HasFileParams {
     }
 
     @Override
+    public boolean isRequestWithFile() {
+        return Util.isFileRequest(this.file);
+    }
+
+    @Override
     public Collection<FileParam> getFileParams() {
-        return Arrays.asList(this.file);
+        return Util.fileParamsAsList(this.file);
     }
 
     public SettingId getSetting() {

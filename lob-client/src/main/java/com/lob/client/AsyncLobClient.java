@@ -28,10 +28,13 @@ import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.Realm;
 import com.ning.http.client.Realm.AuthScheme;
 import com.ning.http.client.Response;
+import com.ning.http.client.StringPart;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -174,7 +177,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest) {
-        return execute(PostcardResponse.class, post(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
+        return execute(PostcardResponse.class, postWithFile(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
     }
 
     @Override
@@ -199,7 +202,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<CheckResponse> createCheck(final CheckRequest checkRequest) {
-        return execute(CheckResponse.class, post(Router.CHECKS, checkRequest), this.callbackExecutorService);
+        return execute(CheckResponse.class, postWithFile(Router.CHECKS, checkRequest), this.callbackExecutorService);
     }
 
     @Override
@@ -254,7 +257,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<AreaMailResponse> createAreaMail(final AreaMailRequest areaMailRequest) {
-        return execute(AreaMailResponse.class, post(Router.AREA_MAIL, areaMailRequest), this.callbackExecutorService);
+        return execute(AreaMailResponse.class, postWithFile(Router.AREA_MAIL, areaMailRequest), this.callbackExecutorService);
     }
 
     @Override
@@ -339,20 +342,27 @@ public class AsyncLobClient implements LobClient {
     }
 
     private BoundRequestBuilder postWithFile(final String resourceUrl, final HasFileParams request) {
-        final BoundRequestBuilder builder = this.httpClient
-            .preparePost(this.baseUrl + resourceUrl)
-            .setParameters(request.toParamMap());
-
-        for (final FileParam fileParam : request.getFileParams()) {
-            if (fileParam.isFile()) {
-                builder.addBodyPart(new FilePart(fileParam.getName(), fileParam.getFile(), null, null));
+        final BoundRequestBuilder builder = this.httpClient.preparePost(this.baseUrl + resourceUrl);
+        if (request.isRequestWithFile()) {
+            for (final FileParam fileParam : request.getFileParams()) {
+                if (fileParam.isFile()) {
+                    builder.addBodyPart(new FilePart(fileParam.getName(), fileParam.getFile(), null, null));
+                }
+                else if (fileParam.isUrl()) {
+                    builder.addBodyPart(new StringPart(fileParam.getName(), fileParam.getUrl()));
+                }
+                else {
+                    throw new IllegalStateException("file param was not a file or string -- this should never happen! " + fileParam);
+                }
             }
-            else if (fileParam.isUrl()) {
-                builder.addParameter(fileParam.getName(), fileParam.getUrl());
+            for (final Map.Entry<String, Collection<String>> param : request.toParamMap().entrySet()) {
+                for (final String value : param.getValue()) {
+                    builder.addBodyPart(new StringPart(param.getKey(), value));
+                }
             }
-            else {
-                throw new IllegalStateException("file param was not a file or string -- this should never happen! " + fileParam);
-            }
+        }
+        else {
+            builder.setParameters(request.toParamMapWithFiles());
         }
         return builder;
     }

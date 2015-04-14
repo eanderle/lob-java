@@ -2,17 +2,20 @@ package com.lob.protocol.request;
 
 import com.lob.Or;
 import com.lob.ParamMapBuilder;
+import com.lob.Util;
 import com.lob.id.AddressId;
 import com.lob.id.BankAccountId;
 import org.joda.money.Money;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
-import static com.lob.Util.checkPresent;
 
-public class CheckRequest implements ParamMappable {
+public class CheckRequest implements HasFileParams {
+    public static final String LOGO = "logo";
+
     private final String name;
     private final Integer checkNumber; // optional parameter, needs to be null if not set
     private final BankAccountId bankAccount;
@@ -20,7 +23,7 @@ public class CheckRequest implements ParamMappable {
     private final Money amount;
     private final String message;
     private final String memo;
-    private final String logo;
+    private final FileParam logo;
 
     public CheckRequest(
             final String name,
@@ -30,7 +33,7 @@ public class CheckRequest implements ParamMappable {
             final Money amount,
             final String message,
             final String memo,
-            final String logo) {
+            final FileParam logo) {
         this.name = name;
         this.checkNumber = checkNumber;
         this.bankAccount = checkNotNull(bankAccount, "bank account is required");
@@ -41,8 +44,7 @@ public class CheckRequest implements ParamMappable {
         this.logo = logo;
     }
 
-    @Override
-    public Map<String, Collection<String>> toParamMap() {
+    private ParamMapBuilder toParamMapWithoutFiles() {
         return ParamMapBuilder.create()
             .put("name", name)
             .put("check_number", checkNumber)
@@ -50,9 +52,27 @@ public class CheckRequest implements ParamMappable {
             .put("to", to)
             .put("amount", amount)
             .put("message", message)
-            .put("memo", memo)
-            .put("logo", logo)
-            .build();
+            .put("memo", memo);
+    }
+
+    @Override
+    public Map<String, Collection<String>> toParamMap() {
+        return toParamMapWithoutFiles().build();
+    }
+
+    @Override
+    public Map<String, Collection<String>> toParamMapWithFiles() {
+        return toParamMapWithoutFiles().put(LOGO, logo).build();
+    }
+
+    @Override
+    public boolean isRequestWithFile() {
+        return Util.isFileRequest(this.logo);
+    }
+
+    @Override
+    public Collection<FileParam> getFileParams() {
+        return Util.fileParamsAsList(this.logo);
     }
 
     public String getName() {
@@ -83,7 +103,7 @@ public class CheckRequest implements ParamMappable {
         return memo;
     }
 
-    public String getLogo() {
+    public FileParam getLogo() {
         return logo;
     }
 
@@ -113,10 +133,9 @@ public class CheckRequest implements ParamMappable {
         private Money amount;
         private String message;
         private String memo;
-        private String logo;
+        private FileParam logo;
 
-        private Builder() {
-        }
+        private Builder() {}
 
         public Builder name(final String name) {
             this.name = name;
@@ -169,6 +188,16 @@ public class CheckRequest implements ParamMappable {
         }
 
         public Builder logo(final String logo) {
+            this.logo = FileParam.url(LOGO, logo);
+            return this;
+        }
+
+        public Builder logo(final File logo) {
+            this.logo = FileParam.file(LOGO, logo);
+            return this;
+        }
+
+        public Builder logo(final FileParam logo) {
             this.logo = logo;
             return this;
         }

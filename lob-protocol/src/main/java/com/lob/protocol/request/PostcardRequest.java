@@ -2,23 +2,27 @@ package com.lob.protocol.request;
 
 import com.lob.Or;
 import com.lob.ParamMapBuilder;
+import com.lob.Util;
 import com.lob.id.AddressId;
 import com.lob.id.SettingId;
-import com.lob.protocol.response.AddressResponse;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
-import static com.lob.Util.checkPresent;
 
-public class PostcardRequest implements ParamMappable {
+public class PostcardRequest implements HasFileParams {
+    private final static String FRONT = "front";
+    private final static String BACK = "back";
+
     private final String name;
     private final Or<AddressId, AddressRequest> to;
     private final Or<AddressId, AddressRequest> from;
     private final String message;
-    private final String front;
-    private final String back;
+    private final FileParam front;
+    private final FileParam back;
     private final Boolean template;
     private final Boolean fullBleed;
     private final SettingId setting;
@@ -28,8 +32,8 @@ public class PostcardRequest implements ParamMappable {
             final Or<AddressId, AddressRequest> to,
             final Or<AddressId, AddressRequest> from,
             final String message,
-            final String front,
-            final String back,
+            final FileParam front,
+            final FileParam back,
             final Boolean template,
             final Boolean fullBleed,
             final SettingId setting) {
@@ -45,20 +49,38 @@ public class PostcardRequest implements ParamMappable {
         this.setting = setting;
     }
 
-    @Override
-    public Map<String, Collection<String>> toParamMap() {
+    private ParamMapBuilder toParamMapWithoutFiles() {
         return ParamMapBuilder.create()
             .put("name", name)
             .put("to", to)
             .put("from", from)
             .put("message", message)
-            .put("front", front)
-            .put("back", back)
             .put("template", template)
             .put("full_bleed", fullBleed)
-            .put("setting", setting)
-            .build();
+            .put("setting", setting);
+    }
 
+    @Override
+    public Map<String, Collection<String>> toParamMap() {
+        return toParamMapWithoutFiles().build();
+    }
+
+    @Override
+    public Map<String, Collection<String>> toParamMapWithFiles() {
+        return toParamMapWithoutFiles()
+            .put(FRONT, front)
+            .put(BACK, back)
+            .build();
+    }
+
+    @Override
+    public boolean isRequestWithFile() {
+        return Util.isFileRequest(this.front, this.back);
+    }
+
+    @Override
+    public Collection<FileParam> getFileParams() {
+        return Util.fileParamsAsList(this.front, this.back);
     }
 
     public String getName() {
@@ -77,11 +99,11 @@ public class PostcardRequest implements ParamMappable {
         return message;
     }
 
-    public String getFront() {
+    public FileParam getFront() {
         return front;
     }
 
-    public String getBack() {
+    public FileParam getBack() {
         return back;
     }
 
@@ -121,14 +143,13 @@ public class PostcardRequest implements ParamMappable {
         private Or<AddressId, AddressRequest> to;
         private Or<AddressId, AddressRequest> from;
         private String message;
-        private String front;
-        private String back;
+        private FileParam front;
+        private FileParam back;
         private Boolean template;
         private Boolean fullBleed;
         private SettingId setting;
 
-        private Builder() {
-        }
+        private Builder() {}
 
         public Builder name(final String name) {
             this.name = name;
@@ -171,11 +192,31 @@ public class PostcardRequest implements ParamMappable {
         }
 
         public Builder front(final String front) {
+            this.front = FileParam.url(FRONT, front);
+            return this;
+        }
+
+        public Builder front(final File front) {
+            this.front = FileParam.file(FRONT, front);
+            return this;
+        }
+
+        public Builder front(final FileParam front) {
             this.front = front;
             return this;
         }
 
         public Builder back(final String back) {
+            this.back = FileParam.url(BACK, back);
+            return this;
+        }
+
+        public Builder back(final File back) {
+            this.back = FileParam.file(BACK, back);
+            return this;
+        }
+
+        public Builder back(final FileParam back) {
             this.back = back;
             return this;
         }

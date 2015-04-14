@@ -1,5 +1,6 @@
 package com.lob;
 
+import com.lob.protocol.request.FileParam;
 import com.lob.protocol.response.ThumbnailResponse;
 
 import java.util.ArrayList;
@@ -70,5 +71,24 @@ public final class Util {
             copy.add(t);
         }
         return copy;
+    }
+
+    public static boolean isFileRequest(final FileParam... params) {
+        for (final FileParam param : params) {
+            if (param != null && param.isFile()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Collection<FileParam> fileParamsAsList(final FileParam... params) {
+        final List<FileParam> paramList = new ArrayList<FileParam>(params.length);
+        for (final FileParam param : params) {
+            if (param != null) {
+                paramList.add(param);
+            }
+        }
+        return paramList;
     }
 }

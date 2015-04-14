@@ -1,6 +1,7 @@
 package com.lob;
 
 import com.lob.id.StringValued;
+import com.lob.protocol.request.FileParam;
 import com.lob.protocol.request.ParamMappable;
 import com.neovisionaries.i18n.CountryCode;
 import org.joda.money.Money;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.IllegalFormatCodePointException;
 import java.util.Map;
 
 public class ParamMapBuilder {
@@ -31,6 +33,17 @@ public class ParamMapBuilder {
 
         putAllStrings(k, Arrays.asList(v));
         return this;
+    }
+
+    public ParamMapBuilder put(final String k, final FileParam v) {
+        if (v == null) {
+            return this;
+        }
+        if (v.isFile()) {
+            throw new IllegalStateException("attempted to put a file parameter in the param map! " + v);
+        }
+
+        return put(k, v.getUrl());
     }
 
     public ParamMapBuilder put(final String k, final Integer v) {
