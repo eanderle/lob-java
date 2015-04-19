@@ -20,6 +20,7 @@ import com.lob.protocol.request.ZipCodeRouteRequest;
 import com.lob.protocol.response.*;
 
 public interface LobClient {
+    public final static String LOB_VERSION_HEADER = "Lob-Version";
 
     // Job methods
     public ListenableFuture<JobResponse> createJob(final JobRequest jobRequest);

@@ -1,11 +1,9 @@
 package com.lob.protocol.request;
 
-import com.neovisionaries.i18n.CountryCode;
+import com.lob.id.CountryCode;
+import com.lob.id.ZipCode;
 
 import java.util.Collection;
-
-import static com.lob.Util.checkNotNull;
-import static com.lob.Util.checkPresent;
 
 public class VerifyAddressRequest extends AbstractAddressRequest implements HasLobParams {
     public VerifyAddressRequest(
@@ -13,7 +11,7 @@ public class VerifyAddressRequest extends AbstractAddressRequest implements HasL
         final String line2,
         final String city,
         final String state,
-        final String zip,
+        final ZipCode zip,
         final CountryCode country) {
 
         super(line1, line2, city, state, zip, country);
@@ -38,7 +36,7 @@ public class VerifyAddressRequest extends AbstractAddressRequest implements HasL
         private String line2;
         private String city;
         private String state;
-        private String zip;
+        private ZipCode zip;
         private CountryCode country;
 
         private Builder() {
@@ -65,7 +63,17 @@ public class VerifyAddressRequest extends AbstractAddressRequest implements HasL
         }
 
         public Builder zip(final String zip) {
+            this.zip = ZipCode.parse(zip);
+            return this;
+        }
+
+        public Builder zip(final ZipCode zip) {
             this.zip = zip;
+            return this;
+        }
+
+        public Builder country(final String country) {
+            this.country = CountryCode.parse(country);
             return this;
         }
 

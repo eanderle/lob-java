@@ -1,15 +1,8 @@
 package com.lob.protocol.request;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.LobParamsBuilder;
-import com.neovisionaries.i18n.CountryCode;
-
-import java.util.Collection;
-import java.util.Map;
-
-import static com.lob.Util.checkNotNull;
-import static com.lob.Util.checkPresent;
+import com.lob.id.CountryCode;
+import com.lob.id.ZipCode;
 
 public abstract class AbstractAddressRequest {
     private final static int MAX_LENGTH = 50;
@@ -18,7 +11,7 @@ public abstract class AbstractAddressRequest {
     private final String line2;
     private final String city;
     private final String state;
-    private final String zip;
+    private final ZipCode zip;
     private final CountryCode country;
 
     public AbstractAddressRequest(
@@ -26,7 +19,7 @@ public abstract class AbstractAddressRequest {
         final String line2,
         final String city,
         final String state,
-        final String zip,
+        final ZipCode zip,
         final CountryCode country) {
 
         this.line1 = line1;
@@ -63,7 +56,7 @@ public abstract class AbstractAddressRequest {
         return state;
     }
 
-    public String getZip() {
+    public ZipCode getZip() {
         return zip;
     }
 

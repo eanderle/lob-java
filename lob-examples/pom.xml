@@ -2,11 +2,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.lob</groupId>
-  <artifactId>lob-protocol</artifactId>
+  <artifactId>lob-examples</artifactId>
   <packaging>jar</packaging>
   <version>2.0.0-SNAPSHOT</version>
-  <name>lob-protocol</name>
-  <description>Domain objects for the Lob API</description>
+  <name>lob-examples</name>
+  <description>Examples for the Lob API</description>
   <url>https://github.com/lob/lob-java</url>
 
   <parent>
@@ -17,18 +17,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.joda</groupId>
-      <artifactId>joda-money</artifactId>
-      <version>0.10.0</version>
+      <groupId>com.lob</groupId>
+      <artifactId>lob-client</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <version>2.7</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-csv</artifactId>
       <version>2.5.1</version>
     </dependency>
   </dependencies>

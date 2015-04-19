@@ -1,9 +1,9 @@
 package com.lob.protocol.request;
 
 import com.lob.id.AddressId;
-import com.lob.id.LobObjectId;
+import com.lob.id.CountryCode;
 import com.lob.id.SettingId;
-import com.neovisionaries.i18n.CountryCode;
+import com.lob.id.ZipCode;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -18,8 +18,8 @@ public class JobRequestTest {
             .line1("123 main street")
             .city("Grand Rapids")
             .state("MI")
-            .zip("49404")
-            .country(CountryCode.US)
+            .zip(ZipCode.parse("49404"))
+            .country("us")
             .build();
 
         final LobObjectRequest.Builder objectABuilder = LobObjectRequest.builder()

@@ -6,30 +6,33 @@ import com.google.common.io.Resources;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
-import com.lob.id.BankAccountId;
+import com.lob.id.CountryCode;
 import com.lob.id.LobObjectId;
 import com.lob.id.SettingId;
+import com.lob.id.ZipCode;
 import com.lob.id.ZipCodeRouteId;
-import com.lob.protocol.request.*;
+import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.AddressRequest.Builder;
+import com.lob.protocol.request.AreaMailRequest;
+import com.lob.protocol.request.BankAccountRequest;
+import com.lob.protocol.request.JobRequest;
+import com.lob.protocol.request.LobObjectRequest;
+import com.lob.protocol.request.PostcardRequest;
+import com.lob.protocol.request.TargetType;
+import com.lob.protocol.request.VerifyAddressRequest;
+import com.lob.protocol.request.ZipCodeRouteRequest;
 import com.lob.protocol.response.AddressResponse;
 import com.lob.protocol.response.AreaMailResponse;
 import com.lob.protocol.response.BankAccountResponse;
-import com.lob.protocol.response.CheckResponse;
 import com.lob.protocol.response.JobResponse;
 import com.lob.protocol.response.JobResponseList;
 import com.lob.protocol.response.LobObjectResponse;
 import com.lob.protocol.response.PostcardResponse;
-import com.neovisionaries.i18n.CountryCode;
-import org.joda.money.CurrencyUnit;
-import org.joda.money.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Arrays;
 
 public class AsyncLobClientIntegrationTest {
@@ -78,8 +81,8 @@ public class AsyncLobClientIntegrationTest {
             .line1("123 main st")
             .city("san francisco")
             .state("ca")
-            .zip("94107")
-            .country(CountryCode.US);
+            .zip(ZipCode.parse("94107"))
+            .country("us");
         final Builder addrB = addrA.butWith().name("peter").line1("850 Berry");
 
         final PostcardRequest.Builder postcardRequestBuilder = PostcardRequest.builder()
@@ -194,7 +197,7 @@ public class AsyncLobClientIntegrationTest {
             .line1("220 William T Morrissey Boulevard")
             .city("boston")
             .state("MA")
-            .zip("02125")
+            .zip(ZipCode.parse("02125"))
             .build();
         System.out.println("verify address " + client.verifyAddress(verifyRequest).get());
 

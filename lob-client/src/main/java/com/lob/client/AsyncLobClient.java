@@ -63,18 +63,28 @@ public class AsyncLobClient implements LobClient {
         this.callbackExecutorService = callbackExecutorService;
     }
 
-    public static LobClient createDefault(final String apiKey) {
+    private static AsyncHttpClientConfig commonSetup(final String apiKey, final AsyncHttpClientConfig.Builder configBuilder) {
         final Realm realm = new Realm.RealmBuilder()
             .setPrincipal(checkNotNull(apiKey))
             .setUsePreemptiveAuth(true)
             .setScheme(AuthScheme.BASIC)
             .build();
 
-        final AsyncHttpClientConfig.Builder builder = new Builder();
-        builder.setRealm(realm);
+        configBuilder.setRealm(realm);
+        return configBuilder.build();
+    }
 
+    public static LobClient createDefault(final String apiKey) {
         return new AsyncLobClient(
-            new AsyncHttpClient(builder.build()),
+            new AsyncHttpClient(commonSetup(apiKey, new Builder())),
+            Lob.getBaseUrl(),
+            Lob.getApiVersion(),
+            Executors.newCachedThreadPool());
+    }
+
+    public static LobClient create(final String apiKey, final AsyncHttpClientConfig config) {
+        return new AsyncLobClient(
+            new AsyncHttpClient(commonSetup(apiKey, new Builder(config))),
             Lob.getBaseUrl(),
             Lob.getApiVersion(),
             Executors.newCachedThreadPool());
@@ -376,11 +386,12 @@ public class AsyncLobClient implements LobClient {
     }
 
     private static <T> ListenableFuture<T> execute(
-        final Class<T> clazz,
-        final BoundRequestBuilder request,
-        final ExecutorService callbackExecutorService) {
-        final SettableFuture<T> guavaFut = SettableFuture.create();
+            final Class<T> clazz,
+            final BoundRequestBuilder request,
+            final ExecutorService callbackExecutorService) {
+            final SettableFuture<T> guavaFut = SettableFuture.create();
         try {
+            request.addHeader(LobClient.LOB_VERSION_HEADER, Lob.getApiVersion());
             request.execute(new GuavaFutureConverter<T>(clazz, guavaFut, callbackExecutorService));
         }
         catch (final IOException e) {

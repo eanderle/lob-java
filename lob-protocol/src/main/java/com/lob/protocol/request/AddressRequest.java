@@ -1,6 +1,7 @@
 package com.lob.protocol.request;
 
-import com.neovisionaries.i18n.CountryCode;
+import com.lob.id.CountryCode;
+import com.lob.id.ZipCode;
 
 import java.util.Collection;
 
@@ -22,7 +23,7 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
             final String line2,
             final String city,
             final String state,
-            final String zip,
+            final ZipCode zip,
             final CountryCode country) {
 
         super(
@@ -32,8 +33,7 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
             city,
             state,
             zip,
-            checkNotNull(country,
-            "country is required"));
+            checkNotNull(country, "country is required"));
 
         if (checkPresent(name, "name is required").length() > MAX_LENGTH) {
             throw new IllegalArgumentException("name must not be longer than " + MAX_LENGTH + " characters");
@@ -85,7 +85,7 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
         private String line2;
         private String city;
         private String state;
-        private String zip;
+        private ZipCode zip;
         private CountryCode country;
 
         private Builder() {
@@ -127,7 +127,17 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
         }
 
         public Builder zip(final String zip) {
+            this.zip = ZipCode.parse(zip);
+            return this;
+        }
+
+        public Builder zip(final ZipCode zip) {
             this.zip = zip;
+            return this;
+        }
+
+        public Builder country(final String country) {
+            this.country = CountryCode.parse(country);
             return this;
         }
 

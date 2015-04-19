@@ -12,6 +12,7 @@
   <modules>
     <module>lob-protocol</module>
     <module>lob-client</module>
+    <module>lob-examples</module>
   </modules>
 
   <developers>

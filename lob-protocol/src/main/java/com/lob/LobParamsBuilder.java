@@ -1,10 +1,11 @@
 package com.lob;
 
+import com.lob.id.CountryCode;
 import com.lob.id.StringValued;
-import com.lob.protocol.request.LobParam;
 import com.lob.protocol.request.HasLobParams;
-import com.neovisionaries.i18n.CountryCode;
+import com.lob.protocol.request.LobParam;
 import org.joda.money.Money;
+import org.joda.money.format.MoneyAmountStyle;
 import org.joda.money.format.MoneyFormatter;
 import org.joda.money.format.MoneyFormatterBuilder;
 
@@ -16,7 +17,9 @@ import java.util.Map;
 import static com.lob.Util.defensiveCopy;
 
 public class LobParamsBuilder {
-    private final static MoneyFormatter MONEY_FORMAT = new MoneyFormatterBuilder().appendAmount().toFormatter();
+    private final static MoneyFormatter MONEY_FORMAT = new MoneyFormatterBuilder()
+        .appendAmount(MoneyAmountStyle.ASCII_DECIMAL_POINT_NO_GROUPING)
+        .toFormatter();
 
     private final Collection<LobParam> internalParams = new ArrayList<LobParam>();
 
@@ -80,13 +83,6 @@ public class LobParamsBuilder {
         }
 
         return put(k, MONEY_FORMAT.print(v));
-    }
-
-    public LobParamsBuilder put(final String k, final CountryCode code) {
-        if (code == null) {
-            return this;
-        }
-        return put(k, code.getAlpha2());
     }
 
     public LobParamsBuilder putLobParams(final String prefix, final HasLobParams hasLobParams) {

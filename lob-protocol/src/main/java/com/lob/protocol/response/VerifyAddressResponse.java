@@ -3,6 +3,8 @@ package com.lob.protocol.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.AddressId;
+import com.lob.id.CountryCode;
+import com.lob.id.ZipCode;
 import org.joda.time.DateTime;
 
 public class VerifyAddressResponse {
@@ -17,7 +19,7 @@ public class VerifyAddressResponse {
         return address.getLine1();
     }
 
-    public String getCountry() {
+    public CountryCode getCountry() {
         return address.getCountry();
     }
 
@@ -25,7 +27,7 @@ public class VerifyAddressResponse {
         return address.getState();
     }
 
-    public String getZip() {
+    public ZipCode getZip() {
         return address.getZip();
     }
 
@@ -44,7 +46,6 @@ public class VerifyAddressResponse {
     @Override
     public String toString() {
         return "VerifyAddressResponse{" +
-            "address=" + address +
-            '}';
+            "address={" + address.toStringWithoutLeadingComma();
     }
 }

@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.LobObjectId;
 import org.joda.time.DateTime;
 
+import java.util.Collection;
+
+import static com.lob.Util.defensiveCopy;
+
 public class LobObjectResponse {
     @JsonProperty private final LobObjectId id;
     @JsonProperty private final String name;
@@ -12,6 +16,8 @@ public class LobObjectResponse {
     @JsonProperty private final boolean fullBleed;
     @JsonProperty private final boolean doubleSided;
     @JsonProperty private final boolean template;
+    @JsonProperty private final String url;
+    @JsonProperty private final Collection<ThumbnailResponse> thumbnails;
     @JsonProperty private final DateTime dateCreated;
     @JsonProperty private final DateTime dateModified;
     @JsonProperty private final SettingResponse setting;
@@ -25,6 +31,8 @@ public class LobObjectResponse {
             @JsonProperty("full_bleed") final boolean fullBleed,
             @JsonProperty("double_sided") final boolean doubleSided,
             @JsonProperty("template") final boolean template,
+            @JsonProperty("url") final String url,
+            @JsonProperty("thumbnails") final Collection<ThumbnailResponse> thumbnails,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("setting") final SettingResponse setting,
@@ -35,6 +43,8 @@ public class LobObjectResponse {
         this.fullBleed = fullBleed;
         this.doubleSided = doubleSided;
         this.template = template;
+        this.url = url;
+        this.thumbnails = thumbnails;
         this.dateCreated = dateCreated;
         this.dateModified = dateModified;
         this.setting = setting;
@@ -65,6 +75,14 @@ public class LobObjectResponse {
         return template;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public Collection<ThumbnailResponse> getThumbnails() {
+        return defensiveCopy(thumbnails);
+    }
+
     public DateTime getDateCreated() {
         return dateCreated;
     }
@@ -90,6 +108,8 @@ public class LobObjectResponse {
             ", fullBleed=" + fullBleed +
             ", doubleSided=" + doubleSided +
             ", template=" + template +
+            ", url='" + url + '\'' +
+            ", thumbnails=" + thumbnails +
             ", dateCreated=" + dateCreated +
             ", dateModified=" + dateModified +
             ", setting=" + setting +

@@ -3,7 +3,8 @@ package com.lob.protocol.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.AddressId;
-import com.neovisionaries.i18n.CountryCode;
+import com.lob.id.CountryCode;
+import com.lob.id.ZipCode;
 import org.joda.time.DateTime;
 
 public class AddressResponse extends AbstractAddressResponse {
@@ -25,8 +26,8 @@ public class AddressResponse extends AbstractAddressResponse {
             @JsonProperty("address_line2") final String line2,
             @JsonProperty("address_city") final String city,
             @JsonProperty("address_state") final String state,
-            @JsonProperty("address_zip") final String zip,
-            @JsonProperty("address_country") final String country,
+            @JsonProperty("address_zip") final ZipCode zip,
+            @JsonProperty("address_country") final CountryCode country,
             @JsonProperty("object") final String object,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,

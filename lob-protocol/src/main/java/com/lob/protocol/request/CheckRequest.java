@@ -4,6 +4,7 @@ import com.lob.LobParamsBuilder;
 import com.lob.Or;
 import com.lob.id.AddressId;
 import com.lob.id.BankAccountId;
+import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 
 import java.io.File;
@@ -150,6 +151,11 @@ public class CheckRequest implements HasLobParams {
 
         public Builder to(final Or<AddressId, AddressRequest> to) {
             this.to = to;
+            return this;
+        }
+
+        public Builder amount(final long amount) {
+            this.amount = Money.of(CurrencyUnit.USD, amount);
             return this;
         }
 
