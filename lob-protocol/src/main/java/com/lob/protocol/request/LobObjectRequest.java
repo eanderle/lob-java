@@ -1,19 +1,16 @@
 package com.lob.protocol.request;
 
-import com.lob.ParamMapBuilder;
-import com.lob.Util;
+import com.lob.LobParamsBuilder;
 import com.lob.id.SettingId;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 
-public class LobObjectRequest implements HasFileParams {
+public class LobObjectRequest implements HasLobParams {
     private final String name;
-    private final FileParam file;
+    private final LobParam file;
     private final SettingId setting;
     private final Integer quantity;
     private final Boolean doubleSided;
@@ -24,7 +21,7 @@ public class LobObjectRequest implements HasFileParams {
 
     public LobObjectRequest(
             final String name,
-            final FileParam file,
+            final LobParam file,
             final SettingId setting,
             final Integer quantity,
             final Boolean doubleSided,
@@ -43,42 +40,25 @@ public class LobObjectRequest implements HasFileParams {
         return new Builder();
     }
 
-    private ParamMapBuilder toParamMapWithoutFiles() {
-        return ParamMapBuilder.create()
+    @Override
+    public Collection<LobParam> getLobParams() {
+        return LobParamsBuilder.create()
             .put("name", name)
             .put("setting", setting)
             .put("quantity", quantity)
             .put("double_sided", doubleSided)
             .put("full_bleed", fullBleed)
-            .put("template", template);
-    }
-
-    @Override
-    public Map<String, Collection<String>> toParamMap() {
-        return toParamMapWithoutFiles().build();
-    }
-
-    @Override
-    public Map<String, Collection<String>> toParamMapWithFiles() {
-        return toParamMapWithoutFiles().put("file", file).build();
+            .put("template", template)
+            .put(file)
+            .build();
     }
 
     public String getName() {
         return name;
     }
 
-    public FileParam getFile() {
+    public LobParam getFile() {
         return file;
-    }
-
-    @Override
-    public boolean isRequestWithFile() {
-        return Util.isFileRequest(this.file);
-    }
-
-    @Override
-    public Collection<FileParam> getFileParams() {
-        return Util.fileParamsAsList(this.file);
     }
 
     public SettingId getSetting() {
@@ -116,7 +96,7 @@ public class LobObjectRequest implements HasFileParams {
 
     public static class Builder {
         private String name;
-        private FileParam file;
+        private LobParam file;
         private SettingId setting;
         private Integer quantity;
         private Boolean doubleSided;
@@ -131,18 +111,18 @@ public class LobObjectRequest implements HasFileParams {
             return this;
         }
 
-        public Builder file(final FileParam file) {
+        public Builder file(final LobParam file) {
             this.file = file;
             return this;
         }
 
         public Builder file(final String file) {
-            this.file = FileParam.url(FILE_PARAM, file);
+            this.file = LobParam.string(FILE_PARAM, file);
             return this;
         }
 
         public Builder file(final File file) {
-            this.file = FileParam.file(FILE_PARAM, file);
+            this.file = LobParam.file(FILE_PARAM, file);
             return this;
         }
 

@@ -2,13 +2,8 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.ParamMapBuilder;
 import com.lob.id.PostcardId;
-import com.lob.protocol.request.ParamMappable;
 import org.joda.time.DateTime;
-
-import java.util.Collection;
-import java.util.Map;
 
 public class PostcardResponse {
     @JsonProperty private final PostcardId id;

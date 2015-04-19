@@ -6,6 +6,8 @@ import com.google.common.io.Resources;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
+import com.lob.id.BankAccountId;
+import com.lob.id.LobObjectId;
 import com.lob.id.SettingId;
 import com.lob.id.ZipCodeRouteId;
 import com.lob.protocol.request.*;
@@ -36,6 +38,41 @@ public class AsyncLobClientIntegrationTest {
 
         final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
 
+        final LobObjectRequest.Builder objectRequest = LobObjectRequest.builder()
+            .file("https://lob.com/goblue.pdf")
+            .name("myObject")
+            .setting(SettingId.BLACK_AND_WHITE_DOCUMENT)
+            .template(true);
+        final LobObjectRequest otherObject = objectRequest.butWith().name("other name").build();
+
+        final JobRequest.Builder jobRequestBuilder = JobRequest.builder()
+            .name("Michigan fan letter")
+            .to("adr_43769b47aed248c2")
+            .from("adr_7f9ece71fbca3796")
+            .objectId("obj_7ca5f80b42b6dfca");
+
+        System.out.println("object request: " + objectRequest.build().getLobParams());
+        final LobObjectResponse objectResponse = client.createLobObject(objectRequest.build()).get();
+        System.out.println("create object " + objectResponse);
+
+        final JobRequest.Builder multiIdJobBuilder = jobRequestBuilder.butWith().objectIds(objectResponse.getId(), LobObjectId.parse("obj_7ca5f80b42b6dfca"));
+        System.out.println("multi object id job " + client.createJob(multiIdJobBuilder.build()).get());
+
+        final JobRequest.Builder multiUrlJobBuilder = jobRequestBuilder.butWith().objects(objectRequest.build(), otherObject);
+        System.out.println("multi object url job " + client.createJob(multiUrlJobBuilder.build()).get());
+
+        final File file = fileFromResource("goblue.pdf");
+        final LobObjectRequest fileRequest = objectRequest.butWith().name("file object").file(file).setting(SettingId.BLACK_AND_WHITE_DOCUMENT).build();
+        System.out.println(fileRequest);
+        System.out.println("file object: " + client.createLobObject(fileRequest).get());
+
+        final JobRequest multiFileJob = multiIdJobBuilder.butWith().objects(objectRequest.build(), fileRequest).build();
+        System.out.println("multi object file job request: " + multiFileJob.getLobParams());
+        System.out.println("multi object file job " + client.createJob(multiFileJob).get());
+
+        final ListenableFuture<JobResponse> jobResponse = client.createJob(jobRequestBuilder.build());
+        System.out.println(jobResponse.get());
+
         final Builder addrA = AddressRequest.builder()
             .name("eric")
             .line1("123 main st")
@@ -56,28 +93,6 @@ public class AsyncLobClientIntegrationTest {
         final PostcardRequest postcardFile = postcardRequestBuilder.butWith().front(fileFromResource("postcardfront.pdf")).build();
         System.out.println("postcard with file front: " + client.createPostcard(postcardFile).get());
 
-        final LobObjectRequest.Builder objectRequest = LobObjectRequest.builder()
-            .file("https://lob.com/goblue.pdf")
-            .name("myObject")
-            .setting(SettingId.BLACK_AND_WHITE_DOCUMENT)
-            .template(true);
-
-        final File file = fileFromResource("goblue.pdf");
-        final LobObjectRequest fileRequest = objectRequest.butWith().file(file).setting(SettingId.BLACK_AND_WHITE_DOCUMENT).build();
-        System.out.println(fileRequest);
-        System.out.println(client.createLobObject(fileRequest).get());
-
-
-        final JobRequest jobRequest = JobRequest.builder()
-            .name("Michigan fan letter")
-            .to("adr_43769b47aed248c2")
-            .from("adr_7f9ece71fbca3796")
-            .objectId("obj_7ca5f80b42b6dfca")
-            .build();
-
-        final ListenableFuture<JobResponse> jobResponse = client.createJob(jobRequest);
-        System.out.println(jobResponse.get());
-
         final PostcardRequest postcardRequest = postcardRequestBuilder.build();
         final PostcardResponse postcardResponse = client.createPostcard(postcardRequest).get();
         System.out.println(postcardResponse);
@@ -94,11 +109,12 @@ public class AsyncLobClientIntegrationTest {
         final BankAccountResponse bankAccountResponse = client.createBankAccount(bankAccountRequest).get();
         System.out.println(bankAccountResponse);
 
+        /*
         final CheckRequest.Builder checkRequestBuilder = CheckRequest.builder()
             .name("test check")
             .to(addrA.build())
             .amount(Money.of(CurrencyUnit.USD, 20.00))
-            .bankAccount(bankAccountResponse.getId())
+            .bankAccount(BankAccountId.parse("bank_6250512bd678b6a"))
             .memo("rent");
 
         final CheckRequest fileLogoCheckRequest = checkRequestBuilder.butWith().logo(fileFromResource("lobCheckLogo.png")).build();
@@ -107,6 +123,7 @@ public class AsyncLobClientIntegrationTest {
 
         final CheckResponse checkResponse = client.createCheck(checkRequest).get();
         System.out.println(checkResponse);
+        */
 
         final AreaMailRequest.Builder areaMailRequestBuilder = AreaMailRequest.builder()
             .name("sample sam")
@@ -120,7 +137,7 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("area mail with file front: " + client.createAreaMail(fileAreaMailRequest).get());
 
         final AreaMailRequest areaMailRequest = areaMailRequestBuilder.build();
-        System.out.println(areaMailRequest.toParamMap());
+        System.out.println(areaMailRequest.getLobParams());
         final AreaMailResponse areaMailResponse = client.createAreaMail(areaMailRequest).get();
         System.out.println(areaMailResponse);
 
@@ -139,9 +156,6 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("get all addresses, count 1, offset 1 " + client.getAddresses(1, 1).get());
         System.out.println("delete address " + client.deleteAddress(addressResponse.getId()).get());
 
-        System.out.println("object request: " + objectRequest.build().toParamMap());
-        final LobObjectResponse objectResponse = client.createLobObject(objectRequest.build()).get();
-        System.out.println("create object " + objectResponse);
         System.out.println("get object " + client.getLobObject(objectResponse.getId()).get());
         System.out.println("get all objects " + client.getAllLobObjects().get());
         System.out.println("get all objects, count 1 " + client.getLobObjects(1).get());
@@ -157,7 +171,7 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("get all postcards, count 1 " + client.getPostcards(1).get());
         System.out.println("get all postcards, count 1, offset 1 " + client.getPostcards(1, 1).get());
 
-        System.out.println("get check " + client.getCheck(checkResponse.getId()).get());
+        //System.out.println("get check " + client.getCheck(checkResponse.getId()).get());
         System.out.println("get all checks " + client.getAllChecks().get());
         System.out.println("get all checks, count 1 " + client.getChecks(1).get());
         System.out.println("get all checks, count 1, offset 1 " + client.getChecks(1, 1).get());

@@ -1,17 +1,16 @@
 package com.lob.protocol.request;
 
-import com.lob.ParamMapBuilder;
+import com.lob.LobParamsBuilder;
 import com.lob.id.ZipCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import static com.lob.Util.defensiveCopy;
 
-public class ZipCodeRouteRequest implements ParamMappable {
+public class ZipCodeRouteRequest implements HasLobParams {
     private final Collection<ZipCode> zipCodes;
 
     public ZipCodeRouteRequest(final Collection<ZipCode> zipCodes) {
@@ -19,8 +18,8 @@ public class ZipCodeRouteRequest implements ParamMappable {
     }
 
     @Override
-    public Map<String, Collection<String>> toParamMap() {
-        return ParamMapBuilder.create()
+    public Collection<LobParam> getLobParams() {
+        return LobParamsBuilder.create()
             .putAll("zip_codes", this.zipCodes)
             .build();
     }

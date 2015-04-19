@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
+import com.lob.LobApiException;
 import com.lob.MoneyDeserializer;
 import com.lob.id.AddressId;
 import com.lob.id.AreaMailId;
@@ -34,7 +35,6 @@ import org.joda.money.Money;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -137,7 +137,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<LobObjectResponse> createLobObject(final LobObjectRequest lobObjectRequest) {
-        return execute(LobObjectResponse.class, postWithFile(Router.OBJECTS, lobObjectRequest), this.callbackExecutorService);
+        return execute(LobObjectResponse.class, post(Router.OBJECTS, lobObjectRequest), this.callbackExecutorService);
     }
 
     @Override
@@ -177,7 +177,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest) {
-        return execute(PostcardResponse.class, postWithFile(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
+        return execute(PostcardResponse.class, post(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<CheckResponse> createCheck(final CheckRequest checkRequest) {
-        return execute(CheckResponse.class, postWithFile(Router.CHECKS, checkRequest), this.callbackExecutorService);
+        return execute(CheckResponse.class, post(Router.CHECKS, checkRequest), this.callbackExecutorService);
     }
 
     @Override
@@ -257,7 +257,7 @@ public class AsyncLobClient implements LobClient {
 
     @Override
     public ListenableFuture<AreaMailResponse> createAreaMail(final AreaMailRequest areaMailRequest) {
-        return execute(AreaMailResponse.class, postWithFile(Router.AREA_MAIL, areaMailRequest), this.callbackExecutorService);
+        return execute(AreaMailResponse.class, post(Router.AREA_MAIL, areaMailRequest), this.callbackExecutorService);
     }
 
     @Override
@@ -313,8 +313,12 @@ public class AsyncLobClient implements LobClient {
         return get(resourceUrl, new FluentStringsMap());
     }
 
-    private BoundRequestBuilder get(final String resourceUrl, final ParamMappable request) {
-        return get(resourceUrl, new FluentStringsMap(request.toParamMap()));
+    private BoundRequestBuilder get(final String resourceUrl, final HasLobParams request) {
+        final FluentStringsMap map = new FluentStringsMap();
+        for (final LobParam param : request.getLobParams()) {
+            map.add(param.getName(), param.getStringParam());
+        }
+        return get(resourceUrl, new FluentStringsMap(map));
     }
 
     private BoundRequestBuilder get(final String resourceUrl, final LobId id) {
@@ -337,32 +341,36 @@ public class AsyncLobClient implements LobClient {
         return this.httpClient.prepareGet(this.baseUrl + resourceUrl).setQueryParameters(params);
     }
 
-    private BoundRequestBuilder post(final String resourceUrl, final ParamMappable request) {
-        return this.httpClient.preparePost(this.baseUrl + resourceUrl).setParameters(request.toParamMap());
-    }
-
-    private BoundRequestBuilder postWithFile(final String resourceUrl, final HasFileParams request) {
+    private BoundRequestBuilder post(final String resourceUrl, final HasLobParams hasLobParams) {
         final BoundRequestBuilder builder = this.httpClient.preparePost(this.baseUrl + resourceUrl);
-        if (request.isRequestWithFile()) {
-            for (final FileParam fileParam : request.getFileParams()) {
-                if (fileParam.isFile()) {
-                    builder.addBodyPart(new FilePart(fileParam.getName(), fileParam.getFile(), null, null));
-                }
-                else if (fileParam.isUrl()) {
-                    builder.addBodyPart(new StringPart(fileParam.getName(), fileParam.getUrl()));
+        final Collection<LobParam> params = hasLobParams.getLobParams();
+
+        boolean isMultipart = false;
+        for (final LobParam param : params) {
+            if (param.isFileParam()) {
+                isMultipart = true;
+                break;
+            }
+        }
+
+        if (isMultipart) {
+            for (final LobParam param : params) {
+                if (param.isStringParam()) {
+                    for (final String s : param.getStringParam()) {
+                        builder.addBodyPart(new StringPart(param.getName(), s));
+                    }
                 }
                 else {
-                    throw new IllegalStateException("file param was not a file or string -- this should never happen! " + fileParam);
-                }
-            }
-            for (final Map.Entry<String, Collection<String>> param : request.toParamMap().entrySet()) {
-                for (final String value : param.getValue()) {
-                    builder.addBodyPart(new StringPart(param.getKey(), value));
+                    builder.addBodyPart(new FilePart(param.getName(), param.getFileParam(), null, null));
                 }
             }
         }
         else {
-            builder.setParameters(request.toParamMapWithFiles());
+            for (final LobParam param : params) {
+                for (final String s : param.getStringParam()) {
+                    builder.addParameter(param.getName(), s);
+                }
+            }
         }
         return builder;
     }
@@ -395,19 +403,39 @@ public class AsyncLobClient implements LobClient {
             this.callbackExecutorService = callbackExecutorService;
         }
 
+        private static boolean isSuccess(final Response response) {
+            final int statusCode = response.getStatusCode();
+            return (statusCode > 199 && statusCode < 400);
+        }
+
         @Override
         public T onCompleted(final Response response) throws Exception {
-            final T value = MAPPER.readValue(response.getResponseBody(), clazz);
-            // Execute setting the guava future in a separate thread so any callbacks
-            // executed on the guava future don't block the ning IO threads.
-            this.callbackExecutorService.submit(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        guavaFut.set(value);
-                    }
-                });
-            return value;
+            if (isSuccess(response)) {
+                final T value = MAPPER.readValue(response.getResponseBody(), clazz);
+                // Execute setting the guava future in a separate thread so any callbacks
+                // executed on the guava future don't block the ning IO threads.
+                this.callbackExecutorService.submit(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            guavaFut.set(value);
+                        }
+                    });
+                return value;
+            }
+            else {
+                final ErrorResponse error = MAPPER.readValue(response.getResponseBody(), ErrorResponse.class);
+                final LobApiException exception = new LobApiException(error);
+
+                this.callbackExecutorService.submit(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            guavaFut.setException(exception);
+                        }
+                    });
+                throw exception;
+            }
         }
     }
 }

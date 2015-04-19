@@ -1,8 +1,8 @@
 package com.lob.protocol.request;
 
+import com.lob.LobParamsBuilder;
 import com.lob.Or;
 import com.lob.OrCollection;
-import com.lob.ParamMapBuilder;
 import com.lob.id.AddressId;
 import com.lob.id.LobObjectId;
 import com.lob.id.ServiceId;
@@ -11,12 +11,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
 
-public class JobRequest implements ParamMappable {
+public class JobRequest implements HasLobParams {
+    public static final String OBJECT = "object";
+
     final String name;
     final Or<AddressId, AddressRequest> to;
     final Or<AddressId, AddressRequest> from;
@@ -41,14 +42,25 @@ public class JobRequest implements ParamMappable {
     }
 
     @Override
-    public Map<String, Collection<String>> toParamMap() {
-        return ParamMapBuilder.create()
+    public Collection<LobParam> getLobParams() {
+        final LobParamsBuilder builder = LobParamsBuilder.create()
             .put("name", name)
             .put("to", to)
             .put("from", from)
-            .putAll("object", objects)
-            .put("service", service)
-            .build();
+            .put("service", service);
+
+        int i = 1;
+        if (this.objects.isTypeA()) {
+            for (final LobObjectId id : this.objects.getTypeA()) {
+                builder.put(OBJECT + i++, id.value());
+            }
+        }
+        else {
+            for (final LobObjectRequest request : this.objects.getTypeB()) {
+                builder.putLobParams(OBJECT + i++, request);
+            }
+        }
+        return builder.build();
     }
 
     public String getName() {
@@ -111,6 +123,11 @@ public class JobRequest implements ParamMappable {
             return this;
         }
 
+        public Builder to(final Or<AddressId, AddressRequest> to) {
+            this.to = to;
+            return this;
+        }
+
         public Builder from(final String from) {
             this.from = Or.typeA(AddressId.parse(from));
             return this;
@@ -123,6 +140,11 @@ public class JobRequest implements ParamMappable {
 
         public Builder from(final AddressRequest from) {
             this.from = Or.typeB(from);
+            return this;
+        }
+
+        public Builder from(final Or<AddressId, AddressRequest> from) {
+            this.from = from;
             return this;
         }
 
@@ -141,13 +163,20 @@ public class JobRequest implements ParamMappable {
             return this;
         }
 
+        public Builder objectStringIds(final String... objectIds) {
+            return objectStringIds(Arrays.asList(objectIds));
+        }
+
         public Builder objectStringIds(final Collection<String> objectIds) {
             final List<LobObjectId> idList = new ArrayList<LobObjectId>(objectIds.size());
             for (final String stringId : objectIds) {
                 idList.add(LobObjectId.parse(stringId));
             }
-            this.objects = OrCollection.typeA(idList);
-            return this;
+            return objectIds(idList);
+        }
+
+        public Builder objectIds(final LobObjectId... objectIds) {
+            return objectIds(Arrays.asList(objectIds));
         }
 
         public Builder objectIds(final Collection<LobObjectId> objectIds) {
@@ -155,8 +184,17 @@ public class JobRequest implements ParamMappable {
             return this;
         }
 
+        public Builder objects(final LobObjectRequest... objects) {
+            return objects(Arrays.asList(objects));
+        }
+
         public Builder objects(final Collection<LobObjectRequest> objects) {
             this.objects = OrCollection.typeB(objects);
+            return this;
+        }
+
+        public Builder objects(final OrCollection<LobObjectId, LobObjectRequest> objects) {
+            this.objects = objects;
             return this;
         }
 
@@ -165,6 +203,9 @@ public class JobRequest implements ParamMappable {
             return this;
         }
 
+        public Builder butWith() {
+            return new Builder().name(name).to(to).from(from).objects(objects).service(service);
+        }
         public JobRequest build() {
             return new JobRequest(name, to, from, objects, service);
         }

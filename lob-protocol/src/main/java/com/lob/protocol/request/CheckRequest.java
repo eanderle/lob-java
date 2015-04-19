@@ -1,19 +1,17 @@
 package com.lob.protocol.request;
 
+import com.lob.LobParamsBuilder;
 import com.lob.Or;
-import com.lob.ParamMapBuilder;
-import com.lob.Util;
 import com.lob.id.AddressId;
 import com.lob.id.BankAccountId;
 import org.joda.money.Money;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 
-public class CheckRequest implements HasFileParams {
+public class CheckRequest implements HasLobParams {
     public static final String LOGO = "logo";
 
     private final String name;
@@ -23,7 +21,7 @@ public class CheckRequest implements HasFileParams {
     private final Money amount;
     private final String message;
     private final String memo;
-    private final FileParam logo;
+    private final LobParam logo;
 
     public CheckRequest(
             final String name,
@@ -33,7 +31,7 @@ public class CheckRequest implements HasFileParams {
             final Money amount,
             final String message,
             final String memo,
-            final FileParam logo) {
+            final LobParam logo) {
         this.name = name;
         this.checkNumber = checkNumber;
         this.bankAccount = checkNotNull(bankAccount, "bank account is required");
@@ -44,35 +42,18 @@ public class CheckRequest implements HasFileParams {
         this.logo = logo;
     }
 
-    private ParamMapBuilder toParamMapWithoutFiles() {
-        return ParamMapBuilder.create()
+    @Override
+    public Collection<LobParam> getLobParams() {
+        return LobParamsBuilder.create()
             .put("name", name)
             .put("check_number", checkNumber)
             .put("bank_account", bankAccount)
             .put("to", to)
             .put("amount", amount)
             .put("message", message)
-            .put("memo", memo);
-    }
-
-    @Override
-    public Map<String, Collection<String>> toParamMap() {
-        return toParamMapWithoutFiles().build();
-    }
-
-    @Override
-    public Map<String, Collection<String>> toParamMapWithFiles() {
-        return toParamMapWithoutFiles().put(LOGO, logo).build();
-    }
-
-    @Override
-    public boolean isRequestWithFile() {
-        return Util.isFileRequest(this.logo);
-    }
-
-    @Override
-    public Collection<FileParam> getFileParams() {
-        return Util.fileParamsAsList(this.logo);
+            .put("memo", memo)
+            .put(logo)
+            .build();
     }
 
     public String getName() {
@@ -103,7 +84,7 @@ public class CheckRequest implements HasFileParams {
         return memo;
     }
 
-    public FileParam getLogo() {
+    public LobParam getLogo() {
         return logo;
     }
 
@@ -133,7 +114,7 @@ public class CheckRequest implements HasFileParams {
         private Money amount;
         private String message;
         private String memo;
-        private FileParam logo;
+        private LobParam logo;
 
         private Builder() {}
 
@@ -188,16 +169,16 @@ public class CheckRequest implements HasFileParams {
         }
 
         public Builder logo(final String logo) {
-            this.logo = FileParam.url(LOGO, logo);
+            this.logo = LobParam.string(LOGO, logo);
             return this;
         }
 
         public Builder logo(final File logo) {
-            this.logo = FileParam.file(LOGO, logo);
+            this.logo = LobParam.file(LOGO, logo);
             return this;
         }
 
-        public Builder logo(final FileParam logo) {
+        public Builder logo(final LobParam logo) {
             this.logo = logo;
             return this;
         }

@@ -2,7 +2,7 @@ package com.lob.protocol.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.ParamMapBuilder;
+import com.lob.LobParamsBuilder;
 import com.neovisionaries.i18n.CountryCode;
 
 import java.util.Collection;
@@ -37,8 +37,8 @@ public abstract class AbstractAddressRequest {
         this.country = country;
     }
 
-    public ParamMapBuilder beginParamMap() {
-        return ParamMapBuilder.create()
+    public LobParamsBuilder beginParams() {
+        return LobParamsBuilder.create()
             .put("address_line1", line1)
             .put("address_line2", line2)
             .put("address_city", city)

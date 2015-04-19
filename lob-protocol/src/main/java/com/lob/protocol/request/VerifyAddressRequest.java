@@ -3,12 +3,11 @@ package com.lob.protocol.request;
 import com.neovisionaries.i18n.CountryCode;
 
 import java.util.Collection;
-import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
 
-public class VerifyAddressRequest extends AbstractAddressRequest implements ParamMappable {
+public class VerifyAddressRequest extends AbstractAddressRequest implements HasLobParams {
     public VerifyAddressRequest(
         final String line1,
         final String line2,
@@ -21,8 +20,8 @@ public class VerifyAddressRequest extends AbstractAddressRequest implements Para
     }
 
     @Override
-    public Map<String, Collection<String>> toParamMap() {
-        return super.beginParamMap().build();
+    public Collection<LobParam> getLobParams() {
+        return super.beginParams().build();
     }
 
     public static Builder builder() {

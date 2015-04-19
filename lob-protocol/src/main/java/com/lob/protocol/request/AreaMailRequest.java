@@ -1,32 +1,30 @@
 package com.lob.protocol.request;
 
+import com.lob.LobParamsBuilder;
 import com.lob.OrCollection;
-import com.lob.ParamMapBuilder;
-import com.lob.Util;
 import com.lob.id.ZipCode;
 import com.lob.id.ZipCodeRouteId;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
 
-public class AreaMailRequest implements HasFileParams {
+public class AreaMailRequest implements HasLobParams {
     public static final String FRONT = "front";
     public static final String BACK = "back";
     private final String name;
-    private final FileParam front;
-    private final FileParam back;
+    private final LobParam front;
+    private final LobParam back;
     private final OrCollection<ZipCode, ZipCodeRouteId> routes;
     private final TargetType targetType;
     private final Boolean fullBleed;
 
     public AreaMailRequest(
             final String name,
-            final FileParam front,
-            final FileParam back,
+            final LobParam front,
+            final LobParam back,
             final OrCollection<ZipCode, ZipCodeRouteId> routes,
             final TargetType targetType,
             final Boolean fullBleed) {
@@ -38,46 +36,27 @@ public class AreaMailRequest implements HasFileParams {
         this.fullBleed = fullBleed;
     }
 
-    private ParamMapBuilder toParamMapWithoutFiles() {
-        return ParamMapBuilder.create()
+    @Override
+    public Collection<LobParam> getLobParams() {
+        return LobParamsBuilder.create()
             .put("name", name)
             .putAllStringValued("routes", routes)
             .put("target_type", targetType)
-            .put("full_bleed", fullBleed);
-    }
-
-    @Override
-    public Map<String, Collection<String>> toParamMap() {
-        return toParamMapWithoutFiles().build();
-    }
-
-    @Override
-    public Map<String, Collection<String>> toParamMapWithFiles() {
-        return toParamMapWithoutFiles()
-            .put(FRONT, front)
-            .put(BACK, back)
+            .put("full_bleed", fullBleed)
+            .put(front)
+            .put(back)
             .build();
-    }
-
-    @Override
-    public boolean isRequestWithFile() {
-        return Util.isFileRequest(this.front, this.back);
-    }
-
-    @Override
-    public Collection<FileParam> getFileParams() {
-        return Util.fileParamsAsList(this.front, this.back);
     }
 
     public String getName() {
         return name;
     }
 
-    public FileParam getFront() {
+    public LobParam getFront() {
         return front;
     }
 
-    public FileParam getBack() {
+    public LobParam getBack() {
         return back;
     }
 
@@ -112,8 +91,8 @@ public class AreaMailRequest implements HasFileParams {
 
     public static class Builder {
         private String name;
-        private FileParam front;
-        private FileParam back;
+        private LobParam front;
+        private LobParam back;
         private OrCollection<ZipCode, ZipCodeRouteId> routes;
         private TargetType targetType;
         private Boolean fullBleed;
@@ -127,31 +106,31 @@ public class AreaMailRequest implements HasFileParams {
         }
 
         public Builder front(final String front) {
-            this.front = FileParam.url(FRONT, front);
+            this.front = LobParam.string(FRONT, front);
             return this;
         }
 
         public Builder front(final File front) {
-            this.front = FileParam.file(FRONT, front);
+            this.front = LobParam.file(FRONT, front);
             return this;
         }
 
-        public Builder front(final FileParam front) {
+        public Builder front(final LobParam front) {
             this.front = front;
             return this;
         }
 
         public Builder back(final String back) {
-            this.back = FileParam.url(BACK, back);
+            this.back = LobParam.string(BACK, back);
             return this;
         }
 
         public Builder back(final File back) {
-            this.back = FileParam.file(BACK, back);
+            this.back = LobParam.file(BACK, back);
             return this;
         }
 
-        public Builder back(final FileParam back) {
+        public Builder back(final LobParam back) {
             this.back = back;
             return this;
         }

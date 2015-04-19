@@ -38,6 +38,6 @@ public class JobRequestTest {
                 objectABuilder.build(),
                 objectBBuilder.build()))
             .build();
-        System.out.println(request.toParamMap());
+        System.out.println(request.getLobParams());
     }
 }

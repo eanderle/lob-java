@@ -1,17 +1,13 @@
 package com.lob.protocol.request;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.ParamMapBuilder;
 import com.neovisionaries.i18n.CountryCode;
 
 import java.util.Collection;
-import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
 
-public class AddressRequest extends AbstractAddressRequest implements ParamMappable {
+public class AddressRequest extends AbstractAddressRequest implements HasLobParams {
     private final static int MAX_LENGTH = 50;
 
     private final String name;
@@ -48,8 +44,8 @@ public class AddressRequest extends AbstractAddressRequest implements ParamMappa
     }
 
     @Override
-    public Map<String, Collection<String>> toParamMap() {
-        return super.beginParamMap()
+    public Collection<LobParam> getLobParams() {
+        return super.beginParams()
             .put("name", name)
             .put("email", email)
             .put("phone", phone)

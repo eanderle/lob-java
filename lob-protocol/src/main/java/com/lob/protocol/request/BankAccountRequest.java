@@ -1,16 +1,15 @@
 package com.lob.protocol.request;
 
+import com.lob.LobParamsBuilder;
 import com.lob.Or;
-import com.lob.ParamMapBuilder;
 import com.lob.id.AddressId;
 
 import java.util.Collection;
-import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
 
-public class BankAccountRequest implements ParamMappable {
+public class BankAccountRequest implements HasLobParams {
     private final String name;
     private final String routingNumber;
     private final String accountNumber;
@@ -34,8 +33,8 @@ public class BankAccountRequest implements ParamMappable {
     }
 
     @Override
-    public Map<String, Collection<String>> toParamMap() {
-        return ParamMapBuilder.create()
+    public Collection<LobParam> getLobParams() {
+        return LobParamsBuilder.create()
             .put("name", name)
             .put("routing_number", routingNumber)
             .put("account_number", accountNumber)
