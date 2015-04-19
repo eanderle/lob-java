@@ -14,6 +14,7 @@ public class SettingId extends IntegerId {
     public static SettingId SEMI_GLOSS_POSTER_24X36 = create(307);
     public static SettingId BUSINESS_CARD_THICK_500_CT = create(400);
     public static SettingId BUSINESS_CARD_STANDARD_250_CT = create(402);
+    public static SettingId GLOSS_PHOTO_4X6 = create(500);
     public static SettingId GLOSS_PHOTO_5X7 = create(501);
     public static SettingId GLOSS_PHOTO_8X10 = create(502);
     public static SettingId GLOSS_PHOTO_4X4 = create(503);

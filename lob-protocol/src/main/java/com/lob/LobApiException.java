@@ -2,12 +2,20 @@ package com.lob;
 
 import com.lob.protocol.response.ErrorResponse;
 
+import java.net.URI;
+
 public class LobApiException extends RuntimeException {
+    private final URI uri;
     private final ErrorResponse errorResponse;
 
-    public LobApiException(final ErrorResponse errorResponse) {
-        super(errorResponse.getErrors().toString());
+    public LobApiException(final URI uri, final ErrorResponse errorResponse) {
+        super(uri + " " + errorResponse.getErrors().toString());
+        this.uri = uri;
         this.errorResponse = errorResponse;
+    }
+
+    public URI getUri() {
+        return uri;
     }
 
     public ErrorResponse getErrorResponse() {
@@ -16,6 +24,6 @@ public class LobApiException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "LobApiException: " + errorResponse.getErrors().toString();
+        return "LobApiException: " + uri + " " + errorResponse.getErrors().toString();
     }
 }

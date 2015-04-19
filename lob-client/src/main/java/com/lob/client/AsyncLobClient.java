@@ -436,7 +436,7 @@ public class AsyncLobClient implements LobClient {
             }
             else {
                 final ErrorResponse error = MAPPER.readValue(response.getResponseBody(), ErrorResponse.class);
-                final LobApiException exception = new LobApiException(error);
+                final LobApiException exception = new LobApiException(response.getUri(), error);
 
                 this.callbackExecutorService.submit(
                     new Runnable() {
