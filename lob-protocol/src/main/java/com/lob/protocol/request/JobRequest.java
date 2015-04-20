@@ -212,6 +212,14 @@ public class JobRequest implements HasLobParams {
             return this;
         }
 
+        public Builder objectIds(final LobObjectResponseList objects) {
+            final List<LobObjectId> idList = new ArrayList<LobObjectId>(objects.getData().size());
+            for (final LobObjectResponse response : objects) {
+                idList.add(response.getId());
+            }
+            return objectIds(idList);
+        }
+
         public Builder objectResponses(final LobObjectResponseList objects) {
             this.objects = OrCollection.typeB(objects.toRequest());
             return this;
