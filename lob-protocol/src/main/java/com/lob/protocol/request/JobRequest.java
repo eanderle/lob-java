@@ -3,9 +3,13 @@ package com.lob.protocol.request;
 import com.lob.LobParamsBuilder;
 import com.lob.Or;
 import com.lob.OrCollection;
+import com.lob.Util;
 import com.lob.id.AddressId;
 import com.lob.id.LobObjectId;
 import com.lob.id.ServiceId;
+import com.lob.protocol.response.AddressResponse;
+import com.lob.protocol.response.LobObjectResponse;
+import com.lob.protocol.response.LobObjectResponseList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,6 +127,11 @@ public class JobRequest implements HasLobParams {
             return this;
         }
 
+        public Builder to(final AddressResponse to) {
+            this.to = Or.typeB(to.toRequest());
+            return this;
+        }
+
         public Builder to(final Or<AddressId, AddressRequest> to) {
             this.to = to;
             return this;
@@ -143,6 +152,11 @@ public class JobRequest implements HasLobParams {
             return this;
         }
 
+        public Builder from(final AddressResponse from) {
+            this.from = Or.typeB(from.toRequest());
+            return this;
+        }
+
         public Builder from(final Or<AddressId, AddressRequest> from) {
             this.from = from;
             return this;
@@ -160,6 +174,11 @@ public class JobRequest implements HasLobParams {
 
         public Builder object(final LobObjectRequest singleObject) {
             this.objects = OrCollection.typeB(Arrays.asList(singleObject));
+            return this;
+        }
+
+        public Builder object(final LobObjectResponse singleObject) {
+            this.objects = OrCollection.typeB(Arrays.asList(singleObject.toRequest()));
             return this;
         }
 
@@ -190,6 +209,11 @@ public class JobRequest implements HasLobParams {
 
         public Builder objects(final Collection<LobObjectRequest> objects) {
             this.objects = OrCollection.typeB(objects);
+            return this;
+        }
+
+        public Builder objectResponses(final LobObjectResponseList objects) {
+            this.objects = OrCollection.typeB(objects.toRequest());
             return this;
         }
 

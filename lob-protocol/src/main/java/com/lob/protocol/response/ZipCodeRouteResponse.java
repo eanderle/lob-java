@@ -3,6 +3,7 @@ package com.lob.protocol.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.ZipCode;
+import com.lob.protocol.request.ZipCodeRouteRequest;
 
 import java.util.Collection;
 
@@ -12,8 +13,8 @@ public class ZipCodeRouteResponse {
 
     @JsonCreator
     public ZipCodeRouteResponse(
-        @JsonProperty("zip_code") final ZipCode zipCode,
-        @JsonProperty("routes") final Collection<RouteResponse> routes) {
+            @JsonProperty("zip_code") final ZipCode zipCode,
+            @JsonProperty("routes") final Collection<RouteResponse> routes) {
         this.zipCode = zipCode;
         this.routes = routes;
     }

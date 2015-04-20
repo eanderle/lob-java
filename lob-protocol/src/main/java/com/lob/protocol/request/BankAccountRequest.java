@@ -3,6 +3,7 @@ package com.lob.protocol.request;
 import com.lob.LobParamsBuilder;
 import com.lob.Or;
 import com.lob.id.AddressId;
+import com.lob.protocol.response.AddressResponse;
 
 import java.util.Collection;
 
@@ -120,6 +121,11 @@ public class BankAccountRequest implements HasLobParams {
             return this;
         }
 
+        public Builder bankAddress(final AddressResponse bankAddress) {
+            this.bankAddress = Or.typeB(bankAddress.toRequest());
+            return this;
+        }
+
         public Builder bankAddress(final Or<AddressId, AddressRequest> bankAddress) {
             this.bankAddress = bankAddress;
             return this;
@@ -129,10 +135,17 @@ public class BankAccountRequest implements HasLobParams {
             this.accountAddress = Or.typeA(accountAddress);
             return this;
         }
+
         public Builder accountAddress(final AddressRequest accountAddress) {
             this.accountAddress = Or.typeB(accountAddress);
             return this;
         }
+
+        public Builder accountAddress(final AddressResponse accountAddress) {
+            this.accountAddress = Or.typeB(accountAddress.toRequest());
+            return this;
+        }
+
         public Builder accountAddress(final Or<AddressId, AddressRequest> accountAddress) {
             this.accountAddress = accountAddress;
             return this;

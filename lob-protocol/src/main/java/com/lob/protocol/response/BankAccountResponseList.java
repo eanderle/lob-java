@@ -1,6 +1,8 @@
 package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lob.Util;
+import com.lob.protocol.request.BankAccountRequest;
 
 import java.util.Collection;
 

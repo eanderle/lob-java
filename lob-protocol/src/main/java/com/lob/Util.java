@@ -1,9 +1,10 @@
 package com.lob;
 
-import com.lob.protocol.response.ThumbnailResponse;
+import com.lob.protocol.request.AddressRequest;
+import com.lob.protocol.response.AddressResponse;
+import com.lob.protocol.response.RequestTransformer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -71,5 +72,13 @@ public final class Util {
             copy.add(t);
         }
         return copy;
+    }
+
+    public static <T> List<T> toRequestList(final Collection<? extends RequestTransformer<T>> responseList) {
+        final List<T> requestList = new ArrayList<T>(responseList.size());
+        for (final RequestTransformer<T> response : responseList) {
+            requestList.add(response.toRequest());
+        }
+        return requestList;
     }
 }

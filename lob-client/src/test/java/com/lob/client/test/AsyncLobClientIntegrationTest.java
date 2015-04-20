@@ -6,7 +6,6 @@ import com.google.common.io.Resources;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
-import com.lob.id.CountryCode;
 import com.lob.id.LobObjectId;
 import com.lob.id.SettingId;
 import com.lob.id.ZipCode;
@@ -41,6 +40,25 @@ public class AsyncLobClientIntegrationTest {
 
         final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
 
+        System.out.println(client.verifyAddress(VerifyAddressRequest.builder()
+            .line1("185 Berry Street")
+            .line2("Suite 1510")
+            .city("San Francisco")
+            .state("CA")
+            .zip("94107")
+            .country("US")
+            .build()).get());
+
+        final VerifyAddressRequest verifyRequest = VerifyAddressRequest.builder()
+            .line1("220 William T Morrissey Boulevard")
+            .city("boston")
+            .state("MA")
+            .zip(ZipCode.parse("02125"))
+            .build();
+        System.out.println("verify address " + client.verifyAddress(verifyRequest).get());
+
+
+        System.out.println("get setting " + client.getSetting(SettingId.parse(100)).get());
         final LobObjectRequest.Builder objectRequest = LobObjectRequest.builder()
             .file("https://lob.com/goblue.pdf")
             .name("myObject")
@@ -192,14 +210,6 @@ public class AsyncLobClientIntegrationTest {
 
         final ZipCodeRouteRequest zipCodeRouteRequest = ZipCodeRouteRequest.builder().addStringZips("48168", "94158").build();
         System.out.println("get zip code routes " + client.getZipCodeRoutes(zipCodeRouteRequest).get());
-
-        final VerifyAddressRequest verifyRequest = VerifyAddressRequest.builder()
-            .line1("220 William T Morrissey Boulevard")
-            .city("boston")
-            .state("MA")
-            .zip(ZipCode.parse("02125"))
-            .build();
-        System.out.println("verify address " + client.verifyAddress(verifyRequest).get());
 
         System.out.println("countries " + client.getAllCountries().get());
         System.out.println("states " + client.getAllStates().get());

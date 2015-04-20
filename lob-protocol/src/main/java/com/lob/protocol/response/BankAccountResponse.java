@@ -2,11 +2,18 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lob.Or;
+import com.lob.id.AddressId;
 import com.lob.id.BankAccountId;
+import com.lob.protocol.request.AddressRequest;
+import com.lob.protocol.request.BankAccountRequest;
 import org.joda.time.DateTime;
 
 public class BankAccountResponse {
     @JsonProperty private final BankAccountId id;
+    @JsonProperty private final String name;
+    @JsonProperty private final String routingNumber;
+    @JsonProperty private final String accountNumber;
     @JsonProperty private final AddressResponse bankAddress;
     @JsonProperty private final AddressResponse accountAddress;
     @JsonProperty private final String signatory;
@@ -17,6 +24,9 @@ public class BankAccountResponse {
     @JsonCreator
     public BankAccountResponse(
             @JsonProperty("id") final BankAccountId id,
+            @JsonProperty("name") final String name,
+            @JsonProperty("routing_number") final String routingNumber,
+            @JsonProperty("account_number") final String accountNumber,
             @JsonProperty("bank_address") final AddressResponse bankAddress,
             @JsonProperty("account_address") final AddressResponse accountAddress,
             @JsonProperty("signatory") final String signatory,
@@ -24,6 +34,9 @@ public class BankAccountResponse {
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("object") final String object) {
         this.id = id;
+        this.name = name;
+        this.routingNumber = routingNumber;
+        this.accountNumber = accountNumber;
         this.bankAddress = bankAddress;
         this.accountAddress = accountAddress;
         this.signatory = signatory;
@@ -34,6 +47,18 @@ public class BankAccountResponse {
 
     public BankAccountId getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getRoutingNumber() {
+        return routingNumber;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
     public AddressResponse getBankAddress() {
@@ -64,6 +89,9 @@ public class BankAccountResponse {
     public String toString() {
         return "BankAccountResponse{" +
             "id=" + id +
+            ", name='" + name + '\'' +
+            ", routingNumber='" + routingNumber + '\'' +
+            ", accountNumber='" + accountNumber + '\'' +
             ", bankAddress=" + bankAddress +
             ", accountAddress=" + accountAddress +
             ", signatory='" + signatory + '\'' +

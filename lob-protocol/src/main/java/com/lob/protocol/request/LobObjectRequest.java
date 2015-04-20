@@ -17,7 +17,7 @@ public class LobObjectRequest implements HasLobParams {
     private final Boolean fullBleed;
     private final Boolean template;
 
-    private final static String FILE_PARAM = "file";
+    public final static String FILE_PARAM = "file";
 
     public LobObjectRequest(
             final String name,

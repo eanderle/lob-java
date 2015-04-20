@@ -2,12 +2,15 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lob.Or;
+import com.lob.id.AddressId;
 import com.lob.id.CheckId;
+import com.lob.protocol.request.AddressRequest;
+import com.lob.protocol.request.CheckRequest;
 import org.joda.money.Money;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
-import java.util.List;
 
 import static com.lob.Util.defensiveCopy;
 
@@ -18,7 +21,7 @@ public class CheckResponse {
     @JsonProperty private final String memo;
     @JsonProperty private final Money amount;
     @JsonProperty private final AddressResponse to;
-    @JsonProperty private final BankAccountResponse backAccount;
+    @JsonProperty private final BankAccountResponse bankAccount;
     @JsonProperty private final String status;
     @JsonProperty private final String message;
     @JsonProperty private final Money price;
@@ -38,7 +41,7 @@ public class CheckResponse {
             @JsonProperty("memo") final String memo,
             @JsonProperty("amount") final Money amount,
             @JsonProperty("to") final AddressResponse to,
-            @JsonProperty("bank_account") final BankAccountResponse backAccount,
+            @JsonProperty("bank_account") final BankAccountResponse bankAccount,
             @JsonProperty("status") final String status,
             @JsonProperty("message") final String message,
             @JsonProperty("price") final Money price,
@@ -55,7 +58,7 @@ public class CheckResponse {
         this.memo = memo;
         this.amount = amount;
         this.to = to;
-        this.backAccount = backAccount;
+        this.bankAccount = bankAccount;
         this.status = status;
         this.message = message;
         this.price = price;
@@ -92,8 +95,8 @@ public class CheckResponse {
         return to;
     }
 
-    public BankAccountResponse getBackAccount() {
-        return backAccount;
+    public BankAccountResponse getBankAccount() {
+        return bankAccount;
     }
 
     public String getStatus() {
@@ -145,7 +148,7 @@ public class CheckResponse {
             ", memo='" + memo + '\'' +
             ", amount=" + amount +
             ", to=" + to +
-            ", backAccount=" + backAccount +
+            ", bankAccount=" + bankAccount +
             ", status='" + status + '\'' +
             ", message='" + message + '\'' +
             ", price=" + price +

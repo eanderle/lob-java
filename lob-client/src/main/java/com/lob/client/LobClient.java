@@ -8,6 +8,7 @@ import com.lob.id.CheckId;
 import com.lob.id.JobId;
 import com.lob.id.LobObjectId;
 import com.lob.id.PostcardId;
+import com.lob.id.SettingId;
 import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.AreaMailRequest;
 import com.lob.protocol.request.BankAccountRequest;
@@ -60,6 +61,8 @@ public interface LobClient {
     public ListenableFuture<LobObjectDeleteResponse> deleteLobObject(final LobObjectId id);
 
     // Setting methods
+    public ListenableFuture<SettingResponse> getSetting(final SettingId id);
+
     public ListenableFuture<SettingResponseList> getAllSettings();
 
     // Service methods

@@ -2,7 +2,15 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lob.Or;
+import com.lob.OrCollection;
+import com.lob.Util;
+import com.lob.id.AddressId;
 import com.lob.id.JobId;
+import com.lob.id.LobObjectId;
+import com.lob.protocol.request.AddressRequest;
+import com.lob.protocol.request.JobRequest;
+import com.lob.protocol.request.LobObjectRequest;
 import org.joda.time.DateTime;
 
 import java.util.Collection;

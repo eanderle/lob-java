@@ -3,13 +3,15 @@ package com.lob.protocol.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.LobObjectId;
+import com.lob.protocol.request.LobObjectRequest;
+import com.lob.protocol.request.LobParam;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
 
 import static com.lob.Util.defensiveCopy;
 
-public class LobObjectResponse {
+public class LobObjectResponse implements RequestTransformer<LobObjectRequest> {
     @JsonProperty private final LobObjectId id;
     @JsonProperty private final String name;
     @JsonProperty private final int quantity;
@@ -49,6 +51,19 @@ public class LobObjectResponse {
         this.dateModified = dateModified;
         this.setting = setting;
         this.object = object;
+    }
+
+    @Override
+    public LobObjectRequest toRequest() {
+        return new LobObjectRequest(
+            name,
+            LobParam.string(LobObjectRequest.FILE_PARAM, id.value()),
+            setting.getId(),
+            quantity,
+            doubleSided,
+            fullBleed,
+            template
+        );
     }
 
     public LobObjectId getId() {

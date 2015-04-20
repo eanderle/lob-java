@@ -4,9 +4,14 @@ import com.lob.LobParamsBuilder;
 import com.lob.OrCollection;
 import com.lob.id.ZipCode;
 import com.lob.id.ZipCodeRouteId;
+import com.lob.protocol.response.ZipCodeRouteResponse;
+import com.lob.protocol.response.ZipCodeRouteResponseList;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
@@ -135,13 +140,41 @@ public class AreaMailRequest implements HasLobParams {
             return this;
         }
 
-        public Builder routesForZips(final Collection<ZipCode> routes) {
-            this.routes = OrCollection.typeA(routes);
+        public Builder routesForZips(final String... zips) {
+            return routesForStringZips(Arrays.asList(zips));
+        }
+
+        public Builder routesForStringZips(final Collection<String> zips) {
+            final List<ZipCode> zipList = new ArrayList<ZipCode>(zips.size());
+            for (final String zip : zips) {
+                zipList.add(ZipCode.parse(zip));
+            }
+            this.routes = OrCollection.typeA(zipList);
+            return this;
+        }
+
+        public Builder routesForZips(final ZipCode... zips) {
+            this.routes = OrCollection.typeA(Arrays.asList(zips));
+            return this;
+        }
+
+        public Builder routesForZips(final Collection<ZipCode> zips) {
+            this.routes = OrCollection.typeA(zips);
+            return this;
+        }
+
+        public Builder routesForIds(final ZipCodeRouteId... routes) {
+            this.routes = OrCollection.typeB(Arrays.asList(routes));
             return this;
         }
 
         public Builder routesForIds(final Collection<ZipCodeRouteId> routes) {
             this.routes = OrCollection.typeB(routes);
+            return this;
+        }
+
+        public Builder routes(final ZipCodeRouteResponseList zipCodeRoutes) {
+            this.routes = OrCollection.typeB(zipCodeRoutes.toRequest());
             return this;
         }
 

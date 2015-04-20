@@ -4,6 +4,7 @@ import com.lob.LobParamsBuilder;
 import com.lob.Or;
 import com.lob.id.AddressId;
 import com.lob.id.SettingId;
+import com.lob.protocol.response.AddressResponse;
 
 import java.io.File;
 import java.util.Collection;
@@ -144,6 +145,11 @@ public class PostcardRequest implements HasLobParams {
             return this;
         }
 
+        public Builder to(final AddressResponse to) {
+            this.to = Or.typeB(to.toRequest());
+            return this;
+        }
+
         public Builder to(final Or<AddressId, AddressRequest> to) {
             this.to = to;
             return this;
@@ -156,6 +162,11 @@ public class PostcardRequest implements HasLobParams {
 
         public Builder from(final AddressRequest from) {
             this.from = Or.typeB(from);
+            return this;
+        }
+
+        public Builder from(final AddressResponse from) {
+            this.from = Or.typeB(from.toRequest());
             return this;
         }
 

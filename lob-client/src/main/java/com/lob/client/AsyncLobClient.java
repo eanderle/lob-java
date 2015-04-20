@@ -9,14 +9,7 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
 import com.lob.LobApiException;
 import com.lob.MoneyDeserializer;
-import com.lob.id.AddressId;
-import com.lob.id.AreaMailId;
-import com.lob.id.BankAccountId;
-import com.lob.id.CheckId;
-import com.lob.id.JobId;
-import com.lob.id.LobId;
-import com.lob.id.LobObjectId;
-import com.lob.id.PostcardId;
+import com.lob.id.*;
 import com.lob.protocol.request.*;
 import com.lob.protocol.response.*;
 import com.ning.http.client.AsyncCompletionHandler;
@@ -176,6 +169,11 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
+    public ListenableFuture<SettingResponse> getSetting(final SettingId id) {
+        return execute(SettingResponse.class, get(Router.SETTINGS, id), this.callbackExecutorService);
+    }
+
+    @Override
     public ListenableFuture<SettingResponseList> getAllSettings() {
         return execute(SettingResponseList.class, get(Router.SETTINGS), this.callbackExecutorService);
     }
@@ -332,6 +330,10 @@ public class AsyncLobClient implements LobClient {
     }
 
     private BoundRequestBuilder get(final String resourceUrl, final LobId id) {
+        return get(resourceUrl + "/" + id.value(), new FluentStringsMap());
+    }
+
+    private BoundRequestBuilder get(final String resourceUrl, final StringValued id) {
         return get(resourceUrl + "/" + id.value(), new FluentStringsMap());
     }
 

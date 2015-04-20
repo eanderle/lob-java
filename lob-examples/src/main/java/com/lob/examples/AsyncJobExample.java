@@ -51,7 +51,7 @@ public class AsyncJobExample extends BaseExample {
             futures.add(objectFuture);
         }
 
-        // Take the results of all the previous requests and use them to create a job asynchronously.
+        // Take the results of all the previous requests and use them to parse a job asynchronously.
         final ListenableFuture<JobResponse> jobFuture = Futures.transform(
             Futures.allAsList(futures),
             new AsyncFunction<List<Object>, JobResponse>() {

@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.AddressId;
 import com.lob.id.CountryCode;
 import com.lob.id.ZipCode;
+import com.lob.protocol.request.AddressRequest;
 import org.joda.time.DateTime;
 
-public class AddressResponse extends AbstractAddressResponse {
+public class AddressResponse extends AbstractAddressResponse implements RequestTransformer<AddressRequest> {
     @JsonProperty("id") private final AddressId id;
     @JsonProperty("name") private final String name;
     @JsonProperty("email") private final String email;
@@ -41,6 +42,11 @@ public class AddressResponse extends AbstractAddressResponse {
         this.dateCreated = dateCreated;
         this.dateModified = dateModified;
         this.deleted = deleted;
+    }
+
+    @Override
+    public AddressRequest toRequest() {
+        return new AddressRequest(name, email, phone, getLine1(), getLine2(), getCity(), getState(), getZip(), getCountry());
     }
 
     public AddressId getId() {
