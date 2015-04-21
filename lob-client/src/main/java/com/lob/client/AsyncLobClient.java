@@ -264,6 +264,14 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
+    public ListenableFuture<BankAccountResponse> verifyBankAccount(final BankAccountVerifyRequest request) {
+        return execute(
+            BankAccountResponse.class,
+            post(Router.BANK_ACCOUNTS + "/" + request.getId().value() + "/verify", request),
+            this.callbackExecutorService);
+    }
+
+    @Override
     public ListenableFuture<AreaMailResponse> createAreaMail(final AreaMailRequest areaMailRequest) {
         return execute(AreaMailResponse.class, post(Router.AREA_MAIL, areaMailRequest), this.callbackExecutorService);
     }

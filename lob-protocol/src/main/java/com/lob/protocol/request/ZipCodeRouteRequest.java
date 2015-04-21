@@ -38,16 +38,6 @@ public class ZipCodeRouteRequest implements HasLobParams {
         private Builder() {
         }
 
-        public Builder addStringZip(final String zipCode) {
-            this.zipCodes.add(ZipCode.parse(zipCode));
-            return this;
-        }
-
-        public Builder addZip(final ZipCode zipCode) {
-            this.zipCodes.add(zipCode);
-            return this;
-        }
-
         public Builder addStringZips(final String... zipCodes) {
             return addStringZips(Arrays.asList(zipCodes));
         }
@@ -62,8 +52,7 @@ public class ZipCodeRouteRequest implements HasLobParams {
                 transformedList.add(ZipCode.parse(stringZip));
             }
 
-            this.zipCodes.addAll(transformedList);
-            return this;
+            return addZips(transformedList);
         }
 
         public Builder addZips(final Collection<ZipCode> zipCodes) {

@@ -9,17 +9,15 @@ import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.BankAccountRequest;
 import org.joda.time.DateTime;
 
-public class BankAccountResponse {
+public class BankAccountResponse extends AbstractLobResponse {
     @JsonProperty private final BankAccountId id;
     @JsonProperty private final String name;
     @JsonProperty private final String routingNumber;
     @JsonProperty private final String accountNumber;
     @JsonProperty private final AddressResponse bankAddress;
+    @JsonProperty private final boolean verified;
     @JsonProperty private final AddressResponse accountAddress;
     @JsonProperty private final String signatory;
-    @JsonProperty private final DateTime dateCreated;
-    @JsonProperty private final DateTime dateModified;
-    @JsonProperty private final String object;
 
     @JsonCreator
     public BankAccountResponse(
@@ -29,20 +27,20 @@ public class BankAccountResponse {
             @JsonProperty("account_number") final String accountNumber,
             @JsonProperty("bank_address") final AddressResponse bankAddress,
             @JsonProperty("account_address") final AddressResponse accountAddress,
+            @JsonProperty("verified") final boolean verified,
             @JsonProperty("signatory") final String signatory,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("object") final String object) {
+        super(dateCreated, dateModified, object);
         this.id = id;
         this.name = name;
         this.routingNumber = routingNumber;
         this.accountNumber = accountNumber;
         this.bankAddress = bankAddress;
         this.accountAddress = accountAddress;
+        this.verified = verified;
         this.signatory = signatory;
-        this.dateCreated = dateCreated;
-        this.dateModified = dateModified;
-        this.object = object;
     }
 
     public BankAccountId getId() {
@@ -69,20 +67,12 @@ public class BankAccountResponse {
         return accountAddress;
     }
 
+    public boolean isVerified() {
+        return verified;
+    }
+
     public String getSignatory() {
         return signatory;
-    }
-
-    public DateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public DateTime getDateModified() {
-        return dateModified;
-    }
-
-    public String getObject() {
-        return object;
     }
 
     @Override
@@ -93,11 +83,9 @@ public class BankAccountResponse {
             ", routingNumber='" + routingNumber + '\'' +
             ", accountNumber='" + accountNumber + '\'' +
             ", bankAddress=" + bankAddress +
+            ", verified=" + verified +
             ", accountAddress=" + accountAddress +
             ", signatory='" + signatory + '\'' +
-            ", dateCreated=" + dateCreated +
-            ", dateModified=" + dateModified +
-            ", object='" + object + '\'' +
-            '}';
+            super.toString();
     }
 }

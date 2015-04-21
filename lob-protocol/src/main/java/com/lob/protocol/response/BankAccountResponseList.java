@@ -1,14 +1,12 @@
 package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.Util;
-import com.lob.protocol.request.BankAccountRequest;
 
-import java.util.Collection;
+import java.util.List;
 
 public class BankAccountResponseList extends AbstractPagedResponseList<BankAccountResponse> {
     public BankAccountResponseList(
-            @JsonProperty("data") final Collection<BankAccountResponse> data,
+            @JsonProperty("data") final List<BankAccountResponse> data,
             @JsonProperty("object") final String object,
             @JsonProperty("next_url") final String nextUrl,
             @JsonProperty("previous_url") final String previousUrl,

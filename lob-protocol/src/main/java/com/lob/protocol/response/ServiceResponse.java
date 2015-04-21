@@ -2,16 +2,17 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lob.id.ServiceId;
 
 public class ServiceResponse {
-    @JsonProperty("id") private final int id;
+    @JsonProperty("id") private final ServiceId id;
 	@JsonProperty("name") private final String name;
 	@JsonProperty("description") private final String description;
 	@JsonProperty("object") private final String object;
 
     @JsonCreator
     public ServiceResponse(
-            @JsonProperty("id") final int id,
+            @JsonProperty("id") final ServiceId id,
             @JsonProperty("name") final String name,
             @JsonProperty("description") final String description,
             @JsonProperty("object") final String object) {
@@ -21,7 +22,7 @@ public class ServiceResponse {
         this.object = object;
     }
 
-    public int getId() {
+    public ServiceId getId() {
         return id;
     }
 

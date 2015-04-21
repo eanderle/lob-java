@@ -3,18 +3,20 @@ package com.lob.protocol.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.ZipCode;
-import com.lob.protocol.request.ZipCodeRouteRequest;
 
 import java.util.Collection;
+import java.util.List;
+
+import static com.lob.Util.defensiveCopy;
 
 public class ZipCodeRouteResponse {
     @JsonProperty private final ZipCode zipCode;
-    @JsonProperty private final Collection<RouteResponse> routes;
+    @JsonProperty private final List<RouteResponse> routes;
 
     @JsonCreator
     public ZipCodeRouteResponse(
             @JsonProperty("zip_code") final ZipCode zipCode,
-            @JsonProperty("routes") final Collection<RouteResponse> routes) {
+            @JsonProperty("routes") final List<RouteResponse> routes) {
         this.zipCode = zipCode;
         this.routes = routes;
     }
@@ -23,8 +25,8 @@ public class ZipCodeRouteResponse {
         return zipCode;
     }
 
-    public Collection<RouteResponse> getRoutes() {
-        return routes;
+    public List<RouteResponse> getRoutes() {
+        return defensiveCopy(routes);
     }
 
     @Override

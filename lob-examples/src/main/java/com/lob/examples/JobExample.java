@@ -44,7 +44,7 @@ public class JobExample extends BaseExample {
             .name("Test Job")
             .to(exampleAddressResponse.getId())
             .from(exampleAddressResponse.getId())
-            .objectId(exampleObjectResponse.getId())
+            .objectIds(exampleObjectResponse.getId())
             .build();
         final JobResponse exampleJobResponse = client.createJob(exampleJobRequest).get();
 

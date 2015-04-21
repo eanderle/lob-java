@@ -1,6 +1,5 @@
 package com.lob;
 
-import com.lob.id.CountryCode;
 import com.lob.id.StringValued;
 import com.lob.protocol.request.HasLobParams;
 import com.lob.protocol.request.LobParam;
@@ -12,6 +11,7 @@ import org.joda.money.format.MoneyFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import static com.lob.Util.defensiveCopy;
@@ -43,6 +43,19 @@ public class LobParamsBuilder {
 
         this.internalParams.add(v);
         return this;
+    }
+
+    public LobParamsBuilder put(final String k, final Collection<Integer> v) {
+        if (v == null) {
+            return this;
+        }
+
+        final List<String> list = new ArrayList<String>(v.size());
+        for (final int i : v) {
+            list.add(Integer.toString(i));
+        }
+
+        return putAllStrings(k, list);
     }
 
     public LobParamsBuilder put(final String k, final Integer v) {

@@ -2,11 +2,11 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Collection;
+import java.util.List;
 
 public class CheckResponseList extends AbstractPagedResponseList<CheckResponse> {
     public CheckResponseList(
-            @JsonProperty("data") final Collection<CheckResponse> data,
+            @JsonProperty("data") final List<CheckResponse> data,
             @JsonProperty("object") final String object,
             @JsonProperty("next_url") final String nextUrl,
             @JsonProperty("previous_url") final String previousUrl,

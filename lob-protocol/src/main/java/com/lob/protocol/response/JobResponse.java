@@ -17,7 +17,7 @@ import java.util.Collection;
 
 import static com.lob.Util.defensiveCopy;
 
-public class JobResponse {
+public class JobResponse extends AbstractLobResponse {
     @JsonProperty("id") private final JobId id;
     @JsonProperty("name") private final String name;
     @JsonProperty("price") private final String price;
@@ -27,9 +27,6 @@ public class JobResponse {
     @JsonProperty("tracking") private final TrackingResponse tracking;
     @JsonProperty("service") private final ServiceResponse service;
     @JsonProperty("objects") private final Collection<LobObjectResponse> objects;
-    @JsonProperty("date_created") private final DateTime dateCreated;
-    @JsonProperty("date_modified") private final DateTime dateModified;
-    @JsonProperty("object") private final String object;
 
     @JsonCreator
     public JobResponse(
@@ -45,6 +42,7 @@ public class JobResponse {
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("object") final String object) {
+        super(dateCreated, dateModified, object);
         this.id = id;
         this.name = name;
         this.price = price;
@@ -54,9 +52,6 @@ public class JobResponse {
         this.tracking = tracking;
         this.service = service;
         this.objects = objects;
-        this.dateCreated = dateCreated;
-        this.dateModified = dateModified;
-        this.object = object;
     }
 
     public JobId getId() {
@@ -95,18 +90,6 @@ public class JobResponse {
         return defensiveCopy(objects);
     }
 
-    public DateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public DateTime getDateModified() {
-        return dateModified;
-    }
-
-    public String getObject() {
-        return object;
-    }
-
     @Override
     public String toString() {
         return "JobResponse{" +
@@ -119,9 +102,6 @@ public class JobResponse {
             ", tracking='" + tracking + '\'' +
             ", service=" + service +
             ", objects=" + objects +
-            ", dateCreated=" + dateCreated +
-            ", dateModified=" + dateModified +
-            ", object='" + object + '\'' +
-            '}';
+            super.toString();
     }
 }

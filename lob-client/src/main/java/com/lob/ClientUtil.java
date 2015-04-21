@@ -13,4 +13,9 @@ public class ClientUtil {
         Resources.asByteSource(Resources.getResource(resource)).copyTo(Files.asByteSink(file));
         return file;
     }
+
+    public static <T> T print(final T t) {
+        System.out.println(t);
+        return t;
+    }
 }

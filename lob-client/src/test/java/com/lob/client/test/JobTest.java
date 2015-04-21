@@ -4,23 +4,26 @@ import com.google.common.collect.Iterables;
 import com.lob.ClientUtil;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
+import com.lob.id.ServiceId;
 import com.lob.id.SettingId;
 import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.JobRequest;
-import com.lob.protocol.request.JobRequest.Builder;
 import com.lob.protocol.request.LobObjectRequest;
 import com.lob.protocol.response.AddressResponse;
-import com.lob.protocol.response.CountryResponse;
-import com.lob.protocol.response.CountryResponseList;
 import com.lob.protocol.response.JobResponse;
 import com.lob.protocol.response.JobResponseList;
 import com.lob.protocol.response.LobObjectResponse;
 import com.lob.protocol.response.LobObjectResponseList;
+import com.lob.protocol.response.ServiceResponse;
+import com.lob.protocol.response.TrackingResponse;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
+import static com.lob.ClientUtil.print;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -29,8 +32,8 @@ public class JobTest {
 
     @Test
     public void testListJobs() throws Exception {
-        final JobResponseList responseList = client.getAllJobs().get();
-        final JobResponse response = Iterables.get(responseList, 0);
+        final JobResponseList responseList = print(client.getAllJobs().get());
+        final JobResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof JobResponse);
         assertThat(responseList.getObject(), is("list"));
@@ -40,7 +43,7 @@ public class JobTest {
     public void testListJobsLimit() throws Exception {
         final JobResponseList responseList = client.getJobs(2).get();
 
-        assertThat(responseList.getData().size(), is(2));
+        assertThat(responseList.getCount(), is(2));
         assertThat(responseList.getObject(), is("list"));
     }
 
@@ -52,19 +55,30 @@ public class JobTest {
     @Test
     public void testCreateJob() throws Exception {
         final AddressResponse address = Iterables.get(client.getAddresses(1).get(), 0);
-        final LobObjectResponse lobObject = Iterables.get(client.getLobObjects(1).get(), 0);
+        final LobObjectResponseList objects = client.getLobObjects(1).get();
+        final LobObjectResponse lobObject = Iterables.get(objects, 0);
 
-        final JobRequest request = JobRequest.builder()
+        final JobRequest.Builder builder = JobRequest.builder()
+            .name("test job")
             .to(address.getId())
             .from(address.getId())
-            .objectId(lobObject.getId())
-            .build();
+            .objectIds(lobObject.getId());
 
-        final JobResponse response = client.createJob(request).get();
+        final JobResponse response = client.createJob(builder.build()).get();
         assertTrue(response instanceof JobResponse);
         assertThat(response.getTo().getId(), is(address.getId()));
         assertThat(response.getFrom().getId(), is(address.getId()));
         assertThat(Iterables.get(response.getObjects(), 0).getId(), is(lobObject.getId()));
+
+        assertThat(response.getName(), is("test job"));
+        assertFalse(response.getPrice().isEmpty());
+        assertFalse(response.getStatus().isEmpty());
+        print(response.getService());
+
+        final TrackingResponse tracking = print(response.getTracking());
+        print(tracking.getCarrier());
+        print(tracking.getLink());
+        print(tracking.getObject());
     }
 
     @Test
@@ -88,7 +102,7 @@ public class JobTest {
                 .zip("94107")
                 .country("US")
                 .build())
-            .object(LobObjectRequest.builder()
+            .objects(LobObjectRequest.builder()
                 .name("Object0")
                 .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
                 .setting(SettingId.COLOR_CARD_4X6)
@@ -109,12 +123,13 @@ public class JobTest {
         final JobRequest request = JobRequest.builder()
             .to(address.getId())
             .from(address.getId())
-            .object(LobObjectRequest.builder()
-                .name("Test Job")
-                .file(ClientUtil.fileFromResource("goblue.pdf"))
-                .setting(SettingId.COLOR_DOCUMENT)
-                .quantity(2)
-                .build())
+            .objects(
+                LobObjectRequest.builder()
+                    .name("Test Job")
+                    .file(ClientUtil.fileFromResource("goblue.pdf"))
+                    .setting(SettingId.COLOR_DOCUMENT)
+                    .quantity(2)
+                    .build())
             .build();
 
         final JobResponse response = client.createJob(request).get();
@@ -131,11 +146,12 @@ public class JobTest {
         final JobRequest request = JobRequest.builder()
             .to(address.getId())
             .from(address.getId())
-            .object(LobObjectRequest.builder()
-                .name("Test Job")
-                .file(ClientUtil.fileFromResource("goblue.pdf"))
-                .setting(SettingId.COLOR_DOCUMENT)
-                .build())
+            .objects(
+                LobObjectRequest.builder()
+                    .name("Test Job")
+                    .file(ClientUtil.fileFromResource("goblue.pdf"))
+                    .setting(SettingId.COLOR_DOCUMENT)
+                    .build())
             .build();
 
         final JobResponse response = client.createJob(request).get();

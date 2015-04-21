@@ -9,15 +9,7 @@ import com.lob.id.JobId;
 import com.lob.id.LobObjectId;
 import com.lob.id.PostcardId;
 import com.lob.id.SettingId;
-import com.lob.protocol.request.AddressRequest;
-import com.lob.protocol.request.AreaMailRequest;
-import com.lob.protocol.request.BankAccountRequest;
-import com.lob.protocol.request.CheckRequest;
-import com.lob.protocol.request.JobRequest;
-import com.lob.protocol.request.LobObjectRequest;
-import com.lob.protocol.request.PostcardRequest;
-import com.lob.protocol.request.VerifyAddressRequest;
-import com.lob.protocol.request.ZipCodeRouteRequest;
+import com.lob.protocol.request.*;
 import com.lob.protocol.response.*;
 
 public interface LobClient {
@@ -102,6 +94,8 @@ public interface LobClient {
     public ListenableFuture<BankAccountResponseList> getBankAccounts(final int count, final int offset);
 
     public ListenableFuture<BankAccountDeleteResponse> deleteBankAccount(final BankAccountId id);
+
+    public ListenableFuture<BankAccountResponse> verifyBankAccount(final BankAccountVerifyRequest request);
 
     // Area mail methods
     public ListenableFuture<AreaMailResponse> createAreaMail(final AreaMailRequest areaMailRequest);

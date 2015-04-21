@@ -8,19 +8,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class AddressResponseList extends AbstractPagedResponseList<AddressResponse> implements RequestListTransformer<AddressRequest> {
+public class AddressResponseList extends AbstractPagedResponseList<AddressResponse> {
     public AddressResponseList(
-            @JsonProperty("data") final Collection<AddressResponse> data,
+            @JsonProperty("data") final List<AddressResponse> data,
             @JsonProperty("object") final String object,
             @JsonProperty("next_url") final String nextUrl,
             @JsonProperty("previous_url") final String previousUrl,
             @JsonProperty("count") final int count) {
         super(data, object, nextUrl, previousUrl, count);
-    }
-
-    @Override
-    public Collection<AddressRequest> toRequest() {
-        return Util.toRequestList(getData());
     }
 
     @Override

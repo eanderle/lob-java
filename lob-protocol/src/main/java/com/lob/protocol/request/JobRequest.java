@@ -5,6 +5,7 @@ import com.lob.Or;
 import com.lob.OrCollection;
 import com.lob.Util;
 import com.lob.id.AddressId;
+import com.lob.id.CountryCode;
 import com.lob.id.LobObjectId;
 import com.lob.id.ServiceId;
 import com.lob.protocol.response.AddressResponse;
@@ -112,11 +113,6 @@ public class JobRequest implements HasLobParams {
             return this;
         }
 
-        public Builder to(final String to) {
-            this.to = Or.typeA(AddressId.parse(to));
-            return this;
-        }
-
         public Builder to(final AddressId to) {
             this.to = Or.typeA(to);
             return this;
@@ -127,18 +123,8 @@ public class JobRequest implements HasLobParams {
             return this;
         }
 
-        public Builder to(final AddressResponse to) {
-            this.to = Or.typeB(to.toRequest());
-            return this;
-        }
-
         public Builder to(final Or<AddressId, AddressRequest> to) {
             this.to = to;
-            return this;
-        }
-
-        public Builder from(final String from) {
-            this.from = Or.typeA(AddressId.parse(from));
             return this;
         }
 
@@ -152,46 +138,9 @@ public class JobRequest implements HasLobParams {
             return this;
         }
 
-        public Builder from(final AddressResponse from) {
-            this.from = Or.typeB(from.toRequest());
-            return this;
-        }
-
         public Builder from(final Or<AddressId, AddressRequest> from) {
             this.from = from;
             return this;
-        }
-
-        public Builder objectId(final String singleObjectId) {
-            this.objects = OrCollection.typeA(Arrays.asList(LobObjectId.parse(singleObjectId)));
-            return this;
-        }
-
-        public Builder objectId(final LobObjectId singleObjectId) {
-            this.objects = OrCollection.typeA(Arrays.asList(singleObjectId));
-            return this;
-        }
-
-        public Builder object(final LobObjectRequest singleObject) {
-            this.objects = OrCollection.typeB(Arrays.asList(singleObject));
-            return this;
-        }
-
-        public Builder object(final LobObjectResponse singleObject) {
-            this.objects = OrCollection.typeB(Arrays.asList(singleObject.toRequest()));
-            return this;
-        }
-
-        public Builder objectStringIds(final String... objectIds) {
-            return objectStringIds(Arrays.asList(objectIds));
-        }
-
-        public Builder objectStringIds(final Collection<String> objectIds) {
-            final List<LobObjectId> idList = new ArrayList<LobObjectId>(objectIds.size());
-            for (final String stringId : objectIds) {
-                idList.add(LobObjectId.parse(stringId));
-            }
-            return objectIds(idList);
         }
 
         public Builder objectIds(final LobObjectId... objectIds) {
@@ -203,25 +152,20 @@ public class JobRequest implements HasLobParams {
             return this;
         }
 
-        public Builder objects(final LobObjectRequest... objects) {
-            return objects(Arrays.asList(objects));
-        }
-
-        public Builder objects(final Collection<LobObjectRequest> objects) {
-            this.objects = OrCollection.typeB(objects);
-            return this;
-        }
-
         public Builder objectIds(final LobObjectResponseList objects) {
-            final List<LobObjectId> idList = new ArrayList<LobObjectId>(objects.getData().size());
+            final List<LobObjectId> idList = new ArrayList<LobObjectId>(objects.getCount());
             for (final LobObjectResponse response : objects) {
                 idList.add(response.getId());
             }
             return objectIds(idList);
         }
 
-        public Builder objectResponses(final LobObjectResponseList objects) {
-            this.objects = OrCollection.typeB(objects.toRequest());
+        public Builder objects(final LobObjectRequest... objects) {
+            return objects(Arrays.asList(objects));
+        }
+
+        public Builder objects(final Collection<LobObjectRequest> objects) {
+            this.objects = OrCollection.typeB(objects);
             return this;
         }
 

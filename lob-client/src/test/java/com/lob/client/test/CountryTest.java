@@ -17,6 +17,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
+import static com.lob.ClientUtil.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -26,8 +27,8 @@ public class CountryTest {
 
     @Test
     public void testCountries() throws Exception {
-        final CountryResponseList responseList = client.getAllCountries().get();
-        final CountryResponse response = Iterables.get(responseList.getData(), 0);
+        final CountryResponseList responseList = print(client.getAllCountries().get());
+        final CountryResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof CountryResponse);
         assertThat(responseList.getObject(), is("list"));

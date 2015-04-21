@@ -2,11 +2,11 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Collection;
+import java.util.List;
 
 public class AreaMailResponseList extends AbstractPagedResponseList<AreaMailResponse> {
     public AreaMailResponseList(
-            @JsonProperty("data") final Collection<AreaMailResponse> data,
+            @JsonProperty("data") final List<AreaMailResponse> data,
             @JsonProperty("object") final String object,
             @JsonProperty("next_url") final String nextUrl,
             @JsonProperty("previous_url") final String previousUrl,

@@ -3,15 +3,14 @@ package com.lob.protocol.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.LobObjectId;
-import com.lob.protocol.request.LobObjectRequest;
-import com.lob.protocol.request.LobParam;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
+import java.util.List;
 
 import static com.lob.Util.defensiveCopy;
 
-public class LobObjectResponse implements RequestTransformer<LobObjectRequest> {
+public class LobObjectResponse extends AbstractLobResponse {
     @JsonProperty private final LobObjectId id;
     @JsonProperty private final String name;
     @JsonProperty private final int quantity;
@@ -19,11 +18,8 @@ public class LobObjectResponse implements RequestTransformer<LobObjectRequest> {
     @JsonProperty private final boolean doubleSided;
     @JsonProperty private final boolean template;
     @JsonProperty private final String url;
-    @JsonProperty private final Collection<ThumbnailResponse> thumbnails;
-    @JsonProperty private final DateTime dateCreated;
-    @JsonProperty private final DateTime dateModified;
+    @JsonProperty private final List<ThumbnailResponse> thumbnails;
     @JsonProperty private final SettingResponse setting;
-    @JsonProperty private final String object;
 
     @JsonCreator
     public LobObjectResponse(
@@ -34,11 +30,12 @@ public class LobObjectResponse implements RequestTransformer<LobObjectRequest> {
             @JsonProperty("double_sided") final boolean doubleSided,
             @JsonProperty("template") final boolean template,
             @JsonProperty("url") final String url,
-            @JsonProperty("thumbnails") final Collection<ThumbnailResponse> thumbnails,
+            @JsonProperty("thumbnails") final List<ThumbnailResponse> thumbnails,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("setting") final SettingResponse setting,
             @JsonProperty("object") final String object) {
+        super(dateCreated, dateModified, object);
         this.id = id;
         this.name = name;
         this.quantity = quantity;
@@ -47,23 +44,7 @@ public class LobObjectResponse implements RequestTransformer<LobObjectRequest> {
         this.template = template;
         this.url = url;
         this.thumbnails = thumbnails;
-        this.dateCreated = dateCreated;
-        this.dateModified = dateModified;
         this.setting = setting;
-        this.object = object;
-    }
-
-    @Override
-    public LobObjectRequest toRequest() {
-        return new LobObjectRequest(
-            name,
-            LobParam.string(LobObjectRequest.FILE_PARAM, id.value()),
-            setting.getId(),
-            quantity,
-            doubleSided,
-            fullBleed,
-            template
-        );
     }
 
     public LobObjectId getId() {
@@ -94,24 +75,12 @@ public class LobObjectResponse implements RequestTransformer<LobObjectRequest> {
         return url;
     }
 
-    public Collection<ThumbnailResponse> getThumbnails() {
+    public List<ThumbnailResponse> getThumbnails() {
         return defensiveCopy(thumbnails);
-    }
-
-    public DateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public DateTime getDateModified() {
-        return dateModified;
     }
 
     public SettingResponse getSetting() {
         return setting;
-    }
-
-    public String getObject() {
-        return object;
     }
 
     @Override
@@ -125,10 +94,7 @@ public class LobObjectResponse implements RequestTransformer<LobObjectRequest> {
             ", template=" + template +
             ", url='" + url + '\'' +
             ", thumbnails=" + thumbnails +
-            ", dateCreated=" + dateCreated +
-            ", dateModified=" + dateModified +
             ", setting=" + setting +
-            ", object='" + object + '\'' +
-            '}';
+            super.toString();
     }
 }

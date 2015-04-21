@@ -2,12 +2,11 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.xml.ws.Response;
-import java.util.Collection;
+import java.util.List;
 
 public class PackagingResponseList extends AbstractResponseList<PackagingResponse> {
     public PackagingResponseList(
-            @JsonProperty("data") final Collection<PackagingResponse> data,
+            @JsonProperty("data") final List<PackagingResponse> data,
             @JsonProperty("object") final String object) {
         super(data, object);
     }

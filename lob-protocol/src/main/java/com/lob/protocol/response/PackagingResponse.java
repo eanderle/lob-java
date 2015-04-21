@@ -2,16 +2,17 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lob.id.PackagingId;
 
 public class PackagingResponse {
-    @JsonProperty private final int id;
+    @JsonProperty private final PackagingId id;
     @JsonProperty private final String name;
     @JsonProperty private final String description;
     @JsonProperty private final String object;
 
     @JsonCreator
     public PackagingResponse(
-            @JsonProperty("id") final int id,
+            @JsonProperty("id") final PackagingId id,
             @JsonProperty("name") final String name,
             @JsonProperty("description") final String description,
             @JsonProperty("object") final String object) {
@@ -21,7 +22,7 @@ public class PackagingResponse {
         this.object = object;
     }
 
-    public int getId() {
+    public PackagingId getId() {
         return id;
     }
 

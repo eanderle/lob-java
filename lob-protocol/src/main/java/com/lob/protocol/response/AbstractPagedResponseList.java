@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+
+import static com.lob.Util.defensiveCopy;
 
 public abstract class AbstractPagedResponseList<T> implements Iterable<T> {
-    @JsonProperty private final Collection<T> data;
+    @JsonProperty private final List<T> data;
     @JsonProperty private final String object;
     @JsonProperty private final String nextUrl;
     @JsonProperty private final String previousUrl;
@@ -15,7 +18,7 @@ public abstract class AbstractPagedResponseList<T> implements Iterable<T> {
 
     @JsonCreator
     public AbstractPagedResponseList(
-            @JsonProperty("data") final Collection<T> data,
+            @JsonProperty("data") final List<T> data,
             @JsonProperty("object") final String object,
             @JsonProperty("next_url") final String nextUrl,
             @JsonProperty("previous_url") final String previousUrl,
@@ -27,13 +30,8 @@ public abstract class AbstractPagedResponseList<T> implements Iterable<T> {
         this.count = count;
     }
 
-    @Override
-    public Iterator<T> iterator() {
-        return data.iterator();
-    }
-
-    public Collection<T> getData() {
-        return data;
+    public List<T> getData() {
+        return defensiveCopy(data);
     }
 
     public String getObject() {
@@ -50,6 +48,19 @@ public abstract class AbstractPagedResponseList<T> implements Iterable<T> {
 
     public int getCount() {
         return count;
+    }
+
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
+    public T get(final int index) {
+        return data.get(index);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return defensiveCopy(data).iterator();
     }
 
     @Override

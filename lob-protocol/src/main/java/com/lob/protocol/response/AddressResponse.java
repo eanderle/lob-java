@@ -8,14 +8,14 @@ import com.lob.id.ZipCode;
 import com.lob.protocol.request.AddressRequest;
 import org.joda.time.DateTime;
 
-public class AddressResponse extends AbstractAddressResponse implements RequestTransformer<AddressRequest> {
-    @JsonProperty("id") private final AddressId id;
-    @JsonProperty("name") private final String name;
-    @JsonProperty("email") private final String email;
-    @JsonProperty("phone") private final String phone;
-    @JsonProperty("date_created") private final DateTime dateCreated;
-    @JsonProperty("date_modified") private final DateTime dateModified;
-    @JsonProperty("deleted") private final boolean deleted;
+public class AddressResponse extends AbstractAddressResponse {
+    @JsonProperty private final AddressId id;
+    @JsonProperty private final String name;
+    @JsonProperty private final String email;
+    @JsonProperty private final String phone;
+    @JsonProperty private final DateTime dateCreated;
+    @JsonProperty private final DateTime dateModified;
+    @JsonProperty private final boolean deleted;
 
     @JsonCreator
     public AddressResponse(
@@ -42,11 +42,6 @@ public class AddressResponse extends AbstractAddressResponse implements RequestT
         this.dateCreated = dateCreated;
         this.dateModified = dateModified;
         this.deleted = deleted;
-    }
-
-    @Override
-    public AddressRequest toRequest() {
-        return new AddressRequest(name, email, phone, getLine1(), getLine2(), getCity(), getState(), getZip(), getCountry());
     }
 
     public AddressId getId() {

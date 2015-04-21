@@ -9,7 +9,7 @@ import org.joda.time.DateTime;
 
 import java.util.Collection;
 
-public class AreaMailResponse {
+public class AreaMailResponse extends AbstractLobResponse {
     @JsonProperty private final AreaMailId id;
     @JsonProperty private final String name;
     @JsonProperty private final String status;
@@ -20,9 +20,6 @@ public class AreaMailResponse {
     @JsonProperty private final Collection<ZipCodeRouteResponse> zipCodeRouteResponses;
     @JsonProperty private final Collection<ThumbnailResponse> thumbnails;
     @JsonProperty private final DateTime expectedDeliveryDate;
-    @JsonProperty private final DateTime dateCreated;
-    @JsonProperty private final DateTime dateModified;
-    @JsonProperty private final String object;
 
     @JsonCreator
     public AreaMailResponse(
@@ -39,6 +36,7 @@ public class AreaMailResponse {
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("object") final String object) {
+        super(dateCreated, dateModified, object);
         this.id = id;
         this.name = name;
         this.status = status;
@@ -49,9 +47,6 @@ public class AreaMailResponse {
         this.zipCodeRouteResponses = zipCodeRouteResponses;
         this.thumbnails = thumbnails;
         this.expectedDeliveryDate = expectedDeliveryDate;
-        this.dateCreated = dateCreated;
-        this.dateModified = dateModified;
-        this.object = object;
     }
 
     public AreaMailId getId() {
@@ -94,18 +89,6 @@ public class AreaMailResponse {
         return expectedDeliveryDate;
     }
 
-    public DateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public DateTime getDateModified() {
-        return dateModified;
-    }
-
-    public String getObject() {
-        return object;
-    }
-
     @Override
     public String toString() {
         return "AreaMailResponse{" +
@@ -119,9 +102,6 @@ public class AreaMailResponse {
             ", zipCodeRouteCollections=" + zipCodeRouteResponses +
             ", thumbnails=" + thumbnails +
             ", expectedDeliveryDate=" + expectedDeliveryDate +
-            ", dateCreated=" + dateCreated +
-            ", dateModified=" + dateModified +
-            ", object='" + object + '\'' +
-            '}';
+            super.toString();
     }
 }

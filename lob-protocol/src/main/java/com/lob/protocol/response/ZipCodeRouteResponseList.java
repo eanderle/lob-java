@@ -8,14 +8,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ZipCodeRouteResponseList extends AbstractResponseList<ZipCodeRouteResponse> implements RequestListTransformer<ZipCodeRouteId> {
+public class ZipCodeRouteResponseList extends AbstractResponseList<ZipCodeRouteResponse> {
     public ZipCodeRouteResponseList(
-        @JsonProperty("data") final Collection<ZipCodeRouteResponse> data,
+        @JsonProperty("data") final List<ZipCodeRouteResponse> data,
         @JsonProperty("object") final String object) {
         super(data, object);
     }
 
-    @Override
     public Collection<ZipCodeRouteId> toRequest() {
         final List<ZipCodeRouteId> list = new ArrayList<ZipCodeRouteId>(getData().size());
         for (final ZipCodeRouteResponse response : getData()) {

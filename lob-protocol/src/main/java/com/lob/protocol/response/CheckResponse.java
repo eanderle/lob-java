@@ -2,19 +2,16 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.Or;
-import com.lob.id.AddressId;
 import com.lob.id.CheckId;
-import com.lob.protocol.request.AddressRequest;
-import com.lob.protocol.request.CheckRequest;
 import org.joda.money.Money;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
+import java.util.List;
 
 import static com.lob.Util.defensiveCopy;
 
-public class CheckResponse {
+public class CheckResponse extends AbstractLobResponse {
     @JsonProperty private final CheckId id;
     @JsonProperty private final String name;
     @JsonProperty private final int checkNumber;
@@ -27,11 +24,8 @@ public class CheckResponse {
     @JsonProperty private final Money price;
     @JsonProperty private final String url;
     @JsonProperty private final TrackingResponse tracking;
-    @JsonProperty private final DateTime dateCreated;
-    @JsonProperty private final DateTime dateModified;
     @JsonProperty private final DateTime expectedDeliveryDate;
-    @JsonProperty private final Collection<ThumbnailResponse> thumbnails;
-    @JsonProperty private final String object;
+    @JsonProperty private final List<ThumbnailResponse> thumbnails;
 
     @JsonCreator
     public CheckResponse(
@@ -50,8 +44,9 @@ public class CheckResponse {
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("expected_delivery_date") final DateTime expectedDeliveryDate,
-            @JsonProperty("thumbnails") final Collection<ThumbnailResponse> thumbnails,
+            @JsonProperty("thumbnails") final List<ThumbnailResponse> thumbnails,
             @JsonProperty("object") final String object) {
+        super(dateCreated, dateModified, object);
         this.id = id;
         this.name = name;
         this.checkNumber = checkNumber;
@@ -64,11 +59,8 @@ public class CheckResponse {
         this.price = price;
         this.url = url;
         this.tracking = tracking;
-        this.dateCreated = dateCreated;
-        this.dateModified = dateModified;
         this.expectedDeliveryDate = expectedDeliveryDate;
         this.thumbnails = thumbnails;
-        this.object = object;
     }
 
     public CheckId getId() {
@@ -119,24 +111,12 @@ public class CheckResponse {
         return tracking;
     }
 
-    public DateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public DateTime getDateModified() {
-        return dateModified;
-    }
-
     public DateTime getExpectedDeliveryDate() {
         return expectedDeliveryDate;
     }
 
-    public Collection<ThumbnailResponse> getThumbnails() {
+    public List<ThumbnailResponse> getThumbnails() {
         return defensiveCopy(this.thumbnails);
-    }
-
-    public String getObject() {
-        return object;
     }
 
     @Override
@@ -154,11 +134,8 @@ public class CheckResponse {
             ", price=" + price +
             ", url='" + url + '\'' +
             ", tracking=" + tracking +
-            ", dateCreated=" + dateCreated +
-            ", dateModified=" + dateModified +
             ", expectedDeliveryDate=" + expectedDeliveryDate +
             ", thumbnails=" + thumbnails +
-            ", object='" + object + '\'' +
-            '}';
+            super.toString();
     }
 }

@@ -180,8 +180,8 @@ final AddressResponseList addresses = client.getAddresses(2).get();
 final LobObject object = client.getLobObjects(1).get().get(0);
 
 final JobRequest jobRequest = JobRequest.builder()
-    .to(addresses.getData().get(0))
-    .from(addresses.getData().get(1))
+    .to(addresses.get(0))
+    .from(addresses.get(1))
     .object(object)
     .build();
 
@@ -451,8 +451,8 @@ final ListenableFuture<PostcardResponse> postcard = client.createPostcard(postca
 final AddressResponseList addresses = client.getAddresses(2).get();
 
 final PostcardRequest postcardRequest = PostcardRequest.builder()
-    .to(addresses.getData().get(0))
-    .from(addresses.getData().get(1))
+    .to(addresses.get(0))
+    .from(addresses.get(1))
     .front("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
     .back("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
     .build();

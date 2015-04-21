@@ -6,6 +6,7 @@ import com.google.common.io.Resources;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
+import com.lob.id.AddressId;
 import com.lob.id.LobObjectId;
 import com.lob.id.SettingId;
 import com.lob.id.ZipCode;
@@ -68,9 +69,9 @@ public class AsyncLobClientIntegrationTest {
 
         final JobRequest.Builder jobRequestBuilder = JobRequest.builder()
             .name("Michigan fan letter")
-            .to("adr_43769b47aed248c2")
-            .from("adr_7f9ece71fbca3796")
-            .objectId("obj_7ca5f80b42b6dfca");
+            .to(AddressId.parse("adr_43769b47aed248c2"))
+            .from(AddressId.parse("adr_7f9ece71fbca3796"))
+            .objectIds(LobObjectId.parse("obj_7ca5f80b42b6dfca"));
 
         System.out.println("object request: " + objectRequest.build().getLobParams());
         final LobObjectResponse objectResponse = client.createLobObject(objectRequest.build()).get();
