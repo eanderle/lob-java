@@ -5,13 +5,14 @@
   <artifactId>lob-examples</artifactId>
   <packaging>jar</packaging>
   <version>2.0.0-SNAPSHOT</version>
-  <name>lob-examples</name>
+
+  <name>${project.groupId}:${project.artifactId}</name>
   <description>Examples for the Lob API</description>
   <url>https://github.com/lob/lob-java</url>
 
   <parent>
     <groupId>com.lob</groupId>
-    <artifactId>lob-all</artifactId>
+    <artifactId>lob-parent</artifactId>
     <version>2.0.0-SNAPSHOT</version>
   </parent>
 
@@ -21,10 +22,10 @@
       <artifactId>lob-client</artifactId>
       <version>2.0.0-SNAPSHOT</version>
     </dependency>
+
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-csv</artifactId>
-      <version>2.5.1</version>
     </dependency>
   </dependencies>
 </project>

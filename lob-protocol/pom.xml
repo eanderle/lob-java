@@ -5,13 +5,14 @@
   <artifactId>lob-protocol</artifactId>
   <packaging>jar</packaging>
   <version>2.0.0-SNAPSHOT</version>
-  <name>lob-protocol</name>
+
+  <name>${project.groupId}:${project.artifactId}</name>
   <description>Domain objects for the Lob API</description>
   <url>https://github.com/lob/lob-java</url>
 
   <parent>
     <groupId>com.lob</groupId>
-    <artifactId>lob-all</artifactId>
+    <artifactId>lob-parent</artifactId>
     <version>2.0.0-SNAPSHOT</version>
   </parent>
 
@@ -19,17 +20,14 @@
     <dependency>
       <groupId>org.joda</groupId>
       <artifactId>joda-money</artifactId>
-      <version>0.10.0</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
-      <version>2.7</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>2.5.1</version>
     </dependency>
   </dependencies>
 </project>
