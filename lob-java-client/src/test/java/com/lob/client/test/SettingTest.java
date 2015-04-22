@@ -1,17 +1,15 @@
 package com.lob.client.test;
 
-import com.google.common.collect.Iterables;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
 import com.lob.id.SettingId;
-import com.lob.protocol.response.CountryResponse;
 import com.lob.protocol.response.SettingResponse;
 import com.lob.protocol.response.SettingResponseList;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutionException;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;

@@ -2,18 +2,11 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.Or;
-import com.lob.OrCollection;
-import com.lob.Util;
-import com.lob.id.AddressId;
 import com.lob.id.JobId;
-import com.lob.id.LobObjectId;
-import com.lob.protocol.request.AddressRequest;
-import com.lob.protocol.request.JobRequest;
-import com.lob.protocol.request.LobObjectRequest;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
+import java.util.List;
 
 import static com.lob.Util.defensiveCopy;
 
@@ -26,7 +19,7 @@ public class JobResponse extends AbstractLobResponse {
     @JsonProperty("status") private final String status;
     @JsonProperty("tracking") private final TrackingResponse tracking;
     @JsonProperty("service") private final ServiceResponse service;
-    @JsonProperty("objects") private final Collection<LobObjectResponse> objects;
+    @JsonProperty("objects") private final List<LobObjectResponse> objects;
 
     @JsonCreator
     public JobResponse(
@@ -38,7 +31,7 @@ public class JobResponse extends AbstractLobResponse {
             @JsonProperty("status") final String status,
             @JsonProperty("tracking") final TrackingResponse tracking,
             @JsonProperty("service") final ServiceResponse service,
-            @JsonProperty("objects") final Collection<LobObjectResponse> objects,
+            @JsonProperty("objects") final List<LobObjectResponse> objects,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("object") final String object) {
@@ -86,7 +79,7 @@ public class JobResponse extends AbstractLobResponse {
         return service;
     }
 
-    public Collection<LobObjectResponse> getObjects() {
+    public List<LobObjectResponse> getObjects() {
         return defensiveCopy(objects);
     }
 

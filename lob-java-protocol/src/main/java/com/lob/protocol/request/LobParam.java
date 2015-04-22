@@ -17,10 +17,6 @@ public class LobParam {
         this.param = param;
     }
 
-    public static LobParam string(final String name, final String string) {
-        return new LobParam(name, Or.<Collection<String>, File>typeA(Arrays.asList(string)));
-    }
-
     public static LobParam strings(final String name, final String... strings) {
         return new LobParam(name, Or.<Collection<String>, File>typeA(Arrays.asList(strings)));
     }

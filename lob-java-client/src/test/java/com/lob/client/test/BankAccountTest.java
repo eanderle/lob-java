@@ -1,6 +1,6 @@
 package com.lob.client.test;
 
-import com.google.common.collect.Iterables;
+import com.lob.Or;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
 import com.lob.protocol.request.AddressRequest;
@@ -10,12 +10,12 @@ import com.lob.protocol.response.AddressResponse;
 import com.lob.protocol.response.BankAccountDeleteResponse;
 import com.lob.protocol.response.BankAccountResponse;
 import com.lob.protocol.response.BankAccountResponseList;
-import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -40,6 +40,8 @@ public class BankAccountTest {
 
         assertTrue(response instanceof BankAccountResponse);
         assertThat(responseList.getCount(), is(2));
+
+        assertThat(client.getBankAccounts(1, 2).get().getCount(), is(1));
     }
 
     @Test(expected = ExecutionException.class)
@@ -69,14 +71,24 @@ public class BankAccountTest {
         final BankAccountResponse retrievedResponse = client.getBankAccount(response.getId()).get();
         assertThat(retrievedResponse.getId(), is(response.getId()));
 
-        final BankAccountVerifyRequest verifyRequest = BankAccountVerifyRequest.builder()
+        final BankAccountVerifyRequest verifyRequest = print(BankAccountVerifyRequest.builder()
             .id(response.getId())
             .amounts(20, 40)
-            .build();
+            .build());
+        assertThat(verifyRequest.getAmounts(), is(Arrays.asList(20, 40)));
+
         final BankAccountResponse verifyResponse = client.verifyBankAccount(verifyRequest).get();
         assertTrue(verifyResponse.isVerified());
 
         client.createBankAccount(builder.butWith().name("other account").build()).get();
+
+        final BankAccountRequest request = print(builder.build());
+        assertFalse(request.getAccountNumber().isEmpty());
+        assertFalse(request.getName().isEmpty());
+        assertFalse(request.getRoutingNumber().isEmpty());
+        assertFalse(request.getSignatory().isEmpty());
+        assertTrue(request.getAccountAddress() instanceof Or);
+        assertTrue(request.getBankAddress() instanceof Or);
     }
 
     @Test

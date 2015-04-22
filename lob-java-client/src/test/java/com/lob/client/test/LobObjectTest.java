@@ -7,8 +7,7 @@ import com.lob.client.LobClient;
 import com.lob.id.LobObjectId;
 import com.lob.id.SettingId;
 import com.lob.protocol.request.LobObjectRequest;
-import com.lob.protocol.response.CountryResponse;
-import com.lob.protocol.response.CountryResponseList;
+import com.lob.protocol.request.LobParam;
 import com.lob.protocol.response.LobObjectDeleteResponse;
 import com.lob.protocol.response.LobObjectResponse;
 import com.lob.protocol.response.LobObjectResponseList;
@@ -19,9 +18,10 @@ import org.junit.Test;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -44,6 +44,8 @@ public class LobObjectTest {
 
         assertTrue(response instanceof LobObjectResponse);
         assertThat(responseList.getCount(), is(2));
+
+        assertThat(client.getLobObjects(1, 2).get().getCount(), is(1));
     }
 
     @Test(expected = ExecutionException.class)
@@ -80,6 +82,15 @@ public class LobObjectTest {
         assertFalse(thumbnail.getLarge().isEmpty());
         assertFalse(thumbnail.getMedium().isEmpty());
         assertFalse(thumbnail.getSmall().isEmpty());
+
+        final LobObjectRequest request = builder.build();
+        assertFalse(request.getName().isEmpty());
+        assertNull(request.isDoubleSided());
+        assertNull(request.isFullBleed());
+        assertNull(request.isTemplate());
+        assertTrue(request.getFile() instanceof LobParam);
+        assertNull(request.getQuantity());
+        assertTrue(request.getSetting() instanceof SettingId);
     }
 
     @Test

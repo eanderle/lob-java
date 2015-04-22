@@ -1,27 +1,24 @@
 package com.lob;
 
+import static com.lob.Util.checkNotNull;
+
 public class Or<T1, T2> {
     final T1 refA;
     final T2 refB;
 
     private Or(final T1 refA, final T2 refB) {
-        if (refA == null && refB == null) {
-            throw new NullPointerException("both references can't be null!");
-        }
-        if (refA != null && refB != null) {
-            throw new IllegalStateException("both references can't be set!");
-        }
-
+        // guaranteed not to be null because this is only accessed through the static methods,
+        // which contain checkNotNull()s
         this.refA = refA;
         this.refB = refB;
     }
 
     public static <T1, T2> Or<T1, T2> typeA(final T1 ref) {
-        return new Or<T1, T2>(ref, null);
+        return new Or<T1, T2>(checkNotNull(ref), null);
     }
 
     public static <T1, T2> Or<T1, T2> typeB(final T2 ref) {
-        return new Or<T1, T2>(null, ref);
+        return new Or<T1, T2>(null, checkNotNull(ref));
     }
 
     public boolean isTypeA() {

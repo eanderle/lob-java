@@ -35,10 +35,7 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
             zip,
             checkNotNull(country, "country is required"));
 
-        if (checkPresent(name, "name is required").length() > MAX_LENGTH) {
-            throw new IllegalArgumentException("name must not be longer than " + MAX_LENGTH + " characters");
-        }
-        this.name = name;
+        this.name = checkPresent(name, "name is required");
         this.email = email;
         this.phone = phone;
     }

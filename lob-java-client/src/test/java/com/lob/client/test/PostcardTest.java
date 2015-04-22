@@ -2,25 +2,25 @@ package com.lob.client.test;
 
 import com.google.common.collect.Iterables;
 import com.lob.ClientUtil;
+import com.lob.Or;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
-import com.lob.id.SettingId;
 import com.lob.protocol.request.AddressRequest;
-import com.lob.protocol.request.LobObjectRequest;
+import com.lob.protocol.request.LobParam;
 import com.lob.protocol.request.PostcardRequest;
 import com.lob.protocol.response.AddressResponse;
 import com.lob.protocol.response.PostcardResponse;
 import com.lob.protocol.response.PostcardResponseList;
-import com.lob.protocol.response.SettingResponse;
 import org.joda.money.Money;
 import org.junit.Test;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -42,6 +42,8 @@ public class PostcardTest {
 
         assertThat(responseList.getCount(), is(2));
         assertThat(responseList.getObject(), is("list"));
+
+        assertThat(client.getPostcards(1, 2).get().getCount(), is(1));
     }
 
     @Test(expected = ExecutionException.class)
@@ -65,12 +67,22 @@ public class PostcardTest {
         assertThat(response.getTo().getId(), is(address.getId()));
         assertThat(response.getFrom().getId(), is(address.getId()));
 
-        client.createPostcard(builder.butWith().name("other postcard").build()).get();
+        print(builder.butWith().name("other postcard").build());
+        print(builder.butWith().message("message"));
 
         print(response.getMessage());
         assertTrue(response.getPrice() instanceof Money);
         assertFalse(response.getStatus().isEmpty());
         print(response.getSetting());
+
+        final PostcardRequest request = print(builder.build());
+        assertNull(request.getMessage());
+        assertFalse(request.getName().isEmpty());
+        assertTrue(request.getBack() instanceof LobParam);
+        assertTrue(request.getFrom() instanceof Or);
+        assertTrue(request.getFront() instanceof LobParam);
+        assertNull(request.getSetting());
+        assertTrue(request.getTo() instanceof Or);
     }
 
     @Test

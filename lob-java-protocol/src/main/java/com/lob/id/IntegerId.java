@@ -41,6 +41,6 @@ public abstract class IntegerId implements StringValued {
 
     @Override
     public int hashCode() {
-        return id;
+        return 31 * id;
     }
 }

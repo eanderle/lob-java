@@ -117,7 +117,7 @@ public class LobObjectRequest implements HasLobParams {
         }
 
         public Builder file(final String file) {
-            this.file = LobParam.string(FILE_PARAM, file);
+            this.file = LobParam.strings(FILE_PARAM, file);
             return this;
         }
 

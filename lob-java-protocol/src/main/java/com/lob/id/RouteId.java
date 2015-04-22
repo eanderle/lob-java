@@ -7,10 +7,6 @@ public class RouteId extends StringId {
         super(id);
     }
 
-    public ZipCodeRouteId toZipCodeRouteId(final ZipCode zipCode) {
-        return ZipCodeRouteId.create(zipCode, this);
-    }
-
     @JsonCreator
     public static RouteId parse(final String s) {
         return new RouteId(s);

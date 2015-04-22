@@ -9,10 +9,6 @@ public abstract class StringId implements StringValued {
         this.id = checkNotNull(id);
     }
 
-    public String getId() {
-        return id;
-    }
-
     @Override
     public String value() {
         return this.id;

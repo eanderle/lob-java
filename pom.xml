@@ -180,6 +180,8 @@
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>0.7.0.201403182114</version>
         <configuration>
+          <destFile>target/</destFile>
+          <append>true</append>
         </configuration>
         <executions>
           <execution>

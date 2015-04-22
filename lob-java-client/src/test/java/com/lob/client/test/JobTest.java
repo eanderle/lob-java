@@ -2,9 +2,10 @@ package com.lob.client.test;
 
 import com.google.common.collect.Iterables;
 import com.lob.ClientUtil;
+import com.lob.Or;
+import com.lob.OrCollection;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
-import com.lob.id.ServiceId;
 import com.lob.id.SettingId;
 import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.JobRequest;
@@ -14,16 +15,15 @@ import com.lob.protocol.response.JobResponse;
 import com.lob.protocol.response.JobResponseList;
 import com.lob.protocol.response.LobObjectResponse;
 import com.lob.protocol.response.LobObjectResponseList;
-import com.lob.protocol.response.ServiceResponse;
 import com.lob.protocol.response.TrackingResponse;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -45,6 +45,7 @@ public class JobTest {
 
         assertThat(responseList.getCount(), is(2));
         assertThat(responseList.getObject(), is("list"));
+        assertThat(client.getJobs(1, 2).get().getCount(), is(1));
     }
 
     @Test(expected = ExecutionException.class)
@@ -56,19 +57,19 @@ public class JobTest {
     public void testCreateJob() throws Exception {
         final AddressResponse address = Iterables.get(client.getAddresses(1).get(), 0);
         final LobObjectResponseList objects = client.getLobObjects(1).get();
-        final LobObjectResponse lobObject = Iterables.get(objects, 0);
+        final LobObjectResponse lobObject = objects.get(0);
 
-        final JobRequest.Builder builder = JobRequest.builder()
+        final JobRequest.Builder builder = print(JobRequest.builder()
             .name("test job")
             .to(address.getId())
             .from(address.getId())
-            .objectIds(lobObject.getId());
+            .objectIds(lobObject.getId()));
 
         final JobResponse response = client.createJob(builder.build()).get();
         assertTrue(response instanceof JobResponse);
         assertThat(response.getTo().getId(), is(address.getId()));
         assertThat(response.getFrom().getId(), is(address.getId()));
-        assertThat(Iterables.get(response.getObjects(), 0).getId(), is(lobObject.getId()));
+        assertThat(response.getObjects().get(0).getId(), is(lobObject.getId()));
 
         assertThat(response.getName(), is("test job"));
         assertFalse(response.getPrice().isEmpty());
@@ -79,6 +80,13 @@ public class JobTest {
         print(tracking.getCarrier());
         print(tracking.getLink());
         print(tracking.getObject());
+
+        final JobRequest otherRequest = builder.butWith().objectIds(objects).build();
+        assertFalse(otherRequest.getName().isEmpty());
+        assertTrue(otherRequest.getFrom() instanceof Or);
+        assertTrue(otherRequest.getObjects() instanceof OrCollection);
+        assertNull(otherRequest.getService());
+
     }
 
     @Test

@@ -1,16 +1,13 @@
 package com.lob.client.test;
 
-import com.google.common.collect.Iterables;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
 import com.lob.id.PackagingId;
-import com.lob.protocol.response.CountryResponse;
-import com.lob.protocol.response.CountryResponseList;
 import com.lob.protocol.response.PackagingResponse;
 import com.lob.protocol.response.PackagingResponseList;
 import org.junit.Test;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;

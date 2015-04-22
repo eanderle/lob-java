@@ -20,12 +20,19 @@ public class ZipCodeRouteRequest implements HasLobParams {
     @Override
     public Collection<LobParam> getLobParams() {
         return LobParamsBuilder.create()
-            .putAll("zip_codes", this.zipCodes)
+            .putAllStringValued("zip_codes", this.zipCodes)
             .build();
     }
 
     public Collection<ZipCode> getZipCodes() {
         return defensiveCopy(zipCodes);
+    }
+
+    @Override
+    public String toString() {
+        return "ZipCodeRouteRequest{" +
+            "zipCodes=" + zipCodes +
+            '}';
     }
 
     public static Builder builder() {

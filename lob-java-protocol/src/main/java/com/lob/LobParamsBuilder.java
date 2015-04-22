@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import static com.lob.Util.defensiveCopy;
 
@@ -43,19 +42,6 @@ public class LobParamsBuilder {
 
         this.internalParams.add(v);
         return this;
-    }
-
-    public LobParamsBuilder put(final String k, final Collection<Integer> v) {
-        if (v == null) {
-            return this;
-        }
-
-        final List<String> list = new ArrayList<String>(v.size());
-        for (final int i : v) {
-            list.add(Integer.toString(i));
-        }
-
-        return putAllStrings(k, list);
     }
 
     public LobParamsBuilder put(final String k, final Integer v) {
@@ -110,16 +96,17 @@ public class LobParamsBuilder {
         return this;
     }
 
-    public LobParamsBuilder putAll(final String prefix, final Map<String, Collection<String>> map) {
-        if (map == null) {
+    public LobParamsBuilder putAllInts(final String k, final Collection<Integer> v) {
+        if (v == null) {
             return this;
         }
 
-        for (final Map.Entry<String, Collection<String>> entry : map.entrySet()) {
-            // XXX not sure how it's going to work if we get more than one level deep
-            putAllStrings(prefix + "[" + entry.getKey() + "]", entry.getValue());
+        final List<String> list = new ArrayList<String>(v.size());
+        for (final int i : v) {
+            list.add(Integer.toString(i));
         }
-        return this;
+
+        return putAllStrings(k, list);
     }
 
     public LobParamsBuilder putAllStringValued(final String k, final OrCollection<? extends StringValued, ? extends StringValued> v) {
@@ -127,10 +114,10 @@ public class LobParamsBuilder {
             return this;
         }
 
-        return (v.isTypeA() ? putAll(k, v.getTypeA()) : putAll(k, v.getTypeB()));
+        return (v.isTypeA() ? putAllStringValued(k, v.getTypeA()) : putAllStringValued(k, v.getTypeB()));
     }
 
-    public LobParamsBuilder putAll(final String k, final Collection<? extends StringValued> v) {
+    public LobParamsBuilder putAllStringValued(final String k, final Collection<? extends StringValued> v) {
         if (v == null) {
             return this;
         }

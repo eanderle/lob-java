@@ -3,9 +3,7 @@ package com.lob.protocol.request;
 import com.lob.LobParamsBuilder;
 import com.lob.Or;
 import com.lob.id.AddressId;
-import com.lob.id.CountryCode;
 import com.lob.id.SettingId;
-import com.lob.protocol.response.AddressResponse;
 
 import java.io.File;
 import java.util.Collection;
@@ -172,7 +170,7 @@ public class PostcardRequest implements HasLobParams {
         }
 
         public Builder front(final String front) {
-            this.front = LobParam.string(FRONT, front);
+            this.front = LobParam.strings(FRONT, front);
             return this;
         }
 
@@ -187,7 +185,7 @@ public class PostcardRequest implements HasLobParams {
         }
 
         public Builder back(final String back) {
-            this.back = LobParam.string(BACK, back);
+            this.back = LobParam.strings(BACK, back);
             return this;
         }
 

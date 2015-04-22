@@ -31,13 +31,6 @@ public final class Util {
         return ref;
     }
 
-    public static <T> Collection<T> checkPresent(final Collection<T> ref, final String message) {
-        if (checkNotNull(ref, message).isEmpty()) {
-            throw new IllegalArgumentException(message);
-        }
-        return ref;
-    }
-
     public static <T1, T2> OrCollection<T1, T2> checkPresent(final OrCollection<T1, T2> ref, final String message) {
         checkNotNull(ref, message);
         if ((ref.isTypeA() && ref.getTypeA().isEmpty()) || (ref.isTypeB() && ref.getTypeB().isEmpty())) {
@@ -71,5 +64,10 @@ public final class Util {
             copy.add(t);
         }
         return copy;
+    }
+
+    public static <T> T print(final T t) {
+        System.out.println(t);
+        return t;
     }
 }

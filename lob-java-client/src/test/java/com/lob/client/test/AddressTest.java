@@ -11,21 +11,25 @@ import com.lob.protocol.request.VerifyAddressRequest;
 import com.lob.protocol.response.AddressDeleteResponse;
 import com.lob.protocol.response.AddressResponse;
 import com.lob.protocol.response.AddressResponseList;
+import com.lob.protocol.response.ErrorResponse;
 import com.lob.protocol.response.VerifyAddressResponse;
+import com.ning.http.client.AsyncHttpClientConfig;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class AddressTest {
-    private final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
+    private final LobClient client = AsyncLobClient.create(
+        "test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc",
+        new AsyncHttpClientConfig.Builder().build());
 
     @Test
     public void testListAddresses() throws Exception {
@@ -68,6 +72,7 @@ public class AddressTest {
             print(lobException);
             assertFalse(lobException.getMessage().isEmpty());
             assertTrue(lobException.getUri() instanceof URI);
+            assertTrue(lobException.getErrorResponse() instanceof ErrorResponse);
         }
     }
 
@@ -98,6 +103,19 @@ public class AddressTest {
             .zip(ZipCode.parse("94107"))
             .country(CountryCode.parse("US"))
             .build()).get();
+
+        final AddressRequest request = print(builder.build());
+        assertFalse(request.getEmail().isEmpty());
+        assertFalse(request.getPhone().isEmpty());
+        assertFalse(request.getCity().isEmpty());
+        assertFalse(request.getLine1().isEmpty());
+        assertFalse(request.getLine2().isEmpty());
+        assertFalse(request.getState().isEmpty());
+        assertTrue(request.getCountry() instanceof CountryCode);
+
+        final AddressId id = response.getId();
+        final AddressResponse retrievedResponse = client.getAddress(id).get();
+        assertThat(retrievedResponse.getId(), is(id));
     }
 
     @Test
@@ -123,7 +141,7 @@ public class AddressTest {
             .zip("02125")
             .country("US");
 
-        final VerifyAddressResponse response = print(client.verifyAddress(builder.build()).get());
+        final VerifyAddressResponse response = print(client.verifyAddress(print(builder.build())).get());
         assertThat(response.getLine1(), is("220 WILLIAM T MORRISSEY BLVD"));
         assertFalse(response.getLine2().isEmpty());
         assertFalse(response.getCity().isEmpty());

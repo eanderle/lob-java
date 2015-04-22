@@ -4,7 +4,6 @@ import com.lob.LobParamsBuilder;
 import com.lob.OrCollection;
 import com.lob.id.ZipCode;
 import com.lob.id.ZipCodeRouteId;
-import com.lob.protocol.response.ZipCodeRouteResponse;
 import com.lob.protocol.response.ZipCodeRouteResponseList;
 
 import java.io.File;
@@ -111,7 +110,7 @@ public class AreaMailRequest implements HasLobParams {
         }
 
         public Builder front(final String front) {
-            this.front = LobParam.string(FRONT, front);
+            this.front = LobParam.strings(FRONT, front);
             return this;
         }
 
@@ -126,7 +125,7 @@ public class AreaMailRequest implements HasLobParams {
         }
 
         public Builder back(final String back) {
-            this.back = LobParam.string(BACK, back);
+            this.back = LobParam.strings(BACK, back);
             return this;
         }
 

@@ -4,8 +4,6 @@ import com.lob.LobParamsBuilder;
 import com.lob.Or;
 import com.lob.id.AddressId;
 import com.lob.id.BankAccountId;
-import com.lob.id.CountryCode;
-import com.lob.protocol.response.AddressResponse;
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 
@@ -136,11 +134,6 @@ public class CheckRequest implements HasLobParams {
             return this;
         }
 
-        public Builder to(final String addressId) {
-            this.to = Or.typeA(AddressId.parse(addressId));
-            return this;
-        }
-
         public Builder to(final AddressId to) {
             this.to = Or.typeA(to);
             return this;
@@ -177,7 +170,7 @@ public class CheckRequest implements HasLobParams {
         }
 
         public Builder logo(final String logo) {
-            this.logo = LobParam.string(LOGO, logo);
+            this.logo = LobParam.strings(LOGO, logo);
             return this;
         }
 

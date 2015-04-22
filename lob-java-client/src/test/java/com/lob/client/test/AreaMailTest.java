@@ -1,12 +1,15 @@
 package com.lob.client.test;
 
-import com.google.common.collect.Iterables;
 import com.lob.ClientUtil;
+import com.lob.OrCollection;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
 import com.lob.id.AreaMailId;
+import com.lob.id.RouteId;
 import com.lob.id.ZipCode;
+import com.lob.id.ZipCodeRouteId;
 import com.lob.protocol.request.AreaMailRequest;
+import com.lob.protocol.request.LobParam;
 import com.lob.protocol.request.TargetType;
 import com.lob.protocol.request.ZipCodeRouteRequest;
 import com.lob.protocol.response.AreaMailResponse;
@@ -20,9 +23,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -63,6 +67,23 @@ public class AreaMailTest {
         client.createAreaMail(builder.butWith().routesForZips(ZipCode.parse("94158")).build()).get();
         client.createAreaMail(builder.butWith().routesForZips(Arrays.asList(ZipCode.parse("94158"))).build()).get();
         client.createAreaMail(builder.butWith().routesForStringZips(Arrays.asList("94158")).build()).get();
+
+        final ZipCodeRouteId routeId = print(ZipCodeRouteId.parse("94158-C001"));
+        assertTrue(routeId.getRouteId() instanceof RouteId);
+        assertTrue(routeId.getZipCode() instanceof ZipCode);
+        print(builder.butWith().routesForIds(routeId).build());
+
+        final AreaMailRequest request = print(builder.build());
+        assertTrue(request.getFullBleed());
+        assertFalse(request.getName().isEmpty());
+        assertTrue(print(request.getBack()) instanceof LobParam);
+        assertTrue(request.getFront() instanceof LobParam);
+        assertTrue(request.getRoutes() instanceof OrCollection);
+        assertTrue(request.getTargetType() instanceof TargetType);
+
+        final AreaMailId id = response.getId();
+        final AreaMailResponse retrievedResponse = client.getAreaMail(id).get();
+        assertThat(retrievedResponse.getId(), is(id));
     }
 
     @Test
@@ -100,6 +121,7 @@ public class AreaMailTest {
         assertTrue(response instanceof AreaMailResponse);
         assertThat(responseList.getCount(), is(2));
 
+        assertThat(client.getAreaMails(1, 2).get().getCount(), is(1));
     }
 
     @Test(expected = ExecutionException.class)

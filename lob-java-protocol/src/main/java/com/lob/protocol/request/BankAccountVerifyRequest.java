@@ -18,7 +18,7 @@ public class BankAccountVerifyRequest implements HasLobParams {
 
     @Override
     public Collection<LobParam> getLobParams() {
-        return LobParamsBuilder.create().put("amounts", amounts).build();
+        return LobParamsBuilder.create().putAllInts("amounts", amounts).build();
     }
 
     public BankAccountId getId() {

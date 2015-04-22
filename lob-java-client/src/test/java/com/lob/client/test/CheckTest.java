@@ -2,8 +2,10 @@ package com.lob.client.test;
 
 import com.google.common.collect.Iterables;
 import com.lob.ClientUtil;
+import com.lob.Or;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
+import com.lob.id.BankAccountId;
 import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.BankAccountVerifyRequest;
 import com.lob.protocol.request.CheckRequest;
@@ -19,7 +21,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -57,6 +59,8 @@ public class CheckTest {
 
         assertThat(responseList.getCount(), is(2));
         assertThat(responseList.getObject(), is("list"));
+
+        assertThat(client.getChecks(1, 2).get().getCount(), is(1));
     }
 
     @Test(expected = ExecutionException.class)
@@ -79,7 +83,7 @@ public class CheckTest {
             .checkNumber(100)
             .memo("Test Check");
 
-        final CheckResponse response = client.createCheck(builder.build()).get();
+        final CheckResponse response = client.createCheck(print(builder.build())).get();
         assertTrue(response instanceof CheckResponse);
         assertThat(response.getBankAccount().getId(), is(bankAccount.getId()));
         assertThat(response.getTo().getId(), is(address.getId()));
@@ -103,6 +107,16 @@ public class CheckTest {
 
         final File logo = ClientUtil.fileFromResource("lobCheckLogo.png");
         client.createCheck(builder.butWith().logo(logo).build()).get();
+
+        final CheckRequest otherRequest = print(builder.butWith().logo("example.com/logo").build());
+        assertFalse(otherRequest.getMessage().isEmpty());
+        assertFalse(otherRequest.getMemo().isEmpty());
+        assertFalse(otherRequest.getName().isEmpty());
+        assertTrue(otherRequest.getAmount() instanceof Money);
+        assertTrue(otherRequest.getBankAccount() instanceof BankAccountId);
+        assertTrue(otherRequest.getCheckNumber() instanceof Integer);
+        assertTrue(otherRequest.getTo() instanceof Or);
+        assertFalse(otherRequest.getLogo().getStringParam().isEmpty());
     }
 
     @Test

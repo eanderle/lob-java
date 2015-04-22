@@ -1,16 +1,14 @@
 package com.lob.client.test;
 
-import com.google.common.collect.Iterables;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
 import com.lob.protocol.request.ZipCodeRouteRequest;
-import com.lob.protocol.response.CountryResponse;
 import com.lob.protocol.response.RouteResponse;
 import com.lob.protocol.response.ZipCodeRouteResponse;
 import com.lob.protocol.response.ZipCodeRouteResponseList;
 import org.junit.Test;
 
-import static com.lob.ClientUtil.print;
+import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -21,9 +19,10 @@ public class ZipCodeRouteTest {
 
     @Test
     public void testZipCodeRoute() throws Exception {
-        final ZipCodeRouteRequest request = ZipCodeRouteRequest.builder()
-            .addStringZips("94158", "60031")
-            .build();
+        final ZipCodeRouteRequest request = print(
+            ZipCodeRouteRequest.builder()
+                .addStringZips("94158", "60031")
+                .build());
         final ZipCodeRouteResponseList responseList = print(client.getZipCodeRoutes(request).get());
         final ZipCodeRouteResponse response = print(responseList.get(0));
 
@@ -34,5 +33,8 @@ public class ZipCodeRouteTest {
         print(route.getBusiness());
         print(route.getResidential());
         assertFalse(route.getObject().isEmpty());
+        print(response.getZipCode().toZipCodeRouteId(route.getRoute()));
+
+        assertFalse(request.getZipCodes().isEmpty());
     }
 }
