@@ -25,7 +25,7 @@ Include the following in your `pom.xml` for Maven:
 <dependencies>
   <dependency>
     <groupId>com.lob</groupId>
-    <artifactId>lob-client</artifactId>
+    <artifactId>lob-java-client</artifactId>
     <version>2.0.0-SNAPSHOT</version>
   </dependency>
   ...
@@ -36,16 +36,16 @@ Include the following in your `pom.xml` for Maven:
 
 We know that transitive dependencies are hard, so we split the wrapper into different modules to make managing them easier.
 
-Most people will want to depend on **lob-client.**
+Most people will want to depend on **lob-java-client.**
 
-- **lob-protocol** contains all of the objects you need to interface with Lob. Its only dependencies are **joda-money**, **joda-time**, and **jackson-annotations**.
-- **lob-client** contains the actual client for interacting with Lob's API. It depends on **guava**, **asynchttpclient**, and two **jackson-databind** packages.
-- **lob-examples** contains usage examples and is not intended to be consumed by your code.
-- **lob-all** is the parent package of all of these modules.
+- **lob-java-protocol** contains all of the objects you need to interface with Lob. Its only dependencies are **joda-money**, **joda-time**, and **jackson-annotations**.
+- **lob-java-client** contains the actual client for interacting with Lob's API. It depends on **guava**, **asynchttpclient**, and two **jackson-databind** packages.
+- **lob-java-examples** contains usage examples and is not intended to be consumed by your code.
+- **lob-java** is the parent package of all of these modules.
 
 ## Usage
 
-We've provided examples in the `lob-examples/` package that has examples of
+We've provided examples in the `lob-java-examples/` package that has examples of
 how to use the lob-java wrapper with some of our core endpoints.
 
 ## Supported Image Types
