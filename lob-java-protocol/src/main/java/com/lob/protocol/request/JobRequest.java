@@ -23,11 +23,11 @@ import static com.lob.Util.checkPresent;
 public class JobRequest implements HasLobParams {
     public static final String OBJECT = "object";
 
-    final String name;
-    final Or<AddressId, AddressRequest> to;
-    final Or<AddressId, AddressRequest> from;
-    final OrCollection<LobObjectId, LobObjectRequest> objects;
-    final ServiceId service;
+    private final String name;
+    private final Or<AddressId, AddressRequest> to;
+    private final Or<AddressId, AddressRequest> from;
+    private final OrCollection<LobObjectId, LobObjectRequest> objects;
+    private final ServiceId service;
 
     public JobRequest(
             final String name,
