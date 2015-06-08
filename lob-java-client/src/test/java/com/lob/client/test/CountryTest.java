@@ -16,7 +16,7 @@ public class CountryTest {
 
     @Test
     public void testCountries() throws Exception {
-        final CountryResponseList responseList = print(client.getAllCountries().get());
+        final CountryResponseList responseList = print(client.getCountries().get());
         final CountryResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof CountryResponse);

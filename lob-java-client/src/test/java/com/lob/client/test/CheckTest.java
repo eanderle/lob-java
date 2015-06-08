@@ -46,7 +46,7 @@ public class CheckTest {
 
     @Test
     public void testListChecks() throws Exception {
-        final CheckResponseList responseList = print(client.getAllChecks().get());
+        final CheckResponseList responseList = print(client.getChecks().get());
         final CheckResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof CheckResponse);

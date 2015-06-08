@@ -21,7 +21,7 @@ public class SettingTest {
 
     @Test
     public void testSettings() throws Exception {
-        final SettingResponseList responseList = print(client.getAllSettings().get());
+        final SettingResponseList responseList = print(client.getSettings().get());
         final SettingResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof SettingResponse);

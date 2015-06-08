@@ -19,7 +19,7 @@ public class ServiceTest {
 
     @Test
     public void testServices() throws Exception {
-        final ServiceResponseList responseList = print(client.getAllServices().get());
+        final ServiceResponseList responseList = print(client.getServices().get());
         final ServiceResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof ServiceResponse);

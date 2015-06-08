@@ -108,7 +108,7 @@ public class AreaMailTest {
 
     @Test
     public void testListAreas() throws Exception {
-        final AreaMailResponseList responseList = print(client.getAllAreaMails().get());
+        final AreaMailResponseList responseList = print(client.getAreaMails().get());
         final AreaMailResponse response = responseList.get(0);
         assertTrue(response instanceof AreaMailResponse);
         assertThat(responseList.getObject(), is("list"));

@@ -94,7 +94,7 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
-    public ListenableFuture<JobResponseList> getAllJobs() {
+    public ListenableFuture<JobResponseList> getJobs() {
         return execute(JobResponseList.class, get(Router.JOBS), this.callbackExecutorService);
     }
 
@@ -119,7 +119,7 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
-    public ListenableFuture<AddressResponseList> getAllAddresses() {
+    public ListenableFuture<AddressResponseList> getAddresses() {
         return execute(AddressResponseList.class, get(Router.ADDRESSES), this.callbackExecutorService);
     }
 
@@ -149,7 +149,7 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
-    public ListenableFuture<LobObjectResponseList> getAllLobObjects() {
+    public ListenableFuture<LobObjectResponseList> getLobObjects() {
         return execute(LobObjectResponseList.class, get(Router.OBJECTS), this.callbackExecutorService);
     }
 
@@ -174,12 +174,12 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
-    public ListenableFuture<SettingResponseList> getAllSettings() {
+    public ListenableFuture<SettingResponseList> getSettings() {
         return execute(SettingResponseList.class, get(Router.SETTINGS), this.callbackExecutorService);
     }
 
     @Override
-    public ListenableFuture<ServiceResponseList> getAllServices() {
+    public ListenableFuture<ServiceResponseList> getServices() {
         return execute(ServiceResponseList.class, get(Router.SERVICES), this.callbackExecutorService);
     }
 
@@ -194,7 +194,7 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
-    public ListenableFuture<PostcardResponseList> getAllPostcards() {
+    public ListenableFuture<PostcardResponseList> getPostcards() {
         return execute(PostcardResponseList.class, get(Router.POSTCARDS), this.callbackExecutorService);
     }
 
@@ -219,7 +219,7 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
-    public ListenableFuture<CheckResponseList> getAllChecks() {
+    public ListenableFuture<CheckResponseList> getChecks() {
         return execute(CheckResponseList.class, get(Router.CHECKS), this.callbackExecutorService);
     }
 
@@ -244,7 +244,7 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
-    public ListenableFuture<BankAccountResponseList> getAllBankAccounts() {
+    public ListenableFuture<BankAccountResponseList> getBankAccounts() {
         return execute(BankAccountResponseList.class, get(Router.BANK_ACCOUNTS), this.callbackExecutorService);
     }
 
@@ -282,7 +282,7 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
-    public ListenableFuture<AreaMailResponseList> getAllAreaMails() {
+    public ListenableFuture<AreaMailResponseList> getAreaMails() {
         return execute(AreaMailResponseList.class, get(Router.AREA_MAIL), this.callbackExecutorService);
     }
 
@@ -307,17 +307,17 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
-    public ListenableFuture<CountryResponseList> getAllCountries() {
+    public ListenableFuture<CountryResponseList> getCountries() {
         return execute(CountryResponseList.class, get(Router.COUNTRIES), this.callbackExecutorService);
     }
 
     @Override
-    public ListenableFuture<StateResponseList> getAllStates() {
+    public ListenableFuture<StateResponseList> getStates() {
         return execute(StateResponseList.class, get(Router.STATES), this.callbackExecutorService);
     }
 
     @Override
-    public ListenableFuture<PackagingResponseList> getAllPackagings() {
+    public ListenableFuture<PackagingResponseList> getPackagings() {
         return execute(PackagingResponseList.class, get(Router.PACKAGINGS), this.callbackExecutorService);
     }
 

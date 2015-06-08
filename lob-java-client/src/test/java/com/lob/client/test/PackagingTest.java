@@ -18,7 +18,7 @@ public class PackagingTest {
 
     @Test
     public void testPackagings() throws Exception {
-        final PackagingResponseList responseList = print(client.getAllPackagings().get());
+        final PackagingResponseList responseList = print(client.getPackagings().get());
         final PackagingResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof PackagingResponse);

@@ -164,7 +164,7 @@ public class AsyncLobClientIntegrationTest {
         System.out.println(areaMailResponse);
 
         System.out.println("Result of getting job: " + client.getJob(jobResponse.get().getId()).get());
-        final JobResponseList jobResponses = client.getAllJobs().get();
+        final JobResponseList jobResponses = client.getJobs().get();
         System.out.println("Result of getting all jobs: " + jobResponses);
 
         System.out.println("Result of getting jobs, count 1: " + client.getJobs(1).get());
@@ -173,48 +173,48 @@ public class AsyncLobClientIntegrationTest {
         final AddressResponse addressResponse = client.createAddress(addrA.build()).get();
         System.out.println("create address " + addressResponse);
         System.out.println("get address " + client.getAddress(addressResponse.getId()).get());
-        System.out.println("get all addresses " + client.getAllAddresses().get());
+        System.out.println("get all addresses " + client.getAddresses().get());
         System.out.println("get all addresses, count 1 " + client.getAddresses(1).get());
         System.out.println("get all addresses, count 1, offset 1 " + client.getAddresses(1, 1).get());
         System.out.println("delete address " + client.deleteAddress(addressResponse.getId()).get());
 
         System.out.println("get object " + client.getLobObject(objectResponse.getId()).get());
-        System.out.println("get all objects " + client.getAllLobObjects().get());
+        System.out.println("get all objects " + client.getLobObjects().get());
         System.out.println("get all objects, count 1 " + client.getLobObjects(1).get());
         System.out.println("get all objects, count 1, offset 1 " + client.getLobObjects(1, 1).get());
         System.out.println("delete object " + client.deleteLobObject(objectResponse.getId()).get());
 
-        System.out.println("get all settings " + client.getAllSettings().get());
+        System.out.println("get all settings " + client.getSettings().get());
 
-        System.out.println("get all services " + client.getAllServices().get());
+        System.out.println("get all services " + client.getServices().get());
 
         System.out.println("get postcard " + client.getPostcard(postcardResponse.getId()).get());
-        System.out.println("get all postcards " + client.getAllPostcards().get());
+        System.out.println("get all postcards " + client.getPostcards().get());
         System.out.println("get all postcards, count 1 " + client.getPostcards(1).get());
         System.out.println("get all postcards, count 1, offset 1 " + client.getPostcards(1, 1).get());
 
         //System.out.println("get check " + client.getCheck(checkResponse.getId()).get());
-        System.out.println("get all checks " + client.getAllChecks().get());
+        System.out.println("get all checks " + client.getChecks().get());
         System.out.println("get all checks, count 1 " + client.getChecks(1).get());
         System.out.println("get all checks, count 1, offset 1 " + client.getChecks(1, 1).get());
 
         System.out.println("get bank " + client.getBankAccount(bankAccountResponse.getId()).get());
-        System.out.println("get all banks " + client.getAllBankAccounts().get());
+        System.out.println("get all banks " + client.getBankAccounts().get());
         System.out.println("get all banks, count 1 " + client.getBankAccounts(1).get());
         System.out.println("get all banks, count 1, offset 1 " + client.getBankAccounts(1, 1).get());
         System.out.println("delete bank account" + client.deleteBankAccount(bankAccountResponse.getId()).get());
 
         System.out.println("get area mail " + client.getAreaMail(areaMailResponse.getId()).get());
-        System.out.println("get all area mails " + client.getAllAreaMails().get());
+        System.out.println("get all area mails " + client.getAreaMails().get());
         System.out.println("get all area mails, count 1 " + client.getAreaMails(1).get());
         System.out.println("get all area mails, count 1, offset 1 " + client.getAreaMails(1, 1).get());
 
         final ZipCodeRouteRequest zipCodeRouteRequest = ZipCodeRouteRequest.builder().addStringZips("48168", "94158").build();
         System.out.println("get zip code routes " + client.getZipCodeRoutes(zipCodeRouteRequest).get());
 
-        System.out.println("countries " + client.getAllCountries().get());
-        System.out.println("states " + client.getAllStates().get());
-        System.out.println("packagings " + client.getAllPackagings().get());
+        System.out.println("countries " + client.getCountries().get());
+        System.out.println("states " + client.getStates().get());
+        System.out.println("packagings " + client.getPackagings().get());
     }
 
     private static File fileFromResource(final String resource) throws IOException {

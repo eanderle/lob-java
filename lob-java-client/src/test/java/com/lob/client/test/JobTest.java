@@ -32,7 +32,7 @@ public class JobTest {
 
     @Test
     public void testListJobs() throws Exception {
-        final JobResponseList responseList = print(client.getAllJobs().get());
+        final JobResponseList responseList = print(client.getJobs().get());
         final JobResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof JobResponse);

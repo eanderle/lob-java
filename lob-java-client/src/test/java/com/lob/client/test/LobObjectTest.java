@@ -30,7 +30,7 @@ public class LobObjectTest {
 
     @Test
     public void testListObjects() throws Exception {
-        final LobObjectResponseList responseList = print(client.getAllLobObjects().get());
+        final LobObjectResponseList responseList = print(client.getLobObjects().get());
         final LobObjectResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof LobObjectResponse);

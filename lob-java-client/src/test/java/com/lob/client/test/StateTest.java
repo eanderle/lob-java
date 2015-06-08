@@ -17,7 +17,7 @@ public class StateTest {
 
     @Test
     public void testStates() throws Exception {
-        final StateResponseList responseList = print(client.getAllStates().get());
+        final StateResponseList responseList = print(client.getStates().get());
         final StateResponse response = print(responseList.get(0));
 
         assertTrue(responseList.size() > 0);

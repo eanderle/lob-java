@@ -20,7 +20,7 @@ public interface LobClient {
 
     public ListenableFuture<JobResponse> getJob(final JobId id);
 
-    public ListenableFuture<JobResponseList> getAllJobs();
+    public ListenableFuture<JobResponseList> getJobs();
 
     public ListenableFuture<JobResponseList> getJobs(final int count);
 
@@ -31,7 +31,7 @@ public interface LobClient {
 
     public ListenableFuture<AddressResponse> getAddress(final AddressId id);
 
-    public ListenableFuture<AddressResponseList> getAllAddresses();
+    public ListenableFuture<AddressResponseList> getAddresses();
 
     public ListenableFuture<AddressResponseList> getAddresses(final int count);
 
@@ -44,7 +44,7 @@ public interface LobClient {
 
     public ListenableFuture<LobObjectResponse> getLobObject(final LobObjectId id);
 
-    public ListenableFuture<LobObjectResponseList> getAllLobObjects();
+    public ListenableFuture<LobObjectResponseList> getLobObjects();
 
     public ListenableFuture<LobObjectResponseList> getLobObjects(final int count);
 
@@ -55,17 +55,17 @@ public interface LobClient {
     // Setting methods
     public ListenableFuture<SettingResponse> getSetting(final SettingId id);
 
-    public ListenableFuture<SettingResponseList> getAllSettings();
+    public ListenableFuture<SettingResponseList> getSettings();
 
     // Service methods
-    public ListenableFuture<ServiceResponseList> getAllServices();
+    public ListenableFuture<ServiceResponseList> getServices();
 
     // Postcard methods
     public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest);
 
     public ListenableFuture<PostcardResponse> getPostcard(final PostcardId id);
 
-    public ListenableFuture<PostcardResponseList> getAllPostcards();
+    public ListenableFuture<PostcardResponseList> getPostcards();
 
     public ListenableFuture<PostcardResponseList> getPostcards(final int count);
 
@@ -76,7 +76,7 @@ public interface LobClient {
 
     public ListenableFuture<CheckResponse> getCheck(final CheckId id);
 
-    public ListenableFuture<CheckResponseList> getAllChecks();
+    public ListenableFuture<CheckResponseList> getChecks();
 
     public ListenableFuture<CheckResponseList> getChecks(final int count);
 
@@ -87,7 +87,7 @@ public interface LobClient {
 
     public ListenableFuture<BankAccountResponse> getBankAccount(final BankAccountId id);
 
-    public ListenableFuture<BankAccountResponseList> getAllBankAccounts();
+    public ListenableFuture<BankAccountResponseList> getBankAccounts();
 
     public ListenableFuture<BankAccountResponseList> getBankAccounts(final int count);
 
@@ -102,7 +102,7 @@ public interface LobClient {
 
     public ListenableFuture<AreaMailResponse> getAreaMail(final AreaMailId id);
 
-    public ListenableFuture<AreaMailResponseList> getAllAreaMails();
+    public ListenableFuture<AreaMailResponseList> getAreaMails();
 
     public ListenableFuture<AreaMailResponseList> getAreaMails(final int count);
 
@@ -114,9 +114,9 @@ public interface LobClient {
     public ListenableFuture<VerifyAddressResponse> verifyAddress(final VerifyAddressRequest request);
 
     // Resources
-    public ListenableFuture<CountryResponseList> getAllCountries();
+    public ListenableFuture<CountryResponseList> getCountries();
 
-    public ListenableFuture<StateResponseList> getAllStates();
+    public ListenableFuture<StateResponseList> getStates();
 
-    public ListenableFuture<PackagingResponseList> getAllPackagings();
+    public ListenableFuture<PackagingResponseList> getPackagings();
 }

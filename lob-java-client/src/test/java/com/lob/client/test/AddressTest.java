@@ -33,7 +33,7 @@ public class AddressTest {
 
     @Test
     public void testListAddresses() throws Exception {
-        final AddressResponseList addresses = print(client.getAllAddresses().get());
+        final AddressResponseList addresses = print(client.getAddresses().get());
         final AddressResponse response = addresses.get(0);
         assertTrue(response instanceof AddressResponse);
         assertThat(addresses.getObject(), is("list"));
@@ -120,13 +120,13 @@ public class AddressTest {
 
     @Test
     public void testRetrieveAddress() throws Exception {
-        final AddressResponse response = print(client.getAllAddresses().get().get(0));
+        final AddressResponse response = print(client.getAddresses().get().get(0));
         assertTrue(response instanceof AddressResponse);
     }
 
     @Test
     public void testDeleteAddress() throws Exception {
-        final AddressId id = client.getAllAddresses().get().get(0).getId();
+        final AddressId id = client.getAddresses().get().get(0).getId();
         final AddressDeleteResponse response = print(client.deleteAddress(id).get());
         assertThat(response.getId(), is(id));
     }

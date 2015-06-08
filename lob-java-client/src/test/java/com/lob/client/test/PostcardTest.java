@@ -29,7 +29,7 @@ public class PostcardTest {
 
     @Test
     public void testListPostcards() throws Exception {
-        final PostcardResponseList responseList = print(client.getAllPostcards().get());
+        final PostcardResponseList responseList = print(client.getPostcards().get());
         final PostcardResponse response = print(responseList.get(0));
 
         assertTrue(response instanceof PostcardResponse);

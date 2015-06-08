@@ -26,7 +26,7 @@ public class BankAccountTest {
 
     @Test
     public void testListBankAccounts() throws Exception {
-        final BankAccountResponseList responseList = client.getAllBankAccounts().get();
+        final BankAccountResponseList responseList = client.getBankAccounts().get();
         final BankAccountResponse response = responseList.get(0);
 
         assertTrue(response instanceof BankAccountResponse);
@@ -125,7 +125,7 @@ public class BankAccountTest {
 
     @Test
     public void testDeleteBankAccount() throws Exception {
-        final BankAccountResponse response = client.getAllBankAccounts().get().get(0);
+        final BankAccountResponse response = client.getBankAccounts().get().get(0);
         final BankAccountDeleteResponse deleteResponse = print(client.deleteBankAccount(response.getId()).get());
         assertThat(deleteResponse.getId(), is(response.getId()));
     }

@@ -42,6 +42,6 @@ public class LobTest {
         Lob.setBaseUrl(baseUrl);
         Lob.setApiVersion(apiVersion);
 
-        AsyncLobClient.createDefault("lol").getAllAddresses().get();
+        AsyncLobClient.createDefault("lol").getAddresses().get();
     }
 }
