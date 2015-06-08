@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
+import com.lob.BooleanDeserializer;
 import com.lob.Lob;
 import com.lob.LobApiException;
 import com.lob.MoneyDeserializer;
@@ -37,7 +38,10 @@ import static com.google.common.base.Preconditions.*;
 public class AsyncLobClient implements LobClient {
     private final static ObjectMapper MAPPER = new ObjectMapper()
         .registerModule(new JodaModule())
-        .registerModule(new SimpleModule().addDeserializer(Money.class, new MoneyDeserializer(CurrencyUnit.USD)))
+        .registerModule(new SimpleModule()
+            .addDeserializer(Money.class, new MoneyDeserializer(CurrencyUnit.USD))
+            .addDeserializer(Boolean.class, new BooleanDeserializer())
+        )
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     private final AsyncHttpClient httpClient;
