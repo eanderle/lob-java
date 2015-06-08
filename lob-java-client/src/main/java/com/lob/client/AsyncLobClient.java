@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.google.common.base.Optional;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.lob.Lob;
@@ -41,14 +42,14 @@ public class AsyncLobClient implements LobClient {
 
     private final AsyncHttpClient httpClient;
     private final String baseUrl;
-    private final String apiVersion;
+    private final Optional<String> apiVersion;
 
     private final ExecutorService callbackExecutorService;
 
     private AsyncLobClient(
             final AsyncHttpClient httpClient,
             final String baseUrl,
-            final String apiVersion,
+            final Optional<String> apiVersion,
             final ExecutorService callbackExecutorService) {
         this.httpClient = httpClient;
         this.baseUrl = baseUrl;
@@ -401,7 +402,11 @@ public class AsyncLobClient implements LobClient {
             final ExecutorService callbackExecutorService) {
             final SettableFuture<T> guavaFut = SettableFuture.create();
         try {
-            request.addHeader(LobClient.LOB_VERSION_HEADER, Lob.getApiVersion());
+            final Optional<String> apiVersionOpt = Lob.getApiVersion();
+            if (apiVersionOpt.isPresent()) {
+                request.addHeader(LobClient.LOB_VERSION_HEADER, apiVersionOpt.get());
+            }
+
             request.execute(new GuavaFutureConverter<T>(clazz, guavaFut, callbackExecutorService));
         }
         catch (final IOException e) {

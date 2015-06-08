@@ -1,10 +1,10 @@
 package com.lob;
 
-public final class Lob {
-    public static final String API_2014_12_18 = "2014-12-18";
+import com.google.common.base.Optional;
 
+public final class Lob {
     private static String BASE_URL = "https://api.lob.com/v1/";
-    private static String API_VERSION = API_2014_12_18;
+    private static Optional<String> API_VERSION = Optional.absent();
 
     // prevent instantiation
     private Lob() {}
@@ -17,11 +17,15 @@ public final class Lob {
         BASE_URL = baseUrl;
     }
 
-    public static String getApiVersion() {
+    public static Optional<String> getApiVersion() {
         return API_VERSION;
     }
 
     public static void setApiVersion(final String apiVersion) {
-        API_VERSION = apiVersion;
+        API_VERSION = Optional.of(apiVersion);
+    }
+
+    public static void clearApiVersion() {
+        API_VERSION = Optional.absent();
     }
 }
