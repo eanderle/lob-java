@@ -7,20 +7,20 @@ import java.util.Collection;
 import static com.lob.Util.defensiveCopy;
 
 public class ErrorResponse {
-    @JsonProperty private final Collection<ErrorResponseItem> errors;
+    @JsonProperty private final ErrorResponseItem error;
 
-    public ErrorResponse(@JsonProperty("errors") final Collection<ErrorResponseItem> errors) {
-        this.errors = errors;
+    public ErrorResponse(@JsonProperty("error") final ErrorResponseItem error) {
+        this.error = error;
     }
 
-    public Collection<ErrorResponseItem> getErrors() {
-        return defensiveCopy(errors);
+    public ErrorResponseItem getError() {
+        return error;
     }
 
     @Override
     public String toString() {
         return "ErrorResponse{" +
-            "errors=" + errors +
+            "error=" + error +
             '}';
     }
 }

@@ -435,7 +435,16 @@ public class AsyncLobClient implements LobClient {
         }
 
         @Override
+        public void onThrowable(final Throwable t) {
+            guavaFut.setException(t);
+        }
+
+        @Override
         public T onCompleted(final Response response) throws Exception {
+            if (guavaFut.isDone()) {
+                return guavaFut.get();
+            }
+
             if (isSuccess(response)) {
                 final T value = MAPPER.readValue(response.getResponseBody(), clazz);
                 // Execute setting the guava future in a separate thread so any callbacks

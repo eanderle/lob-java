@@ -9,7 +9,7 @@ public class LobApiException extends RuntimeException {
     private final ErrorResponse errorResponse;
 
     public LobApiException(final URI uri, final ErrorResponse errorResponse) {
-        super(uri + " " + errorResponse.getErrors().toString());
+        super(uri + " " + errorResponse.getError().toString());
         this.uri = uri;
         this.errorResponse = errorResponse;
     }
@@ -24,6 +24,6 @@ public class LobApiException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "LobApiException: " + uri + " " + errorResponse.getErrors().toString();
+        return "LobApiException: " + uri + " " + errorResponse.getError().toString();
     }
 }
