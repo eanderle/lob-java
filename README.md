@@ -87,6 +87,18 @@ final AsyncHttpClientConfiguration.Builder configBuilder = new AsyncHttpClientCo
 final LobClient client = AsyncLobClient.create("yourApiKey", configBuilder.build());
 ```
 
+You may optionally set an API version. This is useful for testing your code against new API versions before you upgrade.
+
+Note that setting the API version only affects future instances of `LobClient`s, so be sure to set it before creating your client.
+
+```java
+import com.lob.client.AsyncLobClient;
+import com.lob.client.LobClient;
+
+Lob.setApiVersion("apiVersion");
+final LobClient client = AsyncLobClient.createDefault("yourApiKey");
+```
+
 ## API Reference
 - [Simple Print Service](#simple-print-service)
   - [Job](#job)
