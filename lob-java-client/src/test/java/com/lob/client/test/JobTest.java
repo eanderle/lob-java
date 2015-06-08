@@ -113,7 +113,7 @@ public class JobTest {
             .objects(LobObjectRequest.builder()
                 .name("Object0")
                 .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-                .setting(SettingId.COLOR_CARD_4X6)
+                .setting(200)
                 .build())
             .build();
 
@@ -135,7 +135,7 @@ public class JobTest {
                 LobObjectRequest.builder()
                     .name("Test Job")
                     .file(ClientUtil.fileFromResource("goblue.pdf"))
-                    .setting(SettingId.COLOR_DOCUMENT)
+                    .setting(200)
                     .quantity(2)
                     .build())
             .build();
@@ -158,7 +158,7 @@ public class JobTest {
                 LobObjectRequest.builder()
                     .name("Test Job")
                     .file(ClientUtil.fileFromResource("goblue.pdf"))
-                    .setting(SettingId.COLOR_DOCUMENT)
+                    .setting(200)
                     .build())
             .build();
 

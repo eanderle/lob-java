@@ -58,7 +58,7 @@ public class LobObjectTest {
         final LobObjectRequest.Builder builder = LobObjectRequest.builder()
             .name("Test Object")
             .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-            .setting(SettingId.COLOR_CARD_4X6);
+            .setting(200);
 
         final LobObjectResponse response = client.createLobObject(builder.build()).get();
 
@@ -100,7 +100,7 @@ public class LobObjectTest {
         final LobObjectRequest request = LobObjectRequest.builder()
             .name("Test Object")
             .file(file)
-            .setting(SettingId.COLOR_DOCUMENT)
+            .setting(200)
             .doubleSided(true)
             .template(true)
             .build();

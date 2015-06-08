@@ -16,6 +16,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class SettingTest {
+    public static final SettingId SETTING_ID = SettingId.parse(101);
     private final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
 
     @Test
@@ -33,10 +34,10 @@ public class SettingTest {
 
     @Test
     public void testRetrieveSetting() throws Exception {
-        final SettingResponse response = client.getSetting(SettingId.BLACK_AND_WHITE_DOCUMENT).get();
+        final SettingResponse response = client.getSetting(SETTING_ID).get();
 
         assertTrue(response instanceof SettingResponse);
-        assertThat(response.getId(), is(SettingId.BLACK_AND_WHITE_DOCUMENT));
+        assertThat(response.getId(), is(SETTING_ID));
 
         assertFalse(response.getColor().isEmpty());
         assertFalse(response.getDescription().isEmpty());

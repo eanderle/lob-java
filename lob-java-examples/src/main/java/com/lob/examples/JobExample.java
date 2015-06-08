@@ -31,7 +31,7 @@ public class JobExample extends BaseExample {
         final LobObjectRequest exampleObjectRequest = LobObjectRequest.builder()
             .name("Example Object")
             .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-            .setting(SettingId.COLOR_CARD_4X6)
+            .setting(200)
             .quantity(1)
             .doubleSided(true)
             .build();

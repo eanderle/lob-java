@@ -63,7 +63,7 @@ public class AsyncLobClientIntegrationTest {
         final LobObjectRequest.Builder objectRequest = LobObjectRequest.builder()
             .file("https://lob.com/goblue.pdf")
             .name("myObject")
-            .setting(SettingId.BLACK_AND_WHITE_DOCUMENT)
+            .setting(200)
             .template(true);
         final LobObjectRequest otherObject = objectRequest.butWith().name("other name").build();
 
@@ -84,7 +84,7 @@ public class AsyncLobClientIntegrationTest {
         System.out.println("multi object url job " + client.createJob(multiUrlJobBuilder.build()).get());
 
         final File file = fileFromResource("goblue.pdf");
-        final LobObjectRequest fileRequest = objectRequest.butWith().name("file object").file(file).setting(SettingId.BLACK_AND_WHITE_DOCUMENT).build();
+        final LobObjectRequest fileRequest = objectRequest.butWith().name("file object").file(file).setting(200).build();
         System.out.println(fileRequest);
         System.out.println("file object: " + client.createLobObject(fileRequest).get());
 

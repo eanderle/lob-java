@@ -17,7 +17,7 @@ public class ObjectFromFileExample extends BaseExample {
         final LobObjectRequest objectRequest = LobObjectRequest.builder()
             .name("Example File Object")
             .file(file)
-            .setting(SettingId.COLOR_DOCUMENT)
+            .setting(200)
             .build();
         final LobObjectResponse objectResponse = client.createLobObject(objectRequest).get();
 

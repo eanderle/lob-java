@@ -131,6 +131,11 @@ public class LobObjectRequest implements HasLobParams {
             return this;
         }
 
+        public Builder setting(final int setting) {
+            this.setting = SettingId.parse(setting);
+            return this;
+        }
+
         public Builder quantity(final Integer quantity) {
             this.quantity = quantity;
             return this;

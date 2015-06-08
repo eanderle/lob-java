@@ -28,7 +28,7 @@ public class ObjectFromHtmlExample extends BaseExample {
         final LobObjectRequest objectRequest = LobObjectRequest.builder()
             .name("Example Object")
             .file(body)
-            .setting(SettingId.COLOR_CARD_4X6)
+            .setting(200)
             .fullBleed(true)
             .build();
         final LobObjectResponse objectResponse = client.createLobObject(objectRequest).get();

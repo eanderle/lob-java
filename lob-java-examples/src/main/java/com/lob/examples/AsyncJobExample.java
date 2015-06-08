@@ -42,7 +42,7 @@ public class AsyncJobExample extends BaseExample {
         final LobObjectRequest.Builder objectBuilder = LobObjectRequest.builder()
             .name("Example Object")
             .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-            .setting(SettingId.GLOSS_PHOTO_4X6)
+            .setting(200)
             .quantity(1)
             .doubleSided(true);
         for (int i = 0; i < 5; ++i) {

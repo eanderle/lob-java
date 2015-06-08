@@ -25,7 +25,7 @@ public class JobRequestTest {
         final LobObjectRequest.Builder objectABuilder = LobObjectRequest.builder()
             .name("myObject")
             .file("http://example.com/objectA")
-            .setting(SettingId.BLACK_AND_WHITE_DOCUMENT)
+            .setting(101)
             .quantity(2);
 
         final LobObjectRequest.Builder objectBBuilder = objectABuilder.butWith()
