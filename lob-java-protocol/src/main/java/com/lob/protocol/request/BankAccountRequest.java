@@ -3,15 +3,15 @@ package com.lob.protocol.request;
 import com.lob.LobParamsBuilder;
 import com.lob.Or;
 import com.lob.id.AddressId;
-import com.lob.id.CountryCode;
-import com.lob.protocol.response.AddressResponse;
+import com.lob.id.StringId;
 
 import java.util.Collection;
+import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
 
-public class BankAccountRequest implements HasLobParams {
+public class BankAccountRequest extends AbstractLobRequest implements HasLobParams {
     private final String name;
     private final String routingNumber;
     private final String accountNumber;
@@ -25,7 +25,9 @@ public class BankAccountRequest implements HasLobParams {
             final String accountNumber,
             final Or<AddressId, AddressRequest> bankAddress,
             final Or<AddressId, AddressRequest> accountAddress,
-            final String signatory) {
+            final String signatory,
+            final Map<String, String> metadata) {
+        super(metadata);
         this.name = name;
         this.routingNumber = checkNotNull(routingNumber, "routing number is required");
         this.accountNumber = checkNotNull(accountNumber, "account number is required");
@@ -36,7 +38,7 @@ public class BankAccountRequest implements HasLobParams {
 
     @Override
     public Collection<LobParam> getLobParams() {
-        return LobParamsBuilder.create()
+        return super.beginParams()
             .put("name", name)
             .put("routing_number", routingNumber)
             .put("account_number", accountNumber)
@@ -79,7 +81,7 @@ public class BankAccountRequest implements HasLobParams {
             ", bankAddress=" + bankAddress +
             ", accountAddress=" + accountAddress +
             ", signatory='" + signatory + '\'' +
-            '}';
+            super.toString();
     }
 
     public static Builder builder() {
@@ -93,6 +95,7 @@ public class BankAccountRequest implements HasLobParams {
         private Or<AddressId, AddressRequest> bankAddress;
         private Or<AddressId, AddressRequest> accountAddress;
         private String signatory;
+        private Map<String, String> metadata;
 
         private Builder() {
         }
@@ -147,12 +150,24 @@ public class BankAccountRequest implements HasLobParams {
             return this;
         }
 
+        public Builder metadata(final Map<String, String> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
         public Builder butWith() {
-            return new Builder().name(name).routingNumber(routingNumber).accountNumber(accountNumber).bankAddress(bankAddress).accountAddress(accountAddress).signatory(signatory);
+            return new Builder()
+                .name(name)
+                .routingNumber(routingNumber)
+                .accountNumber(accountNumber)
+                .bankAddress(bankAddress)
+                .accountAddress(accountAddress)
+                .signatory(signatory)
+                .metadata(metadata);
         }
 
         public BankAccountRequest build() {
-            return new BankAccountRequest(name, routingNumber, accountNumber, bankAddress, accountAddress, signatory);
+            return new BankAccountRequest(name, routingNumber, accountNumber, bankAddress, accountAddress, signatory, metadata);
         }
     }
 }

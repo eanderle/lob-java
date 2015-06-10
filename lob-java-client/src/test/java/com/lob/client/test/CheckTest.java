@@ -1,6 +1,7 @@
 package com.lob.client.test;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import com.lob.ClientUtil;
 import com.lob.Or;
 import com.lob.client.AsyncLobClient;
@@ -19,6 +20,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.lob.Util.print;
@@ -71,26 +73,30 @@ public class CheckTest {
 
     @Test
     public void testCreateCheck() throws Exception {
+        final Map<String, String> metadata = Maps.newHashMap();
+        metadata.put("key0", "value0");
+        metadata.put("key1", "value1");
         final AddressResponse address = getAddress();
         final BankAccountResponse bankAccount = getAndVerifyBankAccount();
 
         final CheckRequest.Builder builder = CheckRequest.builder()
-            .name("Test Check")
             .bankAccount(bankAccount.getId())
             .to(address.getId())
             .amount(1000)
             .message("test message")
             .checkNumber(100)
-            .memo("Test Check");
+            .memo("Test Check")
+            .metadata(metadata);
 
         final CheckResponse response = client.createCheck(print(builder.build())).get();
         assertTrue(response instanceof CheckResponse);
         assertThat(response.getBankAccount().getId(), is(bankAccount.getId()));
         assertThat(response.getTo().getId(), is(address.getId()));
+        assertThat(response.getMetadata().get("key0"), is("value0"));
+        assertThat(response.getMetadata().get("key1"), is("value1"));
 
         assertFalse(response.getMessage().isEmpty());
         assertFalse(response.getMemo().isEmpty());
-        assertFalse(response.getName().isEmpty());
         assertFalse(response.getStatus().isEmpty());
         assertFalse(response.getUrl().isEmpty());
         assertTrue(response.getCheckNumber() > 0);
@@ -111,7 +117,6 @@ public class CheckTest {
         final CheckRequest otherRequest = print(builder.butWith().logo("example.com/logo").build());
         assertFalse(otherRequest.getMessage().isEmpty());
         assertFalse(otherRequest.getMemo().isEmpty());
-        assertFalse(otherRequest.getName().isEmpty());
         assertTrue(otherRequest.getAmount() instanceof Money);
         assertTrue(otherRequest.getBankAccount() instanceof BankAccountId);
         assertTrue(otherRequest.getCheckNumber() instanceof Integer);

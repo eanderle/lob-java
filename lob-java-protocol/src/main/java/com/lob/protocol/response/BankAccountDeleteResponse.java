@@ -6,7 +6,7 @@ import com.lob.id.BankAccountId;
 
 public class BankAccountDeleteResponse extends AbstractDeleteResponse<BankAccountId> {
     public BankAccountDeleteResponse(
-            @JsonProperty("deleted") final int deleted,
+            @JsonProperty("deleted") final boolean deleted,
             @JsonProperty("id") final BankAccountId id) {
         super(deleted, id);
     }

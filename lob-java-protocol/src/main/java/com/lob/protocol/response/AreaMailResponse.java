@@ -8,6 +8,7 @@ import org.joda.money.Money;
 import org.joda.time.DateTime;
 
 import java.util.Collection;
+import java.util.Map;
 
 public class AreaMailResponse extends AbstractLobResponse {
     @JsonProperty private final AreaMailId id;
@@ -35,8 +36,9 @@ public class AreaMailResponse extends AbstractLobResponse {
             @JsonProperty("expected_delivery_date") final DateTime expectedDeliveryDate,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
+            @JsonProperty("metadata") final Map<String, String> metadata,
             @JsonProperty("object") final String object) {
-        super(dateCreated, dateModified, object);
+        super(dateCreated, dateModified, metadata, object);
         this.id = id;
         this.name = name;
         this.status = status;

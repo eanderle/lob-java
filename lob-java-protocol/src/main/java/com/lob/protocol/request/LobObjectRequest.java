@@ -5,10 +5,11 @@ import com.lob.id.SettingId;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 
-public class LobObjectRequest implements HasLobParams {
+public class LobObjectRequest extends AbstractLobRequest implements HasLobParams {
     private final String name;
     private final LobParam file;
     private final SettingId setting;
@@ -26,7 +27,9 @@ public class LobObjectRequest implements HasLobParams {
             final Integer quantity,
             final Boolean doubleSided,
             final Boolean fullBleed,
-            final Boolean template) {
+            final Boolean template,
+            final Map<String, String> metadata) {
+        super(metadata);
         this.name = name;
         this.file = checkNotNull(file, "file is required");
         this.setting = checkNotNull(setting, "setting is required");
@@ -42,7 +45,7 @@ public class LobObjectRequest implements HasLobParams {
 
     @Override
     public Collection<LobParam> getLobParams() {
-        return LobParamsBuilder.create()
+        return super.beginParams()
             .put("name", name)
             .put("setting", setting)
             .put("quantity", quantity)
@@ -91,7 +94,7 @@ public class LobObjectRequest implements HasLobParams {
             ", doubleSided=" + doubleSided +
             ", fullBleed=" + fullBleed +
             ", template=" + template +
-            '}';
+            super.toString();
     }
 
     public static class Builder {
@@ -102,6 +105,7 @@ public class LobObjectRequest implements HasLobParams {
         private Boolean doubleSided;
         private Boolean fullBleed;
         private Boolean template;
+        private Map<String, String> metadata;
 
         private Builder() {
         }
@@ -156,6 +160,11 @@ public class LobObjectRequest implements HasLobParams {
             return this;
         }
 
+        public Builder metadata(final Map<String, String> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
         public Builder butWith() {
             return new Builder()
                 .name(name)
@@ -164,11 +173,12 @@ public class LobObjectRequest implements HasLobParams {
                 .quantity(quantity)
                 .doubleSided(doubleSided)
                 .fullBleed(fullBleed)
-                .template(template);
+                .template(template)
+                .metadata(metadata);
         }
 
         public LobObjectRequest build() {
-            return new LobObjectRequest(name, file, setting, quantity, doubleSided, fullBleed, template);
+            return new LobObjectRequest(name, file, setting, quantity, doubleSided, fullBleed, template, metadata);
         }
     }
 }

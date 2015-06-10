@@ -1,5 +1,6 @@
 package com.lob.client.test;
 
+import com.google.common.collect.Maps;
 import com.lob.Or;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
@@ -13,6 +14,7 @@ import com.lob.protocol.response.BankAccountResponseList;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.lob.Util.print;
@@ -51,14 +53,18 @@ public class BankAccountTest {
 
     @Test
     public void testCreateBankAccount() throws Exception {
+        final Map<String, String> metadata = Maps.newHashMap();
+        metadata.put("key0", "value0");
+        metadata.put("key1", "value1");
+
         final AddressResponse address = client.getAddresses(1).get().get(0);
         final BankAccountRequest.Builder builder = BankAccountRequest.builder()
-            .name("Test account")
             .routingNumber("122100024")
             .accountNumber("123456789")
             .bankAddress(address.getId())
             .accountAddress(address.getId())
-            .signatory("John Doe");
+            .signatory("John Doe")
+            .metadata(metadata);
 
         final BankAccountResponse response = print(client.createBankAccount(builder.build()).get());
         assertTrue(response instanceof BankAccountResponse);
@@ -67,6 +73,8 @@ public class BankAccountTest {
         assertFalse(response.getAccountNumber().isEmpty());
         assertFalse(response.getRoutingNumber().isEmpty());
         assertFalse(response.getSignatory().isEmpty());
+        assertThat(response.getMetadata().get("key0"), is("value0"));
+        assertThat(response.getMetadata().get("key1"), is("value1"));
 
         final BankAccountResponse retrievedResponse = client.getBankAccount(response.getId()).get();
         assertThat(retrievedResponse.getId(), is(response.getId()));
@@ -80,11 +88,10 @@ public class BankAccountTest {
         final BankAccountResponse verifyResponse = client.verifyBankAccount(verifyRequest).get();
         assertTrue(verifyResponse.isVerified());
 
-        client.createBankAccount(builder.butWith().name("other account").build()).get();
+        client.createBankAccount(builder.butWith().signatory("other account").build()).get();
 
         final BankAccountRequest request = print(builder.build());
         assertFalse(request.getAccountNumber().isEmpty());
-        assertFalse(request.getName().isEmpty());
         assertFalse(request.getRoutingNumber().isEmpty());
         assertFalse(request.getSignatory().isEmpty());
         assertTrue(request.getAccountAddress() instanceof Or);

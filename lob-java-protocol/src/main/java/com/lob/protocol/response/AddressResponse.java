@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.AddressId;
 import com.lob.id.CountryCode;
 import com.lob.id.ZipCode;
-import com.lob.protocol.request.AddressRequest;
 import org.joda.time.DateTime;
+
+import java.util.Map;
 
 public class AddressResponse extends AbstractAddressResponse {
     @JsonProperty private final AddressId id;
@@ -16,6 +17,7 @@ public class AddressResponse extends AbstractAddressResponse {
     @JsonProperty private final DateTime dateCreated;
     @JsonProperty private final DateTime dateModified;
     @JsonProperty private final boolean deleted;
+    @JsonProperty private final Map<String, String> metadata;
 
     @JsonCreator
     public AddressResponse(
@@ -32,7 +34,8 @@ public class AddressResponse extends AbstractAddressResponse {
             @JsonProperty("object") final String object,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
-            @JsonProperty("deleted") final boolean deleted) {
+            @JsonProperty("deleted") final boolean deleted,
+            @JsonProperty("metadata") final Map<String, String> metadata) {
 
         super(line1, line2, city, state, zip, country, object);
         this.id = id;
@@ -42,6 +45,7 @@ public class AddressResponse extends AbstractAddressResponse {
         this.dateCreated = dateCreated;
         this.dateModified = dateModified;
         this.deleted = deleted;
+        this.metadata = metadata;
     }
 
     public AddressId getId() {
@@ -72,6 +76,10 @@ public class AddressResponse extends AbstractAddressResponse {
         return deleted;
     }
 
+    public Map<String, String> getMetadata() {
+        return metadata;
+    }
+
     @Override
     public String toString() {
         return "AddressResponse{" +
@@ -82,6 +90,7 @@ public class AddressResponse extends AbstractAddressResponse {
             ", dateCreated=" + dateCreated +
             ", dateModified=" + dateModified +
             ", deleted=" + deleted +
+            ", metadata=" + metadata +
             super.toString();
     }
 }

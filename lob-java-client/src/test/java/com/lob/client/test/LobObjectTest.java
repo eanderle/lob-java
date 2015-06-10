@@ -1,6 +1,7 @@
 package com.lob.client.test;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import com.lob.ClientUtil;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
@@ -16,6 +17,7 @@ import com.lob.protocol.response.ThumbnailResponse;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.lob.Util.print;
@@ -55,17 +57,21 @@ public class LobObjectTest {
 
     @Test
     public void testCreateObjectUrl() throws Exception {
+        final Map<String, String> metadata = Maps.newHashMap();
+        metadata.put("key0", "value0");
+        metadata.put("key1", "value1");
         final LobObjectRequest.Builder builder = LobObjectRequest.builder()
-            .name("Test Object")
-            .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-            .setting(200);
+            .file("https://s3-us-west-2.amazonaws.com/lob-assets/200_201_card.pdf")
+            .setting(201)
+            .metadata(metadata);
 
-        final LobObjectResponse response = client.createLobObject(builder.build()).get();
+        final LobObjectResponse response = print(client.createLobObject(builder.build()).get());
 
         assertTrue(response instanceof LobObjectResponse);
-        assertThat(response.getName(), is("Test Object"));
+        assertThat(response.getMetadata().get("key0"), is("value0"));
+        assertThat(response.getMetadata().get("key1"), is("value1"));
 
-        client.createLobObject(builder.butWith().name("other object").build()).get();
+        client.createLobObject(builder.butWith().setting(201).build()).get();
 
         final LobObjectDeleteResponse deleteResponse = print(client.deleteLobObject(response.getId()).get());
         assertThat(deleteResponse.getId(), is(response.getId()));
@@ -74,7 +80,6 @@ public class LobObjectTest {
         assertTrue(response.getQuantity() > 0);
         assertTrue(response.getSetting() instanceof SettingResponse);
         assertFalse(response.getThumbnails().isEmpty());
-        assertTrue(response.isDoubleSided());
         assertFalse(response.isFullBleed());
         assertFalse(response.isTemplate());
 
@@ -84,7 +89,6 @@ public class LobObjectTest {
         assertFalse(thumbnail.getSmall().isEmpty());
 
         final LobObjectRequest request = builder.build();
-        assertFalse(request.getName().isEmpty());
         assertNull(request.isDoubleSided());
         assertNull(request.isFullBleed());
         assertNull(request.isTemplate());

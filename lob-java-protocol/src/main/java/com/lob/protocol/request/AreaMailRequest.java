@@ -11,11 +11,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
 
-public class AreaMailRequest implements HasLobParams {
+public class AreaMailRequest extends AbstractLobRequest implements HasLobParams {
     public static final String FRONT = "front";
     public static final String BACK = "back";
     private final String name;
@@ -31,7 +32,9 @@ public class AreaMailRequest implements HasLobParams {
             final LobParam back,
             final OrCollection<ZipCode, ZipCodeRouteId> routes,
             final TargetType targetType,
-            final Boolean fullBleed) {
+            final Boolean fullBleed,
+            final Map<String, String> metadata) {
+        super(metadata);
         this.name = name;
         this.front = checkNotNull(front, "front is required");
         this.back = checkNotNull(back, "back is required");
@@ -42,7 +45,7 @@ public class AreaMailRequest implements HasLobParams {
 
     @Override
     public Collection<LobParam> getLobParams() {
-        return LobParamsBuilder.create()
+        return super.beginParams()
             .put("name", name)
             .putAllStringValued("routes", routes)
             .put("target_type", targetType)
@@ -85,7 +88,7 @@ public class AreaMailRequest implements HasLobParams {
             ", routes=" + routes +
             ", targetType=" + targetType +
             ", fullBleed=" + fullBleed +
-            '}';
+            super.toString();
     }
 
     public static Builder builder() {
@@ -100,6 +103,7 @@ public class AreaMailRequest implements HasLobParams {
         private OrCollection<ZipCode, ZipCodeRouteId> routes;
         private TargetType targetType;
         private Boolean fullBleed;
+        private Map<String, String> metadata;
 
         private Builder() {
         }
@@ -192,12 +196,24 @@ public class AreaMailRequest implements HasLobParams {
             return this;
         }
 
+        public Builder metadata(final Map<String, String> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
         public Builder butWith() {
-            return new Builder().name(name).front(front).back(back).routes(routes).targetType(targetType).fullBleed(fullBleed);
+            return new Builder()
+                .name(name)
+                .front(front)
+                .back(back)
+                .routes(routes)
+                .targetType(targetType)
+                .fullBleed(fullBleed)
+                .metadata(metadata);
         }
 
         public AreaMailRequest build() {
-            return new AreaMailRequest(name, front, back, routes, targetType, fullBleed);
+            return new AreaMailRequest(name, front, back, routes, targetType, fullBleed, metadata);
         }
     }
 }

@@ -2,12 +2,10 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.Or;
-import com.lob.id.AddressId;
 import com.lob.id.BankAccountId;
-import com.lob.protocol.request.AddressRequest;
-import com.lob.protocol.request.BankAccountRequest;
 import org.joda.time.DateTime;
+
+import java.util.Map;
 
 public class BankAccountResponse extends AbstractLobResponse {
     @JsonProperty private final BankAccountId id;
@@ -31,8 +29,9 @@ public class BankAccountResponse extends AbstractLobResponse {
             @JsonProperty("signatory") final String signatory,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
+            @JsonProperty("metadata") final Map<String, String> metadata,
             @JsonProperty("object") final String object) {
-        super(dateCreated, dateModified, object);
+        super(dateCreated, dateModified, metadata, object);
         this.id = id;
         this.name = name;
         this.routingNumber = routingNumber;

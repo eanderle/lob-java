@@ -1,5 +1,6 @@
 package com.lob.client.test;
 
+import com.google.common.collect.Maps;
 import com.lob.LobApiException;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
@@ -18,6 +19,7 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.lob.Util.print;
@@ -78,6 +80,10 @@ public class AddressTest {
 
     @Test
     public void testCreateAddress() throws Exception {
+        final Map<String, String> metadata = Maps.newHashMap();
+        metadata.put("key0", "value0");
+        metadata.put("key1", "value1");
+
         final AddressRequest.Builder builder = AddressRequest.builder()
             .name("Lob")
             .email("support@lob.com")
@@ -87,7 +93,8 @@ public class AddressTest {
             .city("San Francisco")
             .state("CA")
             .zip("94107")
-            .country("US");
+            .country("US")
+            .metadata(metadata);
 
         final AddressResponse response = print(client.createAddress(builder.build()).get());
         assertTrue(response instanceof AddressResponse);
@@ -98,6 +105,8 @@ public class AddressTest {
         assertTrue(response.getDateCreated() instanceof DateTime);
         assertTrue(response.getDateModified() instanceof DateTime);
         assertThat(response.getObject(), is("address"));
+        assertThat(response.getMetadata().get("key0"), is("value0"));
+        assertThat(response.getMetadata().get("key1"), is("value1"));
 
         client.createAddress(builder.butWith()
             .zip(ZipCode.parse("94107"))

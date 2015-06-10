@@ -6,8 +6,8 @@ import com.lob.id.CheckId;
 import org.joda.money.Money;
 import org.joda.time.DateTime;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.lob.Util.defensiveCopy;
 
@@ -45,8 +45,9 @@ public class CheckResponse extends AbstractLobResponse {
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("expected_delivery_date") final DateTime expectedDeliveryDate,
             @JsonProperty("thumbnails") final List<ThumbnailResponse> thumbnails,
+            @JsonProperty("metadata") final Map<String, String> metadata,
             @JsonProperty("object") final String object) {
-        super(dateCreated, dateModified, object);
+        super(dateCreated, dateModified, metadata, object);
         this.id = id;
         this.name = name;
         this.checkNumber = checkNumber;

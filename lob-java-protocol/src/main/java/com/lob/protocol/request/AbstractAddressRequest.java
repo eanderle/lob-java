@@ -4,7 +4,9 @@ import com.lob.LobParamsBuilder;
 import com.lob.id.CountryCode;
 import com.lob.id.ZipCode;
 
-public abstract class AbstractAddressRequest {
+import java.util.Map;
+
+public abstract class AbstractAddressRequest extends AbstractLobRequest {
     private final static int MAX_LENGTH = 50;
 
     private final String line1;
@@ -15,12 +17,14 @@ public abstract class AbstractAddressRequest {
     private final CountryCode country;
 
     public AbstractAddressRequest(
-        final String line1,
-        final String line2,
-        final String city,
-        final String state,
-        final ZipCode zip,
-        final CountryCode country) {
+            final String line1,
+            final String line2,
+            final String city,
+            final String state,
+            final ZipCode zip,
+            final CountryCode country,
+            final Map<String, String> metadata) {
+        super(metadata);
 
         this.line1 = line1;
         this.line2 = line2;
@@ -30,8 +34,8 @@ public abstract class AbstractAddressRequest {
         this.country = country;
     }
 
-    public LobParamsBuilder beginParams() {
-        return LobParamsBuilder.create()
+    protected LobParamsBuilder beginParams() {
+        return super.beginParams()
             .put("address_line1", line1)
             .put("address_line2", line2)
             .put("address_city", city)
@@ -73,6 +77,7 @@ public abstract class AbstractAddressRequest {
             ", state='" + state + '\'' +
             ", zip='" + zip + '\'' +
             ", country=" + country +
+            super.toString() +
             '}';
     }
 }

@@ -6,6 +6,8 @@ import com.lob.id.PostcardId;
 import org.joda.money.Money;
 import org.joda.time.DateTime;
 
+import java.util.Map;
+
 public class PostcardResponse extends AbstractLobResponse {
     @JsonProperty private final PostcardId id;
     @JsonProperty private final String name;
@@ -32,8 +34,9 @@ public class PostcardResponse extends AbstractLobResponse {
             @JsonProperty("template") final boolean template,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
+            @JsonProperty("metadata") final Map<String, String> metadata,
             @JsonProperty("object") final String object) {
-        super(dateCreated, dateModified, object);
+        super(dateCreated, dateModified, metadata, object);
         this.id = id;
         this.name = name;
         this.message = message;

@@ -1,12 +1,12 @@
 package com.lob.client.test;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import com.lob.ClientUtil;
 import com.lob.Or;
 import com.lob.OrCollection;
 import com.lob.client.AsyncLobClient;
 import com.lob.client.LobClient;
-import com.lob.id.SettingId;
 import com.lob.protocol.request.AddressRequest;
 import com.lob.protocol.request.JobRequest;
 import com.lob.protocol.request.LobObjectRequest;
@@ -18,6 +18,7 @@ import com.lob.protocol.response.LobObjectResponseList;
 import com.lob.protocol.response.TrackingResponse;
 import org.junit.Test;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.lob.Util.print;
@@ -55,23 +56,27 @@ public class JobTest {
 
     @Test
     public void testCreateJob() throws Exception {
+        final Map<String, String> metadata = Maps.newHashMap();
+        metadata.put("key0", "value0");
+        metadata.put("key1", "value1");
         final AddressResponse address = Iterables.get(client.getAddresses(1).get(), 0);
         final LobObjectResponseList objects = client.getLobObjects(1).get();
         final LobObjectResponse lobObject = objects.get(0);
 
         final JobRequest.Builder builder = print(JobRequest.builder()
-            .name("test job")
             .to(address.getId())
             .from(address.getId())
-            .objectIds(lobObject.getId()));
+            .objectIds(lobObject.getId())
+            .metadata(metadata));
 
-        final JobResponse response = client.createJob(builder.build()).get();
+        final JobResponse response = print(client.createJob(builder.build()).get());
         assertTrue(response instanceof JobResponse);
         assertThat(response.getTo().getId(), is(address.getId()));
         assertThat(response.getFrom().getId(), is(address.getId()));
         assertThat(response.getObjects().get(0).getId(), is(lobObject.getId()));
+        assertThat(response.getMetadata().get("key0"), is("value0"));
+        assertThat(response.getMetadata().get("key1"), is("value1"));
 
-        assertThat(response.getName(), is("test job"));
         assertFalse(response.getPrice().isEmpty());
         assertFalse(response.getStatus().isEmpty());
         print(response.getService());
@@ -82,7 +87,6 @@ public class JobTest {
         print(tracking.getObject());
 
         final JobRequest otherRequest = builder.butWith().objectIds(objects).build();
-        assertFalse(otherRequest.getName().isEmpty());
         assertTrue(otherRequest.getFrom() instanceof Or);
         assertTrue(otherRequest.getObjects() instanceof OrCollection);
         assertNull(otherRequest.getService());

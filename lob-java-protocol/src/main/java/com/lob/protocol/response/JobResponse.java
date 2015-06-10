@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.JobId;
 import org.joda.time.DateTime;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.lob.Util.defensiveCopy;
 
@@ -34,8 +34,9 @@ public class JobResponse extends AbstractLobResponse {
             @JsonProperty("objects") final List<LobObjectResponse> objects,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
+            @JsonProperty("metadata") final Map<String, String> metadata,
             @JsonProperty("object") final String object) {
-        super(dateCreated, dateModified, object);
+        super(dateCreated, dateModified, metadata, object);
         this.id = id;
         this.name = name;
         this.price = price;

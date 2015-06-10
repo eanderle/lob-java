@@ -7,10 +7,11 @@ import com.lob.id.SettingId;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 
-public class PostcardRequest implements HasLobParams {
+public class PostcardRequest extends AbstractLobRequest implements HasLobParams {
     private final static String FRONT = "front";
     private final static String BACK = "back";
 
@@ -33,8 +34,10 @@ public class PostcardRequest implements HasLobParams {
             final LobParam back,
             final Boolean template,
             final Boolean fullBleed,
-            final SettingId setting) {
+            final SettingId setting,
+            final Map<String, String> metadata) {
 
+        super(metadata);
         this.name = name;
         this.to = checkNotNull(to, "to is required");
         this.from = checkNotNull(from, "from is required");
@@ -48,7 +51,7 @@ public class PostcardRequest implements HasLobParams {
 
     @Override
     public Collection<LobParam> getLobParams() {
-        return LobParamsBuilder.create()
+        return super.beginParams()
             .put("name", name)
             .put("to", to)
             .put("from", from)
@@ -109,7 +112,7 @@ public class PostcardRequest implements HasLobParams {
             ", template=" + template +
             ", fullBleed=" + fullBleed +
             ", setting=" + setting +
-            '}';
+            super.toString();
     }
 
     public static Builder builder() {
@@ -126,6 +129,7 @@ public class PostcardRequest implements HasLobParams {
         private Boolean template;
         private Boolean fullBleed;
         private SettingId setting;
+        private Map<String, String> metadata;
 
         private Builder() {}
 
@@ -214,12 +218,27 @@ public class PostcardRequest implements HasLobParams {
             return this;
         }
 
+        public Builder metadata(final Map<String, String> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
         public Builder butWith() {
-            return new Builder().name(name).to(to).from(from).message(message).front(front).back(back).template(template).fullBleed(fullBleed).setting(setting);
+            return new Builder()
+                .name(name)
+                .to(to)
+                .from(from)
+                .message(message)
+                .front(front)
+                .back(back)
+                .template(template)
+                .fullBleed(fullBleed)
+                .setting(setting)
+                .metadata(metadata);
         }
 
         public PostcardRequest build() {
-            return new PostcardRequest(name, to, from, message, front, back, template, fullBleed, setting);
+            return new PostcardRequest(name, to, from, message, front, back, template, fullBleed, setting, metadata);
         }
     }
 }

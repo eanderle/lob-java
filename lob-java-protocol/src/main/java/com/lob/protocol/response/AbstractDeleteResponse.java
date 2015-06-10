@@ -9,9 +9,9 @@ public abstract class AbstractDeleteResponse<T extends LobId> {
     @JsonProperty private final T id;
 
     public AbstractDeleteResponse(
-            @JsonProperty("deleted") final int deleted,
+            @JsonProperty("deleted") final boolean deleted,
             @JsonProperty("id") final T id) {
-        this.deleted = (deleted == 1);
+        this.deleted = deleted;
         this.id = id;
     }
 

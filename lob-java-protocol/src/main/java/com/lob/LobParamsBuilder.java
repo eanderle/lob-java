@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.lob.Util.defensiveCopy;
 
@@ -82,6 +83,17 @@ public class LobParamsBuilder {
         }
 
         return put(k, MONEY_FORMAT.print(v));
+    }
+
+    public LobParamsBuilder putMap(final String prefix, final Map<String, String> theMap) {
+        if (theMap == null) {
+            return this;
+        }
+
+        for (final Map.Entry<String, String> entry : theMap.entrySet()) {
+            this.internalParams.add(LobParam.strings(prefix + "[" + entry.getKey() + "]", entry.getValue()));
+        }
+        return this;
     }
 
     public LobParamsBuilder putLobParams(final String prefix, final HasLobParams hasLobParams) {

@@ -5,7 +5,7 @@ import com.lob.id.LobObjectId;
 
 public class LobObjectDeleteResponse extends AbstractDeleteResponse<LobObjectId> {
     public LobObjectDeleteResponse(
-            @JsonProperty("deleted") final int deleted,
+            @JsonProperty("deleted") final boolean deleted,
             @JsonProperty("id") final LobObjectId id) {
         super(deleted, id);
     }

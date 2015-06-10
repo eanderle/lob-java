@@ -1,5 +1,6 @@
 package com.lob.client.test;
 
+import com.google.common.collect.Maps;
 import com.lob.ClientUtil;
 import com.lob.OrCollection;
 import com.lob.client.AsyncLobClient;
@@ -21,12 +22,12 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.lob.Util.print;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -35,13 +36,16 @@ public class AreaMailTest {
 
     @Test
     public void testCreateArea() throws Exception {
+        final Map<String, String> metadata = Maps.newHashMap();
+        metadata.put("key0", "value0");
+        metadata.put("key1", "value1");
+
         final AreaMailRequest.Builder builder = AreaMailRequest.builder()
-            .name("area_test_zip")
             .front("https://s3-us-west-2.amazonaws.com/lob-assets/areafront.pdf")
             .back("https://s3-us-west-2.amazonaws.com/lob-assets/areafront.pdf")
             .routesForZips("94158", "60031")
             .targetType(TargetType.ALL)
-            .fullBleed(true);
+            .metadata(metadata);
 
         final AreaMailResponse response = client.createAreaMail(builder.build()).get();
         assertTrue(response instanceof AreaMailResponse);
@@ -50,7 +54,6 @@ public class AreaMailTest {
         final ZipCodeRouteResponseList route = client.getZipCodeRoutes(routeRequest).get();
 
         assertTrue(response.getId() instanceof AreaMailId);
-        assertFalse(response.getName().isEmpty());
         assertFalse(response.getStatus().isEmpty());
         assertFalse(response.getUrl().isEmpty());
         assertThat(response.getObject(), is("area"));
@@ -62,6 +65,8 @@ public class AreaMailTest {
         assertFalse(response.getZipCodeRouteResponses().isEmpty());
         assertTrue(response.getDateCreated() instanceof DateTime);
         assertTrue(response.getDateModified() instanceof DateTime);
+        assertThat(response.getMetadata().get("key0"), is("value0"));
+        assertThat(response.getMetadata().get("key1"), is("value1"));
 
         client.createAreaMail(builder.butWith().routes(route).build()).get();
         client.createAreaMail(builder.butWith().routesForZips(ZipCode.parse("94158")).build()).get();
@@ -74,8 +79,6 @@ public class AreaMailTest {
         print(builder.butWith().routesForIds(routeId).build());
 
         final AreaMailRequest request = print(builder.build());
-        assertTrue(request.getFullBleed());
-        assertFalse(request.getName().isEmpty());
         assertTrue(print(request.getBack()) instanceof LobParam);
         assertTrue(request.getFront() instanceof LobParam);
         assertTrue(request.getRoutes() instanceof OrCollection);

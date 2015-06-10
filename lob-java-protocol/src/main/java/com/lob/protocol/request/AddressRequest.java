@@ -4,6 +4,8 @@ import com.lob.id.CountryCode;
 import com.lob.id.ZipCode;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
@@ -24,7 +26,8 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
             final String city,
             final String state,
             final ZipCode zip,
-            final CountryCode country) {
+            final CountryCode country,
+            final Map<String, String> metadata) {
 
         super(
             checkNotNull(line1,
@@ -33,7 +36,8 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
             city,
             state,
             zip,
-            checkNotNull(country, "country is required"));
+            checkNotNull(country, "country is required"),
+            metadata);
 
         this.name = checkPresent(name, "name is required");
         this.email = email;
@@ -84,6 +88,7 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
         private String state;
         private ZipCode zip;
         private CountryCode country;
+        private Map<String, String> metadata;
 
         private Builder() {
         }
@@ -143,6 +148,11 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
             return this;
         }
 
+        public Builder metadata(final Map<String, String> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
         public Builder butWith() {
             return new Builder()
                 .name(name)
@@ -153,11 +163,12 @@ public class AddressRequest extends AbstractAddressRequest implements HasLobPara
                 .city(city)
                 .state(state)
                 .zip(zip)
-                .country(country);
+                .country(country)
+                .metadata(metadata);
         }
 
         public AddressRequest build() {
-            return new AddressRequest(name, email, phone, line1, line2, city, state, zip, country);
+            return new AddressRequest(name, email, phone, line1, line2, city, state, zip, country, metadata);
         }
     }
 }

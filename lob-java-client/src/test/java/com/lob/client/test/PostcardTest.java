@@ -1,6 +1,7 @@
 package com.lob.client.test;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import com.lob.ClientUtil;
 import com.lob.Or;
 import com.lob.client.AsyncLobClient;
@@ -15,6 +16,7 @@ import org.joda.money.Money;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.lob.Util.print;
@@ -53,21 +55,25 @@ public class PostcardTest {
 
     @Test
     public void testCreatePostcard() throws Exception {
+        final Map<String, String> metadata = Maps.newHashMap();
+        metadata.put("key0", "value0");
+        metadata.put("key1", "value1");
         final AddressResponse address = Iterables.get(client.getAddresses(1).get(), 0);
 
         final PostcardRequest.Builder builder = PostcardRequest.builder()
-            .name("test postcard")
             .to(address.getId())
             .from(address.getId())
-            .front("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-            .back("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf");
+            .front("https://lob.com/4x6_postcard_template.pdf")
+            .back("https://lob.com/4x6_postcard_template.pdf")
+            .metadata(metadata);
 
         final PostcardResponse response = client.createPostcard(builder.build()).get();
         assertTrue(response instanceof PostcardResponse);
         assertThat(response.getTo().getId(), is(address.getId()));
         assertThat(response.getFrom().getId(), is(address.getId()));
+        assertThat(response.getMetadata().get("key0"), is("value0"));
+        assertThat(response.getMetadata().get("key1"), is("value1"));
 
-        print(builder.butWith().name("other postcard").build());
         print(builder.butWith().message("message"));
 
         print(response.getMessage());
@@ -77,7 +83,6 @@ public class PostcardTest {
 
         final PostcardRequest request = print(builder.build());
         assertNull(request.getMessage());
-        assertFalse(request.getName().isEmpty());
         assertTrue(request.getBack() instanceof LobParam);
         assertTrue(request.getFrom() instanceof Or);
         assertTrue(request.getFront() instanceof LobParam);

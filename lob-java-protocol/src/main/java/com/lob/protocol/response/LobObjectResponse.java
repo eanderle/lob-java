@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lob.id.LobObjectId;
 import org.joda.time.DateTime;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.lob.Util.defensiveCopy;
 
@@ -33,9 +33,10 @@ public class LobObjectResponse extends AbstractLobResponse {
             @JsonProperty("thumbnails") final List<ThumbnailResponse> thumbnails,
             @JsonProperty("date_created") final DateTime dateCreated,
             @JsonProperty("date_modified") final DateTime dateModified,
+            @JsonProperty("metadata") final Map<String, String> metadata,
             @JsonProperty("setting") final SettingResponse setting,
             @JsonProperty("object") final String object) {
-        super(dateCreated, dateModified, object);
+        super(dateCreated, dateModified, metadata, object);
         this.id = id;
         this.name = name;
         this.quantity = quantity;

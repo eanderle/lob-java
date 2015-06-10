@@ -9,10 +9,11 @@ import org.joda.money.Money;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 
-public class CheckRequest implements HasLobParams {
+public class CheckRequest extends AbstractLobRequest implements HasLobParams {
     public static final String LOGO = "logo";
 
     private final String name;
@@ -32,7 +33,9 @@ public class CheckRequest implements HasLobParams {
             final Money amount,
             final String message,
             final String memo,
-            final LobParam logo) {
+            final LobParam logo,
+            final Map<String, String> metadata) {
+        super(metadata);
         this.name = name;
         this.checkNumber = checkNumber;
         this.bankAccount = checkNotNull(bankAccount, "bank account is required");
@@ -45,7 +48,7 @@ public class CheckRequest implements HasLobParams {
 
     @Override
     public Collection<LobParam> getLobParams() {
-        return LobParamsBuilder.create()
+        return super.beginParams()
             .put("name", name)
             .put("check_number", checkNumber)
             .put("bank_account", bankAccount)
@@ -100,7 +103,7 @@ public class CheckRequest implements HasLobParams {
             ", message='" + message + '\'' +
             ", memo='" + memo + '\'' +
             ", logo='" + logo + '\'' +
-            '}';
+            super.toString();
     }
 
     public static Builder builder() {
@@ -116,6 +119,7 @@ public class CheckRequest implements HasLobParams {
         private String message;
         private String memo;
         private LobParam logo;
+        private Map<String, String> metadata;
 
         private Builder() {}
 
@@ -184,12 +188,26 @@ public class CheckRequest implements HasLobParams {
             return this;
         }
 
+        public Builder metadata(final Map<String, String> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
         public Builder butWith() {
-            return new Builder().name(name).checkNumber(checkNumber).bankAccount(bankAccount).to(to).amount(amount).message(message).memo(memo).logo(logo);
+            return new Builder()
+                .name(name)
+                .checkNumber(checkNumber)
+                .bankAccount(bankAccount)
+                .to(to)
+                .amount(amount)
+                .message(message)
+                .memo(memo)
+                .logo(logo)
+                .metadata(metadata);
         }
 
         public CheckRequest build() {
-            return new CheckRequest(name, checkNumber, bankAccount, to, amount, message, memo, logo);
+            return new CheckRequest(name, checkNumber, bankAccount, to, amount, message, memo, logo, metadata);
         }
     }
 }
