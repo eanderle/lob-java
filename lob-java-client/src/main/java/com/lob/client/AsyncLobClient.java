@@ -189,6 +189,31 @@ public class AsyncLobClient implements LobClient {
     }
 
     @Override
+    public ListenableFuture<LetterResponse> createLetter(final LetterRequest letterRequest) {
+        return execute(LetterResponse.class, post(Router.LETTERS, letterRequest), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<LetterResponse> getLetter(final LetterId id) {
+        return execute(LetterResponse.class, get(Router.LETTERS, id), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<LetterResponseList> getLetters() {
+        return execute(LetterResponseList.class, get(Router.LETTERS), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<LetterResponseList> getLetters(final int count) {
+        return execute(LetterResponseList.class, get(Router.LETTERS, count), this.callbackExecutorService);
+    }
+
+    @Override
+    public ListenableFuture<LetterResponseList> getLetters(final int count, final int offset) {
+        return execute(LetterResponseList.class, get(Router.LETTERS, count, offset), this.callbackExecutorService);
+    }
+
+    @Override
     public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest) {
         return execute(PostcardResponse.class, post(Router.POSTCARDS, postcardRequest), this.callbackExecutorService);
     }

@@ -11,6 +11,7 @@ public class Router {
     public final static String JOBS = "jobs";
     public final static String CHECKS = "checks";
     public final static String OBJECTS = "objects";
+    public final static String LETTERS = "letters";
     public final static String PACKAGINGS = "packagings";
     public final static String POSTCARDS = "postcards";
     public final static String ROUTES = "routes";

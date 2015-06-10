@@ -86,6 +86,7 @@ public abstract class LobId implements StringValued {
         BANK("bank", "bank"),
         CHECK("chk", "check"),
         JOB("job", "job"),
+        LETTER("ltr", "letter"),
         OBJECT("obj", "object"),
         POSTCARD("psc", "postcard"),
         TRACKING("trk", "tracking");
