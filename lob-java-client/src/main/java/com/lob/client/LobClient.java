@@ -6,6 +6,7 @@ import com.lob.id.AreaMailId;
 import com.lob.id.BankAccountId;
 import com.lob.id.CheckId;
 import com.lob.id.JobId;
+import com.lob.id.LetterId;
 import com.lob.id.LobObjectId;
 import com.lob.id.PostcardId;
 import com.lob.id.SettingId;
@@ -59,6 +60,17 @@ public interface LobClient {
 
     // Service methods
     public ListenableFuture<ServiceResponseList> getServices();
+
+    // Letter methods
+    public ListenableFuture<LetterResponse> createLetter(final LetterRequest letterRequest);
+
+    public ListenableFuture<LetterResponse> getLetter(final LetterId id);
+
+    public ListenableFuture<LetterResponseList> getLetters();
+
+    public ListenableFuture<LetterResponseList> getLetters(final int count);
+
+    public ListenableFuture<LetterResponseList> getLetters(final int count, final int offset);
 
     // Postcard methods
     public ListenableFuture<PostcardResponse> createPostcard(final PostcardRequest postcardRequest);
