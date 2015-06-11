@@ -6,10 +6,11 @@ import com.lob.id.AddressId;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 
-public class LetterRequest implements HasLobParams {
+public class LetterRequest extends AbstractLobRequest implements HasLobParams {
     private final static String FILE = "file";
 
     private final String description;
@@ -27,8 +28,10 @@ public class LetterRequest implements HasLobParams {
             final LobParam file,
             final Boolean color,
             final Boolean doubleSided,
-            final Boolean template ) {
+            final Boolean template,
+            final Map<String, String> metadata) {
 
+        super(metadata);
         this.description = description;
         this.to = checkNotNull(to, "to is required");
         this.from = checkNotNull(from, "from is required");
@@ -40,7 +43,7 @@ public class LetterRequest implements HasLobParams {
 
     @Override
     public Collection<LobParam> getLobParams() {
-        return LobParamsBuilder.create()
+        return super.beginParams()
                 .put("description", description)
                 .put("to", to)
                 .put("from", from)
@@ -75,7 +78,7 @@ public class LetterRequest implements HasLobParams {
                 ", color=" + color +
                 ", doubleSided=" + doubleSided +
                 ", template=" + template +
-                "}";
+                super.toString();
     }
 
     public static Builder builder() { return new Builder(); }
@@ -88,6 +91,7 @@ public class LetterRequest implements HasLobParams {
         private Boolean color;
         private Boolean doubleSided;
         private Boolean template;
+        private Map<String, String> metadata;
 
         private Builder() {}
 
@@ -156,12 +160,25 @@ public class LetterRequest implements HasLobParams {
             return this;
         }
 
+        public Builder metadata(final Map<String, String> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
         public Builder butWith() {
-            return new Builder().description(description).to(to).from(from).file(file).color(color).doubleSided(doubleSided).template(template);
+            return new Builder()
+                    .description(description)
+                    .to(to)
+                    .from(from)
+                    .file(file)
+                    .color(color)
+                    .doubleSided(doubleSided)
+                    .template(template)
+                    .metadata(metadata);
         }
 
         public LetterRequest build() {
-            return new LetterRequest(description, to, from, file, color, doubleSided, template);
+            return new LetterRequest(description, to, from, file, color, doubleSided, template, metadata);
         }
     }
 }
