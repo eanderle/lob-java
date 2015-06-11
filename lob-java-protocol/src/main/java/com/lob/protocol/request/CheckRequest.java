@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 
-public class CheckRequest extends AbstractLobRequest implements HasLobParams {
+public class CheckRequest extends AbstractDataFieldRequest implements HasLobParams {
     public static final String LOGO = "logo";
 
     private final String name;
@@ -34,8 +34,9 @@ public class CheckRequest extends AbstractLobRequest implements HasLobParams {
             final String message,
             final String memo,
             final LobParam logo,
-            final Map<String, String> metadata) {
-        super(metadata);
+            final Map<String, String> metadata,
+            final Map<String, String> data) {
+        super(metadata, data);
         this.name = name;
         this.checkNumber = checkNumber;
         this.bankAccount = checkNotNull(bankAccount, "bank account is required");
@@ -120,6 +121,7 @@ public class CheckRequest extends AbstractLobRequest implements HasLobParams {
         private String memo;
         private LobParam logo;
         private Map<String, String> metadata;
+        private Map<String, String> data;
 
         private Builder() {}
 
@@ -193,6 +195,11 @@ public class CheckRequest extends AbstractLobRequest implements HasLobParams {
             return this;
         }
 
+        public Builder data(final Map<String, String> data) {
+            this.data = data;
+            return this;
+        }
+
         public Builder butWith() {
             return new Builder()
                 .name(name)
@@ -203,11 +210,12 @@ public class CheckRequest extends AbstractLobRequest implements HasLobParams {
                 .message(message)
                 .memo(memo)
                 .logo(logo)
-                .metadata(metadata);
+                .metadata(metadata)
+                .data(data);
         }
 
         public CheckRequest build() {
-            return new CheckRequest(name, checkNumber, bankAccount, to, amount, message, memo, logo, metadata);
+            return new CheckRequest(name, checkNumber, bankAccount, to, amount, message, memo, logo, metadata, data);
         }
     }
 }

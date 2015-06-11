@@ -4,7 +4,7 @@ import com.lob.LobParamsBuilder;
 
 import java.util.Map;
 
-public class AbstractLobRequest {
+public abstract class AbstractLobRequest {
     private final Map<String, String> metadata;
 
     public AbstractLobRequest(final Map<String, String> metadata) {

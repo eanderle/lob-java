@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static com.lob.Util.checkNotNull;
 
-public class PostcardRequest extends AbstractLobRequest implements HasLobParams {
+public class PostcardRequest extends AbstractDataFieldRequest implements HasLobParams {
     private final static String FRONT = "front";
     private final static String BACK = "back";
 
@@ -35,9 +35,10 @@ public class PostcardRequest extends AbstractLobRequest implements HasLobParams 
             final Boolean template,
             final Boolean fullBleed,
             final SettingId setting,
-            final Map<String, String> metadata) {
+            final Map<String, String> metadata,
+            final Map<String, String> data) {
 
-        super(metadata);
+        super(metadata, data);
         this.name = name;
         this.to = checkNotNull(to, "to is required");
         this.from = checkNotNull(from, "from is required");
@@ -130,6 +131,7 @@ public class PostcardRequest extends AbstractLobRequest implements HasLobParams 
         private Boolean fullBleed;
         private SettingId setting;
         private Map<String, String> metadata;
+        private Map<String, String> data;
 
         private Builder() {}
 
@@ -223,6 +225,11 @@ public class PostcardRequest extends AbstractLobRequest implements HasLobParams 
             return this;
         }
 
+        public Builder data(final Map<String, String> data) {
+            this.data = data;
+            return this;
+        }
+
         public Builder butWith() {
             return new Builder()
                 .name(name)
@@ -234,11 +241,12 @@ public class PostcardRequest extends AbstractLobRequest implements HasLobParams 
                 .template(template)
                 .fullBleed(fullBleed)
                 .setting(setting)
-                .metadata(metadata);
+                .metadata(metadata)
+                .data(data);
         }
 
         public PostcardRequest build() {
-            return new PostcardRequest(name, to, from, message, front, back, template, fullBleed, setting, metadata);
+            return new PostcardRequest(name, to, from, message, front, back, template, fullBleed, setting, metadata, data);
         }
     }
 }

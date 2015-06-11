@@ -2,6 +2,7 @@ package com.lob.protocol.request;
 
 import com.lob.LobParamsBuilder;
 import com.lob.OrCollection;
+import com.lob.id.StringId;
 import com.lob.id.ZipCode;
 import com.lob.id.ZipCodeRouteId;
 import com.lob.protocol.response.ZipCodeRouteResponseList;
@@ -16,7 +17,7 @@ import java.util.Map;
 import static com.lob.Util.checkNotNull;
 import static com.lob.Util.checkPresent;
 
-public class AreaMailRequest extends AbstractLobRequest implements HasLobParams {
+public class AreaMailRequest extends AbstractDataFieldRequest implements HasLobParams {
     public static final String FRONT = "front";
     public static final String BACK = "back";
     private final String name;
@@ -33,8 +34,9 @@ public class AreaMailRequest extends AbstractLobRequest implements HasLobParams 
             final OrCollection<ZipCode, ZipCodeRouteId> routes,
             final TargetType targetType,
             final Boolean fullBleed,
-            final Map<String, String> metadata) {
-        super(metadata);
+            final Map<String, String> metadata,
+            final Map<String, String> data) {
+        super(metadata, data);
         this.name = name;
         this.front = checkNotNull(front, "front is required");
         this.back = checkNotNull(back, "back is required");
@@ -104,6 +106,7 @@ public class AreaMailRequest extends AbstractLobRequest implements HasLobParams 
         private TargetType targetType;
         private Boolean fullBleed;
         private Map<String, String> metadata;
+        private Map<String, String> data;
 
         private Builder() {
         }
@@ -201,6 +204,11 @@ public class AreaMailRequest extends AbstractLobRequest implements HasLobParams 
             return this;
         }
 
+        public Builder data(final Map<String, String> data) {
+            this.data = data;
+            return this;
+        }
+
         public Builder butWith() {
             return new Builder()
                 .name(name)
@@ -209,11 +217,12 @@ public class AreaMailRequest extends AbstractLobRequest implements HasLobParams 
                 .routes(routes)
                 .targetType(targetType)
                 .fullBleed(fullBleed)
-                .metadata(metadata);
+                .metadata(metadata)
+                .data(data);
         }
 
         public AreaMailRequest build() {
-            return new AreaMailRequest(name, front, back, routes, targetType, fullBleed, metadata);
+            return new AreaMailRequest(name, front, back, routes, targetType, fullBleed, metadata, data);
         }
     }
 }
