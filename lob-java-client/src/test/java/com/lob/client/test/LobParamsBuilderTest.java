@@ -4,16 +4,15 @@ import com.lob.LobParamsBuilder;
 import com.lob.Or;
 import com.lob.OrCollection;
 import com.lob.id.RouteId;
-import com.lob.id.StringValued;
 import org.joda.money.Money;
 import org.junit.Test;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 
-public class LobParamsBuilderTest {
+public class LobParamsBuilderTest extends QuietLogging {
 
     @Test
     @SuppressWarnings("unchecked")
@@ -29,6 +28,7 @@ public class LobParamsBuilderTest {
             .putAllStrings("key", null)
             .putAllStringValued("key", (Collection) null)
             .putAllStringValued("key", (OrCollection) null)
+            .putMap("key", (Map) null)
             .putLobParams("key", null);
 
         assertTrue(builder.build().isEmpty());

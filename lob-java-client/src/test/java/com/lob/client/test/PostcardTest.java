@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class PostcardTest {
+public class PostcardTest extends QuietLogging {
     private final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
 
     @Test
@@ -113,8 +113,8 @@ public class PostcardTest {
                     .zip("94107")
                     .country("US")
                     .build())
-            .front("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-            .back("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
+            .front("https://lob.com/4x6_postcard_template.pdf")
+            .back("https://lob.com/4x6_postcard_template.pdf")
             .build();
 
         final PostcardResponse response = client.createPostcard(request).get();
@@ -133,7 +133,6 @@ public class PostcardTest {
             .from(address.getId())
             .front(file)
             .back(file)
-            .fullBleed(true)
             .build();
 
         final PostcardResponse response = client.createPostcard(request).get();

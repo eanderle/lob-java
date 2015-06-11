@@ -1,5 +1,6 @@
 package com.lob.client.test;
 
+import ch.qos.logback.classic.Level;
 import com.google.common.collect.Maps;
 import com.lob.LobApiException;
 import com.lob.client.AsyncLobClient;
@@ -16,7 +17,10 @@ import com.lob.protocol.response.ErrorResponse;
 import com.lob.protocol.response.VerifyAddressResponse;
 import com.ning.http.client.AsyncHttpClientConfig;
 import org.joda.time.DateTime;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.util.Map;
@@ -28,7 +32,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class AddressTest {
+public class AddressTest extends QuietLogging {
     private final LobClient client = AsyncLobClient.create(
         "test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc",
         new AsyncHttpClientConfig.Builder().build());

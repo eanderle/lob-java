@@ -27,7 +27,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class LobObjectTest {
+public class LobObjectTest extends QuietLogging {
     private final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
 
     @Test
@@ -102,17 +102,13 @@ public class LobObjectTest {
         final File file = ClientUtil.fileFromResource("goblue.pdf");
 
         final LobObjectRequest request = LobObjectRequest.builder()
-            .name("Test Object")
             .file(file)
             .setting(200)
-            .doubleSided(true)
-            .template(true)
             .build();
 
         final LobObjectResponse response = client.createLobObject(request).get();
 
         assertTrue(response instanceof LobObjectResponse);
-        assertThat(response.getName(), is("Test Object"));
     }
 
     @Test

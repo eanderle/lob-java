@@ -9,7 +9,7 @@ import org.joda.time.DateTime;
 
 import java.util.Map;
 
-public class AddressResponse extends AbstractAddressResponse {
+public class AddressResponse extends BaseAddressResponse {
     @JsonProperty private final AddressId id;
     @JsonProperty private final String name;
     @JsonProperty private final String email;

@@ -2,16 +2,14 @@ package com.lob.protocol.response;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.lob.id.AddressId;
 import com.lob.id.CountryCode;
 import com.lob.id.ZipCode;
-import org.joda.time.DateTime;
 
 public class VerifyAddressResponse {
-    @JsonProperty private final AbstractAddressResponse address;
+    @JsonProperty private final BaseAddressResponse address;
 
     @JsonCreator
-    public VerifyAddressResponse(@JsonProperty("address") final AbstractAddressResponse address) {
+    public VerifyAddressResponse(@JsonProperty("address") final BaseAddressResponse address) {
         this.address = address;
     }
 

@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class JobTest {
+public class JobTest extends QuietLogging {
     private final LobClient client = AsyncLobClient.createDefault("test_0dc8d51e0acffcb1880e0f19c79b2f5b0cc");
 
     @Test
@@ -96,28 +96,30 @@ public class JobTest {
     @Test
     public void testCreateJobInline() throws Exception {
         final JobRequest request = JobRequest.builder()
-            .to(AddressRequest.builder()
-                .name("Lob0")
-                .line1("185 Berry Street")
-                .line2("Suite 1510")
-                .city("San Francisco")
-                .state("CA")
-                .zip("94107")
-                .country("US")
-                .build())
-            .from(AddressRequest.builder()
-                .name("Lob1")
-                .line1("185 Berry Street")
-                .line2("Suite 1510")
-                .city("San Francisco")
-                .state("CA")
-                .zip("94107")
-                .country("US")
-                .build())
-            .objects(LobObjectRequest.builder()
-                .name("Object0")
-                .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-                .setting(200)
+            .to(
+                AddressRequest.builder()
+                    .name("Lob0")
+                    .line1("185 Berry Street")
+                    .line2("Suite 1510")
+                    .city("San Francisco")
+                    .state("CA")
+                    .zip("94107")
+                    .country("US")
+                    .build())
+            .from(
+                AddressRequest.builder()
+                    .name("Lob1")
+                    .line1("185 Berry Street")
+                    .line2("Suite 1510")
+                    .city("San Francisco")
+                    .state("CA")
+                    .zip("94107")
+                    .country("US")
+                    .build())
+            .objects(
+                LobObjectRequest.builder()
+                    .file("https://s3-us-west-2.amazonaws.com/lob-assets/200_201_card.pdf")
+                    .setting(200)
                 .build())
             .build();
 
@@ -125,7 +127,6 @@ public class JobTest {
         assertTrue(response instanceof JobResponse);
         assertThat(response.getTo().getName(), is("Lob0"));
         assertThat(response.getFrom().getName(), is("Lob1"));
-        assertThat(Iterables.get(response.getObjects(), 0).getName(), is("Object0"));
     }
 
     @Test
@@ -137,7 +138,6 @@ public class JobTest {
             .from(address.getId())
             .objects(
                 LobObjectRequest.builder()
-                    .name("Test Job")
                     .file(ClientUtil.fileFromResource("goblue.pdf"))
                     .setting(200)
                     .quantity(2)
@@ -160,7 +160,6 @@ public class JobTest {
             .from(address.getId())
             .objects(
                 LobObjectRequest.builder()
-                    .name("Test Job")
                     .file(ClientUtil.fileFromResource("goblue.pdf"))
                     .setting(200)
                     .build())
@@ -168,7 +167,6 @@ public class JobTest {
 
         final JobResponse response = client.createJob(request).get();
         assertTrue(response instanceof JobResponse);
-        assertThat(Iterables.get(response.getObjects(), 0).getName(), is("Test Job"));
 
         final JobResponse retrievedResponse = client.getJob(response.getId()).get();
         assertThat(retrievedResponse.getId(), is(response.getId()));

@@ -9,7 +9,7 @@ import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 
-public class UtilTest {
+public class UtilTest extends QuietLogging {
 
     @Test(expected = NullPointerException.class)
     public void testCheckNotNullWithNull() throws Exception {

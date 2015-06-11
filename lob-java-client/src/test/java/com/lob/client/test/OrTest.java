@@ -8,7 +8,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class OrTest {
+public class OrTest extends QuietLogging {
 
     @Test(expected = IllegalStateException.class)
     public void testOrWrongTypeA() throws Exception {

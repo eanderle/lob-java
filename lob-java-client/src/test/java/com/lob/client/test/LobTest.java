@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class LobTest {
+public class LobTest extends QuietLogging {
     private final static String baseUrl = Lob.getBaseUrl();
 
     @AfterClass
