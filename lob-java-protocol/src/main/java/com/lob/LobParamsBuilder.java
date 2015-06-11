@@ -58,7 +58,7 @@ public class LobParamsBuilder {
             return this;
         }
 
-        return put(k, (v ? "1" : "0"));
+        return put(k, Boolean.toString(v));
     }
 
     public LobParamsBuilder put(final String k, final StringValued v) {

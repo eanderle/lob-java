@@ -42,7 +42,7 @@ public class LetterResponse extends AbstractLobResponse {
             @JsonProperty("date_modified") final DateTime dateModified,
             @JsonProperty("metadata") final Map<String, String> metadata,
             @JsonProperty("object") final String object) {
-       super(dateCreated, dateModified, metadata, object);
+        super(dateCreated, dateModified, metadata, object);
         this.id = id;
         this.description = description;
         this.to = to;
