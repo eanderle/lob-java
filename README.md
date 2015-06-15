@@ -34,12 +34,9 @@ Include the following in your `pom.xml` for Maven:
 
 ## Project Structure
 
-We know that transitive dependencies are hard, so we split the wrapper into different modules to make managing them easier.
-
 Most people will want to depend on **lob-java-client.**
 
-- **lob-java-protocol** contains all of the objects you need to interface with Lob. Its only dependencies are **joda-money**, **joda-time**, and **jackson-annotations**.
-- **lob-java-client** contains the actual client for interacting with Lob's API. It depends on **guava**, **asynchttpclient**, and two **jackson-databind** packages.
+- **lob-java-client** contains the actual client for interacting with Lob's API. It depends on **guava**, **asynchttpclient**, **joda-money**, **joda-time**, **jackson-annotations**, and two **jackson-databind** packages.
 - **lob-java-examples** contains usage examples and is not intended to be consumed by your code.
 - **lob-java** is the parent package of all of these modules.
 
@@ -129,6 +126,11 @@ final LobClient client = AsyncLobClient.createDefault("yourApiKey");
     - [Postcard creation](#postcard-creation)
     - [Postcard listing](#postcard-listing)
     - [Postcard retrieval](#postcard-retrieval)
+- [Simple Letter Service](#simple-letter-service)
+  - [Letter](#letter)
+    - [Letter creation](#letter-creation)
+    - [Letter listing](#letter-listing)
+    - [Letter retrieval](#letter-retrieval)
 - [Simple Check Service](#simple-check-service)
   - [Check](#check)
     - [Check creation](#check-creation)
@@ -157,7 +159,7 @@ final LobClient client = AsyncLobClient.createDefault("yourApiKey");
 
 ```java
 // Returns a list of Job objects
-final ListenableFuture<JobResponseList> jobs = client.getAllJobs();
+final ListenableFuture<JobResponseList> jobs = client.getJobs();
 
 // Can specify count and offset as well
 final int count = 5;
@@ -179,7 +181,6 @@ final ListenableFuture<JobResponse> job = client.getJob(<id>);
 final JobRequest.Builder jobBuilder = JobRequest.builder();
 
 final JobRequest jobRequest = builder
-    .name("Joe First Job")
     .to(<addressId>)
     .from(<addressId)
     .objectId(<objectId>)
@@ -220,9 +221,8 @@ final JobRequest jobRequest = JobRequest.builder()
         .country("US")
         .build())
     .object(LobObjectRequest.builder()
-        .name("Test Object")
         .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-        .setting(SettingId.COLOR_CARD_4X6)
+        .setting(200)
         .build())
     .build();
 
@@ -250,14 +250,12 @@ final JobRequest jobRequest = JobRequest.builder()
         .build())
     .objects(
         LobObjectRequest.builder()
-            .name("Test Object")
             .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-            .setting(SettingId.COLOR_CARD_4X6)
+            .setting(201)
             .build(),
         LobObjectRequest.builder()
-            .name("Test Object")
             .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-            .setting(SettingId.COLOR_CARD_4X6)
+            .setting(200)
             .build())
     .build();
 
@@ -271,7 +269,7 @@ final ListenableFuture<JobResponse> jobResponse = client.createJob(jobRequest);
 
 ```java
 // List addresses
-final ListenableFuture<AddressResponseList> addresses = client.getAllAddresses();
+final ListenableFuture<AddressResponseList> addresses = client.getAddresses();
 
 // List Addresses with Count and Offset
 final int count = 5;
@@ -327,7 +325,7 @@ final ListenableFuture<AddressDeleteResponse> deleteResponse = client.deleteAddr
 #### Country listing
 ```java
 // Returns a list of Country objects
-final ListenableFuture<CountryResponseList> countries = client.getAllCountries();
+final ListenableFuture<CountryResponseList> countries = client.getCountries();
 ```
 
 ### State
@@ -335,7 +333,7 @@ final ListenableFuture<CountryResponseList> countries = client.getAllCountries()
 #### State listing
 ```java
 // Returns a list of State objects
-final ListenableFuture<StateResponseList> states = client.getAllStates();
+final ListenableFuture<StateResponseList> states = client.getStates();
 ```
 
 ### Lob Object
@@ -344,7 +342,7 @@ final ListenableFuture<StateResponseList> states = client.getAllStates();
 
 ```java
 // Returns a list of lob objects
-final ListenableFuture<LobObjectResponseList> objects = client.getAllLobObjects();
+final ListenableFuture<LobObjectResponseList> objects = client.getLobObjects();
 
 // Can specify count and offset
 final int count = 4;
@@ -364,32 +362,26 @@ final ListenableFuture<LobObjectResponse> object = client.getLobObject(<id>);
 ```java
 // Create an Object using a URL
 final LobObjectRequest objectRequest = LobObjectRequest.builder()
-    .name("Url Test Object")
     .file("https://s3-us-west-2.amazonaws.com/lob-assets/test.pdf")
-    .setting(SettingId.COLOR_CARD_4X6)
+    .setting(200)
     .quantity(1)
-    .doubleSided(true)
     .build();
 final ListenableFuture<LobObjectResponse> object = client.createLobObject(objectRequest);
 
 // Create an Object using a local file
 final File file = new File("/path/to/local/file");
 final LobObjectRequest objectRequest = LobObjectRequest.builder()
-    .name("File Test Object")
     .file(file)
-    .setting(SettingId.BLACK_AND_WHITE_DOCUMENT)
+    .setting(200)
     .quantity(1)
-    .doubleSided(false)
     .build();
 final ListenableFuture<LobObjectResponse> object = client.createLobObject(objectRequest);
 
 // Create an Object using HTML
 final LobObjectRequest objectRequest = LobObjectRequest.builder()
-    .name("Html Test Object")
     .file("<html style="margin: 130px; font-size: 50;">HTML here</html>")
-    .setting(SettingId.BLACK_AND_WHITE_DOCUMENT)
+    .setting(200)
     .quantity(1)
-    .doubleSided(false)
     .build();
 final ListenableFuture<LobObjectResponse> object = client.createLobObject(objectRequest);
 ```
@@ -407,7 +399,7 @@ final ListenableFuture<LobObjectDeleteResponse> objectDeleteResponse = client.de
 
 ```java
 // List All Settings
-final ListenableFuture<SettingResponseList> settings = client.getAllSettings();
+final ListenableFuture<SettingResponseList> settings = client.getSettings();
 ```
 
 #### Setting retrieval
@@ -423,7 +415,7 @@ final ListenableFuture<SettingResponseList> settings = client.getSetting(Setting
 
 ```java
 // List All Services
-final ListenableFuture<ServiceResponseList> services = client.getAllServices();
+final ListenableFuture<ServiceResponseList> services = client.getServices();
 ```
 
 ## Simple Postcard Service
@@ -434,7 +426,7 @@ final ListenableFuture<ServiceResponseList> services = client.getAllServices();
 
 ```java
 // Returns a list of Postcard objects
-final ListenableFuture<PostcardResponseList> postcards = client.getAllPostcards();
+final ListenableFuture<PostcardResponseList> postcards = client.getPostcards();
 
 // Can specify count and offset
 final int count = 4;
@@ -556,6 +548,102 @@ final PostcardRequest postcardRequest = PostcardRequest.builder()
 final ListenableFuture<PostcardResponse> postcard = client.createPostcard(postcardRequest);
 ```
 
+## Simple Letter Service
+
+### Letter
+
+#### Letter listing
+
+```java
+// Returns a list of Letter objects
+final ListenableFuture<LetterResponseList> letters = client.getLetters();
+
+// Can specify count and offset
+final int count = 4;
+final int offset = 2;
+final ListenableFuture<LetterResponseList> letters = client.getLetters(count, offset);
+```
+
+#### Letter retrieval
+```java
+// Retrieve a specific postcard by id
+final ListenableFuture<LetterResponse> letters = client.getLetter(<id>);
+```
+
+#### Letter creation
+```java
+// Create a Letter Using IDs for Address
+final LetterRequest letterRequest = LetterRequest.builder()
+    .to(<addressId>)
+    .from(<addressId>)
+    .file("https://s3-us-west-2.amazonaws.com/lob-assets/letter-goblue.pdf")
+    .color(true)
+    .build();
+final ListenableFuture<LetterResponse> letter = client.createLetter(letterRequest);
+
+// Create Letter Using Inline Addresses
+final LetterRequest letterRequest = LetterRequest.builder()
+    .to(AddressRequest.builder()
+        .name("Lob")
+        .line1("185 Berry Street")
+        .line2("Suite 1510")
+        .city("San Francisco")
+        .state("CA")
+        .zip("94107")
+        .country("US")
+        .build())
+    .from(AddressRequest.builder()
+        .name("Lob")
+        .line1("185 Berry Street")
+        .line2("Suite 1510")
+        .city("San Francisco")
+        .state("CA")
+        .zip("94107")
+        .country("US")
+        .build())
+    .file("https://s3-us-west-2.amazonaws.com/lob-assets/letter-goblue.pdf")
+    .color(true)
+    .build();
+final ListenableFuture<LetterResponse> letter = client.createLetter(letterRequest);
+
+// Create Letter Using Inline Addresses and Local File
+final File file = new File("/path/to/local/file");
+final LetterRequest letterRequest = LetterRequest.builder()
+    .to(AddressRequest.builder()
+        .name("Lob")
+        .line1("185 Berry Street")
+        .line2("Suite 1510")
+        .city("San Francisco")
+        .state("CA")
+        .zip("94107")
+        .country("US")
+        .build())
+    .from(AddressRequest.builder()
+        .name("Lob")
+        .line1("185 Berry Street")
+        .line2("Suite 1510")
+        .city("San Francisco")
+        .state("CA")
+        .zip("94107")
+        .country("US")
+        .build())
+    .file(file)
+    .color(true)
+    .build();
+final ListenableFuture<LetterResponse> letter = client.createLetter(letterRequest);
+
+// Create a Letter Using HTML
+final LetterRequest letterRequest = LetterRequest.builder()
+    .to(<addressId>)
+    .from(<addressId>)
+    .file("<html style="margin: 130px; font-size: 50;">Front HTML</html>")
+    .color(true)
+    .build();
+final ListenableFuture<LetterResponse> letter = client.createLetter(letterRequest);
+
+final ListenableFuture<LetterResponse> letter = client.createLetter(letterRequest);
+```
+
 ## Simple Check Service
 
 ### Check
@@ -563,7 +651,7 @@ final ListenableFuture<PostcardResponse> postcard = client.createPostcard(postca
 #### Check listing
 ```java
 // Returns a list of Check objects
-final ListenableFuture<CheckResponseList> checks = client.getAllChecks();
+final ListenableFuture<CheckResponseList> checks = client.getChecks();
 
 // Can specify count and offset
 final int count = 4;
@@ -582,7 +670,6 @@ final ListenableFuture<CheckResponse> check = client.getCheck(<id>);
 ```java
 // Create Check with Address Id
 final CheckRequest checkRequest = CheckRequest.builder()
-    .name("Check Test")
     .to(<addressId>)
     .bankAccount(<bankAccountId>)
     .amount(1000)
@@ -593,7 +680,6 @@ final ListenableFuture<CheckResponse> check = client.createCheck(checkRequest);
 
 // Create Check with Inline Address
 final CheckRequest checkRequest = CheckRequest.builder()
-    .name("Check Test")
     .to(AddressRequest.builder()
         .name("Lob")
         .line1("185 Berry Street")
@@ -617,7 +703,7 @@ final ListenableFuture<CheckResponse> check = client.createCheck(checkRequest);
 
 ```java
 // Returns a list of BankAccount objects
-final ListenableFuture<BankAccountResponseList> bankAccounts = client.getAllBankAccounts();
+final ListenableFuture<BankAccountResponseList> bankAccounts = client.getBankAccounts();
 
 // Can specify count and offset
 final int count = 4;
@@ -651,7 +737,6 @@ final BankAccountRequest bankAccountRequest = BankAccountRequest.builder()
     .accountNumber("123456789")
     .signatory("John Doe")
     .bankAddress(AddressRequest.builder()
-        .name("Bank Address")
         .line1("123 Wall Street")
         .city("San Francisco")
         .state("CA")
@@ -687,7 +772,7 @@ final ListenableFuture<BankAccountDeleteResponse> bankAccountDeleteResponse = cl
 
 ```java
 // List areas
-final ListenableFuture<AreaMailResponseList> areaMails = client.getAllAreaMails();
+final ListenableFuture<AreaMailResponseList> areaMails = client.getAreaMails();
 
 // Can specify count and offset
 final int count = 4;
@@ -707,12 +792,10 @@ final ListenableFuture<AreaMailResponse> areaMail = client.getAreaMail(<id>);
 ```java
 // Basic Area Create with Zip Codes
 final AreaMailRequest areaMailRequest = AreaMailRequest.builder()
-    .name("Lob")
     .front("https://s3-us-west-2.amazonaws.com/lob-assets/areafront.pdf")
     .back("https://s3-us-west-2.amazonaws.com/lob-assets/areafront.pdf")
     .routesForZips("94158", "60031")
     .targetType(TargetType.ALL)
-    .fullBleed(true)
     .build();
 final ListenableFuture<AreaMailResponse> areaMail = client.createAreaMail(areaMailRequest);
 
@@ -723,23 +806,19 @@ final ZipCodeRouteResponseList routes = client.getZipCodeRoutes(
         .build())
     .get();
 final AreaMailRequest areaMailRequest = AreaMailRequest.builder()
-    .name("Lob")
     .front("https://s3-us-west-2.amazonaws.com/lob-assets/areafront.pdf")
     .back("https://s3-us-west-2.amazonaws.com/lob-assets/areafront.pdf")
     .routes(routes)
     .targetType(TargetType.ALL)
-    .fullBleed(true)
     .build();
 final ListenableFuture<AreaMailResponse> areaMail = client.createAreaMail(areaMailRequest);
 
 // Basic Area Create with HTML
 final AreaMailRequest areaMailRequest = AreaMailRequest.builder()
-    .name("Lob")
     .front("<html style="margin: 130px; font-size: 50;">Front HTML</html>")
     .back("<html style="margin: 130px; font-size: 50;">Back HTML</html>")
     .routesForZips("94158", "60031")
     .targetType(TargetType.ALL)
-    .fullBleed(true)
     .build();
 final ListenableFuture<AreaMailResponse> areaMail = client.createAreaMail(areaMailRequest);
 
