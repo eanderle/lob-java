@@ -34,11 +34,8 @@ Include the following in your `pom.xml` for Maven:
 
 ## Project Structure
 
-Most people will want to depend on **lob-java-client.**
-
-- **lob-java-client** contains the actual client for interacting with Lob's API. It depends on **guava**, **asynchttpclient**, **joda-money**, **joda-time**, **jackson-annotations**, and two **jackson-databind** packages.
+- **lob-java** contains the actual client for interacting with Lob's API. It depends on **guava**, **asynchttpclient**, **joda-money**, **joda-time**, **jackson-annotations**, and two **jackson-databind** packages.
 - **lob-java-examples** contains usage examples and is not intended to be consumed by your code.
-- **lob-java** is the parent package of all of these modules.
 
 ## Usage
 
